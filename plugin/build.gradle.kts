@@ -2,8 +2,10 @@ plugins {
     kotlin("jvm")
 }
 
-repositories {
-    mavenCentral()
+dependencies {
+    implementation(kotlin("stdlib"))
+    implementation(project(":plasmaenchants-api"))
+    compileOnly("org.spigotmc:spigot-api:1.14-R0.1-SNAPSHOT")
 }
 
 tasks {
