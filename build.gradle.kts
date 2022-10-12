@@ -5,13 +5,7 @@ plugins {
 allprojects {
     group = "us.teaminceptus.plasmaenchants"
     version = "1.0.0-SNAPSHOT"
-}
 
-repositories {
-    mavenCentral()
-}
-
-subprojects {
     repositories {
         mavenCentral()
         maven("https://oss.sonatype.org/content/repositories/snapshots")

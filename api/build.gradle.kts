@@ -4,7 +4,6 @@ plugins {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    compileOnly("org.spigotmc:spigot-api:1.14-R0.1-SNAPSHOT")
 }
 
 tasks {
@@ -19,4 +18,8 @@ tasks {
             jvmTarget = jvmVersion
         }
     }
+}
+
+dependencies {
+    compileOnly("org.spigotmc:spigot-api:1.14-R0.1-SNAPSHOT")
 }
