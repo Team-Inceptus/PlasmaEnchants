@@ -81,7 +81,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: setup
-    name: Deploy JavaDocs
+    name: Deploy KDocs
     if: ${{ github.event_name != 'pull_request' && github.ref_name == 'master' }}
     steps:
       - uses: actions/checkout@v3
@@ -92,8 +92,8 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
-      - name: Build JavaDocs
+      - name: Build KDocs
         run: mvn package pre-site -pl "api" -DskipTests
 
-      - name: Deploy JavaDoc
+      - name: Deploy KDocs
         run: bash dokka.sh ${GITHUB_SHA::7}
