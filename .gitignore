@@ -2,9 +2,7 @@
 .idea/
 .vscode/
 *.iml
-.gradle/
 build/
 out/
-bin/
+target/
 *.jar
-!gradle-wrapper.jar
