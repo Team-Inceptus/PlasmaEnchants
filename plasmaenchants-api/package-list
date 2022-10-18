@@ -1,0 +1,14 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:us.teaminceptus.plasmaenchants.api////PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api/index.html
+$dokka.location:us.teaminceptus.plasmaenchants.api/PlasmaConfig.Config///PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api/-plasma-config/-config/index.html
+$dokka.location:us.teaminceptus.plasmaenchants.api/PlasmaConfig.Config/getConfig/#/PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api/-plasma-config/-config/get-config.html
+$dokka.location:us.teaminceptus.plasmaenchants.api/PlasmaConfig.Config/getLogger/#/PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api/-plasma-config/-config/get-logger.html
+$dokka.location:us.teaminceptus.plasmaenchants.api/PlasmaConfig.Config/getPlugin/#/PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api/-plasma-config/-config/get-plugin.html
+$dokka.location:us.teaminceptus.plasmaenchants.api/PlasmaConfig.Config/print/#kotlin.Throwable/PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api/-plasma-config/-config/print.html
+$dokka.location:us.teaminceptus.plasmaenchants.api/PlasmaConfig///PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api/-plasma-config/index.html
+$dokka.location:us.teaminceptus.plasmaenchants.api/PlasmaConfig/get/#kotlin.String/PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api/-plasma-config/get.html
+$dokka.location:us.teaminceptus.plasmaenchants.api/PlasmaConfig/getLanguage/#/PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api/-plasma-config/get-language.html
+$dokka.location:us.teaminceptus.plasmaenchants.api/PlasmaConfig/getMessage/#kotlin.String/PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api/-plasma-config/get-message.html
+us.teaminceptus.plasmaenchants.api
+

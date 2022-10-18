@@ -1,6 +1,0 @@
-name: ${project.name}
-main: us.teaminceptus.plasmaenchants.PlasmaEnchants
-version: ${plugin.version}
-load: POSTWORLD
-authors: [GamerCoder215]
-website: ${project.url}
