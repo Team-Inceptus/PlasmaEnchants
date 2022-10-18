@@ -12,17 +12,29 @@ interface PlasmaConfig {
     companion object Config {
         private val p: Plugin? = if (getPlugin() == null) null else getPlugin()
 
+        /**
+         * Fetches the PlasmaEnchants plugin.
+         * @return Plugin
+         */
         @JvmStatic
         fun getPlugin(): Plugin? {
             return Bukkit.getPluginManager().getPlugin("PlasmaEnchants")
         }
 
+        /**
+         * Fetches the PlasmaEnchant plugin's logger.
+         * @return Plugin's Logger
+         */
         @JvmStatic
         fun getLogger(): Logger? {
             if (p == null) return null;
             return p.getLogger();
         }
 
+        /**
+         * Fetches the PlasmaConfig instance.
+         * @return PlasmaConfig Instance
+         */
         @JvmStatic
         fun getConfig(): PlasmaConfig? {
             if (p == null) return null
@@ -31,6 +43,9 @@ interface PlasmaConfig {
             return null
         }
 
+        /**
+         * Prints a throwable in the plugin namespace.
+         */
         @JvmStatic
         fun print(e: Throwable) {
             val logger: Logger? = getLogger();
