@@ -93,7 +93,7 @@ jobs:
           cache: 'maven'
 
       - name: Build KDocs
-        run: mvn package pre-site -pl "api" -DskipTests
+        run: mvn clean package pre-site -pl "api" -DskipTests
 
       - name: Deploy KDocs
         run: bash dokka.sh ${GITHUB_SHA::7}
