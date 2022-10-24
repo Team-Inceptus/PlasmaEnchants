@@ -14,12 +14,10 @@ import java.io.IOException
  */
 class PlasmaEnchants : JavaPlugin(), PlasmaConfig {
 
-    private var config: FileConfiguration? = null
-
     override fun onEnable() {
-        config = getConfig()
+        saveDefaultConfig()
 
-        getLogger().info("Done!")
+        logger.info("Done!")
     }
 
     override fun onDisable() {
@@ -29,23 +27,23 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig {
     // Configuration
 
     override fun get(key: String): String {
-        val p: Properties = Properties();
+        val p = Properties();
         val lang: String = if (getLanguage().equals("en", ignoreCase = true)) "" else "_" + getLanguage();
 
-        try {
-            val str: InputStream = PlasmaEnchants::class.java.getResourceAsStream("/lang/plasmaenchants" + lang + ".properties")
+        return try {
+            val str: InputStream = PlasmaEnchants::class.java.getResourceAsStream("/lang/plasmaenchants$lang.properties") as InputStream
 
             p.load(str);
             str.close();
-            return ChatColor.translateAlternateColorCodes('&', p.getProperty(key, "Unknown Value"));
+            ChatColor.translateAlternateColorCodes('&', p.getProperty(key, "Unknown Value"));
         } catch (e: IOException) {
             print(e);
-            return "Unknown Value";
+            "Unknown Value";
         }
     }
 
     override fun getLanguage(): String? {
-        return config?.getString("language", "en")
+        return config.getString("language", "en")
     }
 
 }
