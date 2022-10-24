@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
 
     <name>PlasmaEnchants-Parent</name>
-    <description>Advanced, Free Custom Enchantments Plugin, written in Kotlin, and developed for Spigot 1.14+</description>
+    <description>Advanced, Premium Custom Enchantments Plugin, written in Kotlin, and developed for Spigot 1.14+</description>
 
     <properties>
         <java.version>8</java.version>
