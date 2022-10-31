@@ -10,4 +10,8 @@ enum class PEnchantments(private val action: Consumer<Player>) : PEnchantment {
 
     ;
 
+    override fun accept(player: Player) {
+        action.accept(player)
+    }
+
 }
