@@ -24,6 +24,7 @@ $dokka.location:us.teaminceptus.plasmaenchants.api.enchants/PEnchantment/getTarg
 $dokka.location:us.teaminceptus.plasmaenchants.api.enchants/PEnchantment/isNatural/#/PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api.enchants/-p-enchantment/is-natural.html
 $dokka.location:us.teaminceptus.plasmaenchants.api.enchants/PEnchantment/rollTableChance/#/PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api.enchants/-p-enchantment/roll-table-chance.html
 $dokka.location:us.teaminceptus.plasmaenchants.api.enchants/PEnchantments///PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api.enchants/-p-enchantments/index.html
+$dokka.location:us.teaminceptus.plasmaenchants.api.enchants/PEnchantments/accept/#org.bukkit.entity.Player/PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api.enchants/-p-enchantments/accept.html
 $dokka.location:us.teaminceptus.plasmaenchants.api.enchants/PEnchantments/valueOf/#kotlin.String/PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api.enchants/-p-enchantments/value-of.html
 $dokka.location:us.teaminceptus.plasmaenchants.api.enchants/PEnchantments/values/#/PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api.enchants/-p-enchantments/values.html
 $dokka.location:us.teaminceptus.plasmaenchants.api.player////PointingToDeclaration/plasmaenchants-api/us.teaminceptus.plasmaenchants.api.player/index.html
