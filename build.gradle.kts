@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.8.10" apply false
     id("org.sonarqube") version "4.0.0.2929"
-    id("com.github.johnrengelman.shadow") version "8.1.0" apply false
+    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
 
     java
     `java-library`
