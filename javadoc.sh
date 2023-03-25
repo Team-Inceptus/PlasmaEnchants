@@ -6,7 +6,7 @@ if [ ! -d "docs" ]; then
   mkdir docs
 fi;
 
-cp -Rfv api/target/dokka/* ./docs/
+cp -Rfv api/build/dokka/javadoc/* ./docs/
 
 git checkout gh-pages
 
@@ -22,10 +22,8 @@ done
 cp -Rfv ./docs/* ./
 rm -rf ./docs
 
-echo "plasmaenchants.teaminceptus.us" > CNAME
-
 git add .
 git branch -D gh-pages
 git branch -m gh-pages
-git commit -m "Update KDocs ($1)"
+git commit -m "Update JavaDocs ($1)"
 git push -f origin gh-pages

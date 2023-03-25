@@ -3,6 +3,8 @@
 .vscode/
 *.iml
 build/
-out/
-target/
+bin/
 *.jar
+.gradle
+build
+!gradle-wrapper.jar

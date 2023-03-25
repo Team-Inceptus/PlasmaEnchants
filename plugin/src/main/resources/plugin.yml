@@ -1,6 +1,8 @@
-name: ${project.name}
+name: PlasmaEnchants
 main: us.teaminceptus.plasmaenchants.PlasmaEnchants
-version: ${plugin.version}
+version: ${project.version}
 load: POSTWORLD
-authors: [GamerCoder215]
-website: ${project.url}
+authors: [GamerCoder]
+website: "https://github.com/Team-Inceptus/PlasmaEnchants"
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:1.8.10
