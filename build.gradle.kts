@@ -51,7 +51,7 @@ allprojects {
     dependencies {
         compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.8.10")
         compileOnly("org.jetbrains:annotations:24.0.1")
-        compileOnly("org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT")
+        compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
 
         testImplementation("org.mockito:mockito-core:5.2.0")
         testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
