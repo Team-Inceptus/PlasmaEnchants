@@ -8,7 +8,7 @@ val lampVersion = "3.1.5"
 dependencies {
     api(project(":plasmaenchants-api"))
 
-    implementation("org.bstats:bstats-bukkit:3.0.1")
+    implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("com.github.Revxrsal.Lamp:bukkit:$lampVersion")
     implementation("com.github.Revxrsal.Lamp:common:$lampVersion")
 }
