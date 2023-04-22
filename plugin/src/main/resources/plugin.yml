@@ -5,4 +5,4 @@ load: POSTWORLD
 authors: [GamerCoder]
 website: "https://github.com/Team-Inceptus/PlasmaEnchants"
 libraries:
-  - org.jetbrains.kotlin:kotlin-stdlib:1.8.10
+  - org.jetbrains.kotlin:kotlin-stdlib:1.8.20
