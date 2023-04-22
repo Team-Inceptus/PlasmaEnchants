@@ -2,13 +2,14 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.10" apply false
+    kotlin("jvm") version "1.8.20"
     id("org.sonarqube") version "4.0.0.2929"
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 
     java
     `java-library`
     `maven-publish`
+    jacoco
 }
 
 val pGroup = "us.teaminceptus.plasmaenchants"
@@ -28,6 +29,7 @@ sonarqube {
 allprojects {
     apply<JavaPlugin>()
     apply<JavaLibraryPlugin>()
+    apply<JacocoPlugin>()
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.sonarqube")
     apply(plugin = "com.github.johnrengelman.shadow")
@@ -49,7 +51,7 @@ allprojects {
     }
 
     dependencies {
-        compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.8.10")
+        compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.8.20")
         compileOnly("org.jetbrains:annotations:24.0.1")
         compileOnly("org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT")
 
@@ -64,8 +66,20 @@ allprojects {
     }
 
     tasks {
-        withType<KotlinCompile> {
+        compileKotlin {
             kotlinOptions.jvmTarget = jvmVersion.toString()
+        }
+
+        jacocoTestReport {
+            dependsOn(test)
+
+            reports {
+                xml.required.set(false)
+                csv.required.set(false)
+
+                html.required.set(true)
+                html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
+            }
         }
 
         test {
@@ -73,6 +87,7 @@ allprojects {
             testLogging {
                 events("passed", "skipped", "failed")
             }
+            finalizedBy(jacocoTestReport)
         }
 
         javadoc {
