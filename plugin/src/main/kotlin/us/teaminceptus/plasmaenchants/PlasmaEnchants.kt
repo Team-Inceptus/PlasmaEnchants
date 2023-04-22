@@ -1,7 +1,7 @@
-package us.teaminceptus.plasmaenchants;
+package us.teaminceptus.plasmaenchants
 
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.ChatColor
 import us.teaminceptus.plasmaenchants.api.PlasmaConfig
 import us.teaminceptus.plasmaenchants.PlasmaEnchants
@@ -12,7 +12,7 @@ import java.io.IOException
 /**
  * Represents the main PlasmaEnchants Plugin
  */
-class PlasmaEnchants : JavaPlugin(), PlasmaConfig {
+object PlasmaEnchants : JavaPlugin(), PlasmaConfig {
 
     override fun onEnable() {
         saveDefaultConfig()
@@ -27,18 +27,18 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig {
     // Configuration
 
     override fun get(key: String): String {
-        val p = Properties();
-        val lang: String = if (getLanguage().equals("en", ignoreCase = true)) "" else "_" + getLanguage();
+        val p = Properties()
+        val lang: String = if (getLanguage().equals("en", ignoreCase = true)) "" else "_" + getLanguage()
 
         return try {
             val str: InputStream = PlasmaEnchants::class.java.getResourceAsStream("/lang/plasmaenchants$lang.properties") as InputStream
 
-            p.load(str);
-            str.close();
-            ChatColor.translateAlternateColorCodes('&', p.getProperty(key, "Unknown Value"));
+            p.load(str)
+            str.close()
+            ChatColor.translateAlternateColorCodes('&', p.getProperty(key, "Unknown Value"))
         } catch (e: IOException) {
-            print(e);
-            "Unknown Value";
+            print(e)
+            "Unknown Value"
         }
     }
 
