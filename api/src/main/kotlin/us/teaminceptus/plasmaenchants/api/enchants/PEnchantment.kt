@@ -2,7 +2,10 @@ package us.teaminceptus.plasmaenchants.api.enchants
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import org.jetbrains.annotations.NotNull
+import org.bukkit.event.Event
+import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import us.teaminceptus.plasmaenchants.api.events.PlayerTickEvent
 import java.util.Objects
 import java.util.function.BiConsumer
 import java.util.function.Consumer
@@ -11,7 +14,7 @@ import java.util.stream.Collectors
 /**
  * Represents a PlasmaEnchants Enchantment.
  */
-interface PEnchantment : BiConsumer<Player, Int> {
+interface PEnchantment {
 
     /**
      * Fetches the name of this PEnchantment.
@@ -24,19 +27,6 @@ interface PEnchantment : BiConsumer<Player, Int> {
      * @return Description of Enchantment
      */
     fun getDescription(): String
-
-    /**
-     * Whether this Enchantment will spawn in an Enchantment Table.
-     * @return true if in enchant table, false otherwise
-     */
-    fun isNatural(): Boolean
-
-    /**
-     * Rolls the chance for this Enchantment's level in an enchantment table.
-     * @param player Player to use
-     * @return result of the roll, 0 if not in enchanting table
-     */
-    fun rollTable(player: Player): Int
 
     /**
      * Fetches the maximum level of this PEnchantment.
@@ -54,24 +44,49 @@ interface PEnchantment : BiConsumer<Player, Int> {
      * Fetches the Type of this PEnchantment.
      * @return Type
      */
-    fun getType(): Type
+    fun getType(): Type<*>
+
+    /**
+     * Fetches the list of conflicts for this PEnchantment.
+     * @return List of Conflicts
+     */
+    fun getConflicts(): List<PEnchantment>
+
+    /**
+     * Whether or not this PEnchantment conflicts with another PEnchantment.
+     * @param enchantment PEnchantment to check for conflicts with.
+     * @return true if conflicts with enchantment, false otherwise
+     */
+    fun conflictsWith(enchantment: PEnchantment?): Boolean {
+        if (enchantment == null) return false
+        return getConflicts().contains(enchantment) || enchantment.getConflicts().contains(this)
+    }
 
     /**
      * PEnchantment Types
+     * @param T Event Type
      */
-    enum class Type {
-        /**
-         * Represents the type of Enchantment that will activate when attacking.
-         */
-        ATTACKING,
-        /**
-         * Represents the type of Enchantment that will activate when defending or taking damage.
-         */
-        DEFENDING,
-        /**
-         * Represents the type of Enchantment that will activate when mining blocks.
-         */
-        MINING
+    class Type<T : Event> private constructor(private val clazz: Class<T>) {
+        companion object {
+            /**
+             * Represents the type of Enchantment that will activate when attacking.
+             */
+            val ATTACKING: Type<EntityDamageByEntityEvent> = Type(EntityDamageByEntityEvent::class.java)
+            /**
+             * Represents the type of Enchantment that will activate when defending or taking damage.
+             */
+            val DEFENDING: Type<EntityDamageByEntityEvent> = Type(EntityDamageByEntityEvent::class.java)
+            /**
+             * Represents the type of Enchantment that will activate when mining blocks.
+             */
+            val MINING: Type<BlockBreakEvent> = Type(BlockBreakEvent::class.java)
+            /**
+             * Represents the type of Enchantment that runs its action every tick.
+             */
+            val PASSIVE: Type<PlayerTickEvent> = Type(PlayerTickEvent::class.java)
+        }
+
+        fun getEventClass(): Class<T> = clazz
     }
 
     /**
@@ -244,7 +259,6 @@ interface PEnchantment : BiConsumer<Player, Int> {
          * Fetches all of the valid materiasl this Target supports.
          * @return Array of Valid Materials
          */
-        @NotNull
         fun getValidMaterials(): List<Material> {
             return validMaterials
         }
