@@ -2,7 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.20"
+    kotlin("jvm") version "1.8.21"
     id("org.sonarqube") version "4.0.0.2929"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 
@@ -51,12 +51,12 @@ allprojects {
     }
 
     dependencies {
-        compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.8.20")
+        compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.8.21")
         compileOnly("org.jetbrains:annotations:24.0.1")
         compileOnly("org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT")
 
         testImplementation("org.mockito:mockito-core:5.3.1")
-        testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+        testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
         testImplementation("com.github.seeseemelk:MockBukkit-v1.13:0.2.0")
     }
 
