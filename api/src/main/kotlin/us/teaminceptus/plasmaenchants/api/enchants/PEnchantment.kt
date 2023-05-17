@@ -5,6 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import us.teaminceptus.plasmaenchants.api.events.PlayerTickEvent
 import java.util.Objects
 import java.util.function.BiConsumer
@@ -76,6 +77,10 @@ interface PEnchantment {
              * Represents the type of Enchantment that will activate when defending or taking damage.
              */
             val DEFENDING: Type<EntityDamageByEntityEvent> = Type(EntityDamageByEntityEvent::class.java)
+            /**
+             * Represents the type of Enchantment that will activate when taking general damage.
+             */
+            val DAMAGE: Type<EntityDamageEvent> = Type(EntityDamageEvent::class.java)
             /**
              * Represents the type of Enchantment that will activate when mining blocks.
              */
