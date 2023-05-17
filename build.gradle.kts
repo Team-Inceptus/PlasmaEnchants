@@ -56,7 +56,7 @@ allprojects {
         compileOnly("org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT")
 
         testImplementation("org.mockito:mockito-core:5.2.0")
-        testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+        testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
         testImplementation("com.github.seeseemelk:MockBukkit-v1.13:0.2.0")
     }
 
