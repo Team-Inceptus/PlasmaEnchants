@@ -3,13 +3,12 @@ package us.teaminceptus.plasmaenchants.api.enchants
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Illager
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.Event
-import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.potion.PotionEffect
@@ -20,60 +19,51 @@ import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Target.*
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.ATTACKING
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.DAMAGE
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.DEFENDING
+import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.MINING
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.PASSIVE
-import us.teaminceptus.plasmaenchants.api.events.PlayerTickEvent
+import kotlin.math.absoluteValue
 
 /**
  * Represents all of the Default PlasmaEnchants Enchantments.
  */
+@Suppress("unchecked_cast")
 enum class PEnchantments(
-    private val type: PEnchantment.Type<*>,
     private val target: PEnchantment.Target,
     private val maxLevel: Int = 1,
-    action: (Event, Int) -> Unit,
+    private val info: Action<*>,
     private vararg val conflicts: PEnchantment
 ) : PEnchantment {
 
-    // Melee Enchantments
+    // Attacking Enchantments
 
     POISONING(
-        ATTACKING, SWORDS, 2, { event, level ->
-            require(event is EntityDamageByEntityEvent)
-
+        SWORDS, 2, Action(ATTACKING) { event, level ->
             if (event.entity is LivingEntity)
                     (event.entity as LivingEntity).addPotionEffect(PotionEffect(PotionEffectType.POISON, 20 * 5, level - 1))
         }),
 
     WITHERING(
-        ATTACKING, MELEE_WEAPONS, 1, { event, _ ->
-            require(event is EntityDamageByEntityEvent)
-
+        MELEE_WEAPONS, 1, Action(ATTACKING) { event, _ ->
             if (event.entity is LivingEntity)
                     (event.entity as LivingEntity).addPotionEffect(PotionEffect(PotionEffectType.WITHER, 20 * 3, 0))
         }, POISONING),
 
     BANE_OF_ILLAGER(
-        ATTACKING, MELEE_WEAPONS, 4, { event, level ->
-            require(event is EntityDamageByEntityEvent)
-
+        MELEE_WEAPONS, 4, Action(ATTACKING) { event, level ->
             if (Illager::class.java.isAssignableFrom(event.entity::class.java))
                     event.damage *= 1 + (level * 0.2)
         }),
 
     THUNDEROUS(
-        ATTACKING, SWORDS, 1, { event, _ ->
-            require(event is EntityDamageByEntityEvent)
-
+        SWORDS, 1, Action(ATTACKING) { event, _ ->
             if (event.entity is LivingEntity)
                 event.damager.world.strikeLightning(event.entity.location)
         }),
 
     ACIDIC(
-        ATTACKING, MELEE_WEAPONS, 5, func@{ event, level ->
-            require(event is EntityDamageByEntityEvent)
-
+        MELEE_WEAPONS, 5, Action(ATTACKING) { event, level ->
             if (event.entity is LivingEntity) {
-                val equipment = (event.entity as LivingEntity).equipment ?: return@func
+                val equipment = (event.entity as LivingEntity).equipment ?: return@Action
 
                 equipment.armorContents.forEach {
                     if (it.itemMeta is Damageable) {
@@ -85,9 +75,7 @@ enum class PEnchantments(
         }),
 
     VAMPIRISM(
-        ATTACKING, SWORDS, 3, { event, level ->
-            require(event is EntityDamageByEntityEvent)
-
+        SWORDS, 3, Action(ATTACKING) { event, level ->
             if (event.entity is LivingEntity) {
                 val player = event.damager as Player
                 val entity = event.entity as LivingEntity
@@ -98,9 +86,7 @@ enum class PEnchantments(
         }),
 
     GRAVITY(
-        ATTACKING, SWORDS, 6, { event, level ->
-            require(event is EntityDamageByEntityEvent)
-
+        SWORDS, 6, Action(ATTACKING) { event, level ->
             event.entity.getNearbyEntities(0.5 * level, 0.5 * level, 0.5 * level).forEach {
                 val from = it.location
                 val to = event.entity.location
@@ -111,20 +97,29 @@ enum class PEnchantments(
             }
         }),
 
-    // Armor Enchantments
+    FLARE(
+        SWORDS, 3, Action(ATTACKING) { event, level ->
+            if (event.entity is LivingEntity) {
+                val time = event.damager.world.time
+                val dist = (7000 - time).absoluteValue.coerceAtLeast(1)
+                if (dist > 6000) return@Action
 
-    JUMP(
-        PASSIVE, BOOTS, 5, { event, level ->
-            require(event is PlayerTickEvent)
-
-            event.player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 3, level - 1))
+                val ticks = (120 / dist.floorDiv(1000)) * (1 + (level.floorDiv(2) * 0.5))
+                event.entity.fireTicks += ticks.toInt()
+            }
         }),
 
-    DEFLECT(
-        DEFENDING, CHESTPLATES, 1, { event, _ ->
-            require(event is EntityDamageByEntityEvent)
+    BACKSTAB(
+        MELEE_WEAPONS, 5, Action(ATTACKING) { event, level ->
+            if (event.entity is LivingEntity)
+                (event.entity as LivingEntity).addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 20 * level, level.floorDiv(3)))
+        }),
 
-            if (event.entity is Player && event.damager is Projectile) {
+    // Defending Enchantments
+
+    DEFLECT(
+        CHESTPLATES, 1, Action(DEFENDING) { event, _ ->
+            if (event.damager is Projectile) {
                 event.isCancelled = true
                 event.damager.velocity = event.damager.velocity.multiply(-1)
 
@@ -132,10 +127,10 @@ enum class PEnchantments(
             }
         }),
 
-    LIGHTFOOT(
-        DAMAGE, BOOTS, 3, { event, level ->
-            require(event is EntityDamageEvent)
+    // Damage Enchantments
 
+    LIGHTFOOT(
+        BOOTS, 3, Action(DAMAGE) { event, level ->
             if (event.cause == DamageCause.FALL) {
                 val block = Location(
                     event.entity.location.world,
@@ -149,23 +144,64 @@ enum class PEnchantments(
             }
         }),
 
+    // Mining Enchantments
+
+    SMELTING(
+        PICKAXES, 1, Action(MINING) { event, _ ->
+            if (event.player.inventory.itemInMainHand.containsEnchantment(Enchantment.SILK_TOUCH)) return@Action
+
+            event.isDropItems = false
+            val drops = event.block.getDrops(event.player.inventory.itemInMainHand).onEach {
+                when (it.type.name.lowercase()) {
+                    "coal_ore" -> it.type = Material.COAL
+                    "copper_ore", "deepslate_copper_ore", "raw_copper" -> it.type = Material.matchMaterial("copper_ingot")!!
+                    "redstone_ore", "deepslate_redstone_ore" -> it.type = Material.REDSTONE
+                    "iron_ore", "deepslate_iron_ore", "raw_iron" -> it.type = Material.IRON_INGOT
+                    "lapis_ore", "deepslate_lapis_ore" -> it.type = Material.LAPIS_LAZULI
+                    "gold_ore", "deepslate_gold_ore", "raw_gold" -> it.type = Material.GOLD_INGOT
+                    "diamond_ore", "deepslate_diamond_ore" -> it.type = Material.DIAMOND
+                    "emerald_ore", "deepslate_emerald_ore" -> it.type = Material.EMERALD
+                    "ancient_debris" -> it.type = Material.matchMaterial("netherite_scrap")!!
+                }
+            }
+
+            drops.forEach { event.player.world.dropItemNaturally(event.block.location, it) }
+        }),
+
+    // Passive Enchantments
+
+    JUMP(
+        BOOTS, 5, Action(PASSIVE) { event, level ->
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 3, level - 1))
+        }),
+
     ;
 
     private val nameKey = "enchantment.${name.lowercase()}"
-    private val action: (Event, Int) -> Unit
-
-    init {
-        this.action = { event, level -> if (type.getEventClass().isAssignableFrom(event.javaClass)) action(event, level) }
-    }
 
     override fun getName(): String = PlasmaConfig.getConfig()?.get(nameKey) ?: name.lowercase().replaceFirstChar { it.uppercase() }
 
     override fun getDescription(): String = PlasmaConfig.getConfig()?.get("$nameKey.desc") ?: "No description provided."
 
-    override fun getType(): PEnchantment.Type<*> = type
+    override fun getType(): PEnchantment.Type<*> = info.type
 
     override fun getTarget(): PEnchantment.Target = target
 
     override fun getConflicts(): List<PEnchantment> = listOf(*conflicts)
+
+    override fun getMaxLevel(): Int = maxLevel
+
+    override fun accept(e: Event, level: Int) = info.action(e, level)
+
+    private class Action<T : Event>(val type: PEnchantment.Type<T>, action: (T, Int) -> Unit) {
+        val action: (Event, Int) -> Unit
+
+        init {
+            this.action = { event, level ->
+                if (type.getEventClass().isAssignableFrom(event::class.java))
+                    action(event as T, level)
+            }
+        }
+    }
 
 }

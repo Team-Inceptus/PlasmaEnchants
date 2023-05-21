@@ -1,21 +1,20 @@
 package us.teaminceptus.plasmaenchants.api.enchants
 
 import org.bukkit.Material
-import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.EntityShootBowEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import us.teaminceptus.plasmaenchants.api.events.PlayerTickEvent
-import java.util.Objects
 import java.util.function.BiConsumer
-import java.util.function.Consumer
 import java.util.stream.Collectors
 
 /**
  * Represents a PlasmaEnchants Enchantment.
  */
-interface PEnchantment {
+interface PEnchantment : BiConsumer<Event, Int> {
 
     /**
      * Fetches the name of this PEnchantment.
@@ -89,6 +88,14 @@ interface PEnchantment {
              * Represents the type of Enchantment that runs its action every tick.
              */
             val PASSIVE: Type<PlayerTickEvent> = Type(PlayerTickEvent::class.java)
+            /**
+             * Represents the type of Enchantment that will activate when interacting. Only one enchantment of this type can be applied to an item.
+             */
+            val INTERACT: Type<PlayerInteractEvent> = Type(PlayerInteractEvent::class.java)
+            /**
+             * Represents the type of Enchantment that will activate when shooting a bow or crossbow-.
+             */
+            val SHOOT_BOW: Type<EntityShootBowEvent> = Type(EntityShootBowEvent::class.java)
         }
 
         fun getEventClass(): Class<T> = clazz
