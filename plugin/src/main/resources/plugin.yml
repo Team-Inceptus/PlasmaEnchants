@@ -1,6 +1,7 @@
 name: PlasmaEnchants
 main: us.teaminceptus.plasmaenchants.PlasmaEnchants
 version: ${project.version}
+api-version: 1.14
 load: POSTWORLD
 authors: [GamerCoder]
 website: "https://github.com/Team-Inceptus/PlasmaEnchants"
