@@ -12,7 +12,7 @@ import java.io.IOException
 /**
  * Represents the main PlasmaEnchants Plugin
  */
-object PlasmaEnchants : JavaPlugin(), PlasmaConfig {
+class PlasmaEnchants : JavaPlugin(), PlasmaConfig {
 
     override fun onEnable() {
         saveDefaultConfig()
