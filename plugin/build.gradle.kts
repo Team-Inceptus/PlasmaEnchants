@@ -14,7 +14,7 @@ dependencies {
 
 tasks {
     kotlinSourcesJar {
-        archiveFileName.set("PlasmaEnchants-${project.version}-sources.jar")
+        archiveClassifier.set("")
     }
 
     withType<ProcessResources> {
@@ -25,6 +25,6 @@ tasks {
 
     withType<ShadowJar> {
         dependsOn(kotlinSourcesJar)
-        archiveFileName.set("PlasmaEnchants-${project.version}.jar")
+        archiveClassifier.set("")
     }
 }

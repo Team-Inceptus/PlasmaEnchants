@@ -118,7 +118,7 @@ allprojects {
             relocate("revxrsal.commands", "us.teaminceptus.shaded.lamp")
             relocate("org.bstats.bukkit", "us.teaminceptus.shaded.bstats")
 
-            archiveFileName.set("${project.name}-${project.version}.jar")
+            archiveClassifier.set("")
         }
     }
 }

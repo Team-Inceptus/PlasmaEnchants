@@ -9,19 +9,18 @@ description = "API for the Premium Plugin PlasmaEnchants"
 
 tasks {
     kotlinSourcesJar {
-        archiveFileName.set("PlasmaEnchants-API-${project.version}-sources.jar")
+        archiveClassifier.set("sources")
     }
 
     register("javadocJar", Jar::class.java) {
         dependsOn(dokkaJavadoc)
 
-        archiveFileName.set("PlasmaEnchants-API-${project.version}-javadoc.jar")
+        archiveClassifier.set("javadoc")
         from(dokkaJavadoc.flatMap { it.outputDirectory })
     }
 
     withType<ShadowJar> {
         dependsOn(kotlinSourcesJar, "javadocJar")
-        archiveFileName.set("PlasmaEnchants-API-${project.version}.jar")
     }
 }
 
