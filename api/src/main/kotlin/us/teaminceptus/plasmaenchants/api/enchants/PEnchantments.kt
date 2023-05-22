@@ -3,6 +3,10 @@ package us.teaminceptus.plasmaenchants.api.enchants
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
+import org.bukkit.Statistic
+import org.bukkit.block.Beacon
+import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Illager
 import org.bukkit.entity.LivingEntity
@@ -10,7 +14,9 @@ import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.Event
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
+import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
+import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
@@ -21,6 +27,8 @@ import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.D
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.DEFENDING
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.MINING
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.PASSIVE
+import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.isOre
+import java.util.*
 import kotlin.math.absoluteValue
 
 /**
@@ -31,7 +39,7 @@ enum class PEnchantments(
     private val target: PEnchantment.Target,
     private val maxLevel: Int = 1,
     private val info: Action<*>,
-    private vararg val conflicts: PEnchantment
+    private val conflicts: Array<PEnchantment>
 ) : PEnchantment {
 
     // Attacking Enchantments
@@ -115,6 +123,54 @@ enum class PEnchantments(
                 (event.entity as LivingEntity).addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 20 * level, level.floorDiv(3)))
         }),
 
+    BEACON_OF_ATTACKING(
+        MELEE_WEAPONS, 5, Action(ATTACKING) { event, level ->
+            val p = event.damager as Player
+            var damage = event.damage
+
+            listOf(
+                p.location.chunk,
+                p.world.getChunkAt(p.location.add(16.0, 0.0, 0.0)),
+                p.world.getChunkAt(p.location.add(0.0, 0.0, 16.0)),
+                p.world.getChunkAt(p.location.add(-16.0, 0.0, 0.0)),
+                p.world.getChunkAt(p.location.add(0.0, 0.0, -16.0)),
+                p.world.getChunkAt(p.location.add(16.0, 0.0, 16.0)),
+                p.world.getChunkAt(p.location.add(-16.0, 0.0, 16.0)),
+                p.world.getChunkAt(p.location.add(16.0, 0.0, -16.0 )),
+                p.world.getChunkAt(p.location.add(-16.0, 0.0, -16.0))
+            )
+                .flatMap { it.tileEntities.toList() }
+                .filter { it.type == Material.BEACON }
+                .map { it as Beacon }
+                .filter { it.tier > 0}.forEach {
+                    damage *= 1.0 + (level * 0.2) + 0.05 * (it.tier - 1)
+                }
+
+            event.damage = damage
+        }),
+
+    IRON_FIST(
+        CHESTPLATES, 10, Action(ATTACKING) { event, level ->
+            val p = event.damager as Player
+            if (p.equipment?.itemInMainHand != null) return@Action
+
+            event.damage *= 1 + (level * 0.3)
+        }),
+
+    // Attacking Enchantments - Collectors
+
+    PLAYER_COLLECTOR(
+        MELEE_WEAPONS, 3, Action(ATTACKING) { event, level ->
+            val p = event.damager as Player
+            val kills = p.getStatistic(Statistic.PLAYER_KILLS)
+            if (kills < 1) return@Action
+
+            val count = kills.toString().length
+            event.damage *= 1 + (level * 0.05 * count)
+        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+
+
+
     // Defending Enchantments
 
     DEFLECT(
@@ -122,9 +178,53 @@ enum class PEnchantments(
             if (event.damager is Projectile) {
                 event.isCancelled = true
                 event.damager.velocity = event.damager.velocity.multiply(-1)
+                event.damager.teleport(event.damager.location.apply {
+                    direction = direction.multiply(-1)
+                })
 
                 event.entity.world.playSound(event.entity.location, Sound.ITEM_SHIELD_BLOCK, 1F, 1F)
             }
+        }),
+
+    HARDENING(
+        CHESTPLATES, 3, Action(DEFENDING) { event, level ->
+            if (event.entity is LivingEntity) {
+                if ((event.entity as LivingEntity).equipment == null) return@Action
+                for (item in (event.entity as LivingEntity).equipment!!.armorContents)
+                    if (item.itemMeta is Damageable) {
+                        val meta = item.itemMeta as Damageable
+                        item.itemMeta = meta.apply {
+                            damage -= level * 2
+                        } as ItemMeta
+                    }
+            }
+
+        }),
+
+    BEACON_OF_DEFENDING(
+        CHESTPLATES, 5, Action(DEFENDING) { event, level ->
+            val p = event.entity as Player
+            var damage = event.damage
+
+            listOf(
+                p.location.chunk,
+                p.world.getChunkAt(p.location.add(16.0, 0.0, 0.0)),
+                p.world.getChunkAt(p.location.add(0.0, 0.0, 16.0)),
+                p.world.getChunkAt(p.location.add(-16.0, 0.0, 0.0)),
+                p.world.getChunkAt(p.location.add(0.0, 0.0, -16.0)),
+                p.world.getChunkAt(p.location.add(16.0, 0.0, 16.0)),
+                p.world.getChunkAt(p.location.add(-16.0, 0.0, 16.0)),
+                p.world.getChunkAt(p.location.add(16.0, 0.0, -16.0)),
+                p.world.getChunkAt(p.location.add(-16.0, 0.0, -16.0))
+            )
+                .flatMap { it.tileEntities.toList() }
+                .filter { it.type == org.bukkit.Material.BEACON }
+                .map { it as org.bukkit.block.Beacon }
+                .filter { it.tier > 0}.forEach {
+                    damage *= 1 - (level * 0.1) - (0.025 * (it.tier - 1))
+                }
+
+            event.damage = damage
         }),
 
     // Damage Enchantments
@@ -141,6 +241,30 @@ enum class PEnchantments(
 
                 if (block.type == Material.SOUL_SAND || block.type.name.equals("SOUL_SOIL", true))
                     event.damage /= (1 + level)
+            }
+        }),
+
+    STRIDING(
+        LEGGINGS, 1, Action(DAMAGE) { event, _ ->
+            if (event.cause == DamageCause.LAVA) event.isCancelled = true
+        }),
+
+    DISINTEGRATION(
+        LEGGINGS, 9, Action(DAMAGE) { event, level ->
+            if (event.cause == DamageCause.SUFFOCATION || event.cause == DamageCause.FALLING_BLOCK)
+                event.damage *= 1 - (level * 0.1)
+        }),
+
+    LANDING(
+        BOOTS, 9,  Action(DAMAGE) { event, level ->
+            if (event.cause != DamageCause.FALL) return@Action
+            event.isCancelled = true
+
+            val dmg = event.damage * (1 - (level * 0.1))
+
+            event.entity.getNearbyEntities(level.toDouble(), 1.0, level.toDouble()).forEach {
+                if (it is LivingEntity)
+                    it.damage(dmg, event.entity)
             }
         }),
 
@@ -168,6 +292,34 @@ enum class PEnchantments(
             drops.forEach { event.player.world.dropItemNaturally(event.block.location, it) }
         }),
 
+    VEIN_RIPPER(
+        PICKAXES, 1, Action(MINING) { event, _ ->
+            if (!event.block.type.isOre()) return@Action
+
+            fun findVein(block: Block): Set<Block> {
+                val set = mutableSetOf<Block>()
+                listOf(
+                    BlockFace.UP,
+                    BlockFace.DOWN,
+                    BlockFace.NORTH,
+                    BlockFace.EAST,
+                    BlockFace.SOUTH,
+                    BlockFace.WEST,
+                ).forEach {
+                    val relative = block.getRelative(it)
+                    if (relative.type == block.type) {
+                        set.add(relative)
+                        set.addAll(findVein(relative))
+                    }
+                }
+
+                return set
+            }
+
+            val vein = findVein(event.block)
+            vein.forEach { it.breakNaturally(event.player.inventory.itemInMainHand) }
+        }),
+
     // Passive Enchantments
 
     JUMP(
@@ -176,6 +328,20 @@ enum class PEnchantments(
         }),
 
     ;
+
+    constructor(
+        target: PEnchantment.Target,
+        maxLevel: Int,
+        info: Action<out Event>,
+        conflicts: Collection<PEnchantment> = emptyList()
+    ) : this(target, maxLevel, info, conflicts.toTypedArray())
+
+    constructor(
+        target: PEnchantment.Target,
+        maxLevel: Int,
+        info: Action<out Event>,
+        conflicts: PEnchantment
+    ) : this(target, maxLevel, info, listOf(conflicts))
 
     private val nameKey = "enchantment.${name.lowercase()}"
 
@@ -201,6 +367,12 @@ enum class PEnchantments(
                 if (type.getEventClass().isAssignableFrom(event::class.java))
                     action(event as T, level)
             }
+        }
+    }
+
+    private object Util {
+        fun Material.isOre(): Boolean {
+            return name.endsWith("_ORE") || name.equals("ancient_debris", ignoreCase = true)
         }
     }
 
