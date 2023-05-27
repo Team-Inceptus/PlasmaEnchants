@@ -3,6 +3,7 @@ package us.teaminceptus.plasmaenchants.api.enchants
 import org.bukkit.Material
 import org.bukkit.event.Event
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockDamageEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityShootBowEvent
@@ -81,9 +82,13 @@ interface PEnchantment : BiConsumer<Event, Int> {
              */
             val DAMAGE: Type<EntityDamageEvent> = Type(EntityDamageEvent::class.java)
             /**
+             * Represents the type of Enchantment that will activate when breaking blocks.
+             */
+            val BLOCK_BREAK: Type<BlockBreakEvent> = Type(BlockBreakEvent::class.java)
+            /**
              * Represents the type of Enchantment that will activate when mining blocks.
              */
-            val MINING: Type<BlockBreakEvent> = Type(BlockBreakEvent::class.java)
+            val MINING: Type<BlockDamageEvent> = Type(BlockDamageEvent::class.java)
             /**
              * Represents the type of Enchantment that runs its action every tick.
              */

@@ -8,13 +8,13 @@ import org.bukkit.block.Beacon
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.Illager
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.Event
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
-import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.potion.PotionEffect
@@ -25,9 +25,11 @@ import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Target.*
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.ATTACKING
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.DAMAGE
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.DEFENDING
+import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.BLOCK_BREAK
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.MINING
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.PASSIVE
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.isOre
+import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.matchType
 import java.util.*
 import kotlin.math.absoluteValue
 
@@ -160,7 +162,7 @@ enum class PEnchantments(
     // Attacking Enchantments - Collectors
 
     PLAYER_COLLECTOR(
-        MELEE_WEAPONS, 3, Action(ATTACKING) { event, level ->
+        AXES, 3, Action(ATTACKING) { event, level ->
             val p = event.damager as Player
             val kills = p.getStatistic(Statistic.PLAYER_KILLS)
             if (kills < 1) return@Action
@@ -169,7 +171,139 @@ enum class PEnchantments(
             event.damage *= 1 + (level * 0.05 * count)
         }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
+    UNDEAD_COLLECTOR(
+        MELEE_WEAPONS, 3, Action(ATTACKING) { event, level ->
+            val p = event.damager as Player
+            var kills = 0
 
+            for (type in listOf(
+                EntityType.ZOMBIE,
+                EntityType.ZOMBIE_VILLAGER,
+                EntityType.HUSK,
+                EntityType.DROWNED,
+                EntityType.PHANTOM,
+                EntityType.SKELETON,
+                EntityType.STRAY,
+                EntityType.WITHER,
+                EntityType.WITHER_SKELETON,
+                matchType("ZOGLIN"),
+                matchType("ZOMBIFIED_PIGLIN"),
+            )) if (type != null) kills += p.getStatistic(Statistic.KILL_ENTITY, type)
+
+            val count = kills.toString().length
+            event.damage *= 1 + (level * 0.05 * count)
+        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+
+    AQUATIC_COLLECTOR(
+        SWORDS, 3, Action(ATTACKING) { event, level ->
+            val p = event.damager as Player
+            var kills = 0
+
+            for (type in listOf(
+                EntityType.DROWNED,
+                EntityType.COD,
+                EntityType.SALMON,
+                EntityType.PUFFERFISH,
+                EntityType.TROPICAL_FISH,
+                EntityType.TURTLE,
+                EntityType.GUARDIAN,
+                EntityType.ELDER_GUARDIAN,
+                EntityType.SQUID,
+                matchType("GLOW_SQUID"),
+                matchType("AXOLOTL"),
+                matchType("TADPOLE"),
+            )) if (type != null) kills += p.getStatistic(Statistic.KILL_ENTITY, type)
+
+            val count = kills.toString().length
+            event.damage *= 1 + (level * 0.05 * count)
+        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+
+    NETHER_COLLECTOR(
+        MELEE_WEAPONS, 3, Action(ATTACKING) { event, level ->
+            val p = event.damager as Player
+            var kills = 0
+
+            for (type in listOf(
+                EntityType.BLAZE,
+                EntityType.ENDERMAN,
+                EntityType.GHAST,
+                EntityType.MAGMA_CUBE,
+                EntityType.SKELETON,
+                EntityType.WITHER_SKELETON,
+                EntityType.WITHER,
+                matchType("PIGLIN"),
+                matchType("HOGLIN"),
+                matchType("ZOMBIFIED_PIGLIN"),
+                matchType("ZOGLIN"),
+                matchType("PIGLIN_BRUTE"),
+                matchType("STRIDER"),
+            )) if (type != null) kills += p.getStatistic(Statistic.KILL_ENTITY, type)
+
+            val count = kills.toString().length
+            event.damage *= 1 + (level * 0.05 * count)
+        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+
+    ORE_COLLECTOR(
+        AXES, 4, Action(ATTACKING) { event, level ->
+            val p = event.damager as Player
+            var mined = 0
+
+            for (m in listOf(
+                Material.COAL_ORE,
+                Material.matchMaterial("COPPER_ORE"),
+                Material.IRON_ORE,
+                Material.LAPIS_ORE,
+                Material.REDSTONE_ORE,
+                Material.GOLD_ORE,
+                Material.DIAMOND_ORE,
+                Material.EMERALD_ORE,
+
+                Material.matchMaterial("DEEPSLATE_COAL_ORE"),
+                Material.matchMaterial("DEEPSLATE_COPPER_ORE"),
+                Material.matchMaterial("DEEPSLATE_LAPIS_ORE"),
+                Material.matchMaterial("DEEPSLATE_REDSTONE_ORE"),
+                Material.matchMaterial("DEEPSLATE_IRON_ORE"),
+                Material.matchMaterial("DEEPSLATE_GOLD_ORE"),
+                Material.matchMaterial("DEEPSLATE_DIAMOND_ORE"),
+                Material.matchMaterial("DEEPSLATE_EMERALD_ORE"),
+                
+                Material.NETHER_QUARTZ_ORE,
+                Material.matchMaterial("NETHER_GOLD_ORE")
+            )) if (m != null) mined += p.getStatistic(Statistic.MINE_BLOCK, m)
+
+            val count = mined.toString().length
+            event.damage *= 1 + (level * 0.05 * count)
+        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+
+    END_COLLECTOR(
+        MELEE_WEAPONS, 4, Action(ATTACKING) { event, level ->
+            val p = event.damager as Player
+            var kills = 0
+
+            for (type in listOf(
+                EntityType.ENDERMAN,
+                EntityType.ENDER_DRAGON,
+                EntityType.ENDERMITE
+            )) kills += p.getStatistic(Statistic.KILL_ENTITY, type)
+
+            val count = kills.toString().length
+            event.damage *= 1 + (level * 0.07 * count)
+        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+
+    BOSS_COLLECTOR(
+        MELEE_WEAPONS, 5, Action(ATTACKING) { event, level ->
+            val p = event.damager as Player
+            var kills = 0
+
+            for (type in listOf(
+                EntityType.ENDER_DRAGON,
+                EntityType.WITHER,
+                matchType("WARDEN")
+            )) if (type != null) kills += p.getStatistic(Statistic.KILL_ENTITY, type)
+
+            val count = kills.toString().length
+            event.damage *= 1 + (level * 0.1 * count)
+        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     // Defending Enchantments
 
@@ -218,8 +352,8 @@ enum class PEnchantments(
                 p.world.getChunkAt(p.location.add(-16.0, 0.0, -16.0))
             )
                 .flatMap { it.tileEntities.toList() }
-                .filter { it.type == org.bukkit.Material.BEACON }
-                .map { it as org.bukkit.block.Beacon }
+                .filter { it.type == Material.BEACON }
+                .map { it as Beacon }
                 .filter { it.tier > 0}.forEach {
                     damage *= 1 - (level * 0.1) - (0.025 * (it.tier - 1))
                 }
@@ -268,10 +402,51 @@ enum class PEnchantments(
             }
         }),
 
+    MOON_PROTECTION(
+        ARMOR, 4, Action(DAMAGE) { event, level ->
+            if (event.cause == DamageCause.STARVATION || event.cause == DamageCause.VOID) return@Action
+            if (event.entity.world.time !in 13000..24000) return@Action
+
+            event.damage *= (1 - (level * 0.05)).coerceAtLeast(0.1)
+        }),
+
+    SUN_PROTECTION(
+        ARMOR, 4, Action(DAMAGE) { event, level ->
+            if (event.cause == DamageCause.STARVATION || event.cause == DamageCause.VOID) return@Action
+            if (event.entity.world.time !in 0..13000) return@Action
+
+            event.damage *= (1 - (level * 0.05)).coerceAtLeast(0.1)
+        }, MOON_PROTECTION),
+
+    STORM_PROTECTION(
+        ARMOR, 4, Action(DAMAGE) { event, level ->
+            if (event.cause == DamageCause.STARVATION || event.cause == DamageCause.VOID) return@Action
+            if (!event.entity.world.hasStorm()) return@Action
+
+            event.damage *= (1 - (level * 0.05)).coerceAtLeast(0.1)
+        }, SUN_PROTECTION),
+
+    SIPHONING(
+        HELMETS, 4, Action(DAMAGE) { event, level ->
+            if (event.cause != DamageCause.LIGHTNING) return@Action
+            event.isCancelled = true
+
+            if (event.entity is Player)
+                (event.entity as Player).health += level * 5
+        }),
+
+    SQUISHY(
+        CHESTPLATES, 4, Action(DAMAGE) { event, level ->
+            if (event.cause != DamageCause.THORNS || event.cause != DamageCause.CONTACT) return@Action
+
+            if (level == 4) event.isCancelled = true
+            else event.damage *= 1 - (level * 0.25)
+        }),
+
     // Mining Enchantments
 
     SMELTING(
-        PICKAXES, 1, Action(MINING) { event, _ ->
+        PICKAXES, 1, Action(BLOCK_BREAK) { event, _ ->
             if (event.player.inventory.itemInMainHand.containsEnchantment(Enchantment.SILK_TOUCH)) return@Action
 
             event.isDropItems = false
@@ -293,7 +468,7 @@ enum class PEnchantments(
         }),
 
     VEIN_RIPPER(
-        PICKAXES, 1, Action(MINING) { event, _ ->
+        PICKAXES, 1, Action(BLOCK_BREAK) { event, _ ->
             if (!event.block.type.isOre()) return@Action
 
             fun findVein(block: Block): Set<Block> {
@@ -318,6 +493,12 @@ enum class PEnchantments(
 
             val vein = findVein(event.block)
             vein.forEach { it.breakNaturally(event.player.inventory.itemInMainHand) }
+        }),
+
+    BEDROCK_MINER(
+        PICKAXES, 1, Action(MINING) { event, _ ->
+            if (event.block.type == Material.OBSIDIAN)
+                event.instaBreak = true
         }),
 
     // Passive Enchantments
@@ -373,6 +554,13 @@ enum class PEnchantments(
     private object Util {
         fun Material.isOre(): Boolean {
             return name.endsWith("_ORE") || name.equals("ancient_debris", ignoreCase = true)
+        }
+
+        fun matchType(name: String): EntityType? {
+            for (type in EntityType.values())
+                if (type.name.equals(name, ignoreCase = true)) return type
+
+            return null
         }
     }
 
