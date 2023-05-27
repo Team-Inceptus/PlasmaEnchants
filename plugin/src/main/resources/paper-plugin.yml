@@ -3,8 +3,5 @@ main: us.teaminceptus.plasmaenchants.PlasmaEnchants
 version: ${project.version}
 description: ${project.description}
 api-version: 1.14
-load: POSTWORLD
-authors: [GamerCoder]
-website: "https://github.com/Team-Inceptus/PlasmaEnchants"
-libraries:
-  - org.jetbrains.kotlin:kotlin-stdlib:1.8.21
+load-after:
+  - name: Kotlin
