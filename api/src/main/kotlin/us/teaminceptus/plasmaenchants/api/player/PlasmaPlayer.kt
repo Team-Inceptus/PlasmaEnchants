@@ -13,12 +13,12 @@ import java.io.File
 class PlasmaPlayer(private val p: OfflinePlayer) {
 
     private val pConfig: FileConfiguration?
-    private val pFile: File? = PlasmaConfig.getDataFolder()?.resolve("${p.uniqueId}.yml")
+    private val pFile: File = PlasmaConfig.getDataFolder().resolve("${p.uniqueId}.yml")
 
     init {
-        if (pFile?.exists() == false) pFile.createNewFile()
+        if (!pFile.exists()) pFile.createNewFile()
 
-        this.pConfig = pFile?.let { YamlConfiguration.loadConfiguration(it) }
+        this.pConfig = pFile.let { YamlConfiguration.loadConfiguration(it) }
     }
 
     /**
@@ -41,7 +41,7 @@ class PlasmaPlayer(private val p: OfflinePlayer) {
      * Fetches the Player's File that the configuration is stored in.
      * @return Player's File
      */
-    fun getFile(): File? {
+    fun getFile(): File {
         return pFile
     }
 

@@ -3,6 +3,7 @@ package us.teaminceptus.plasmaenchants.api
 import org.bukkit.plugin.Plugin
 import org.bukkit.Bukkit
 import java.io.File
+import java.util.Locale
 import java.util.logging.Logger
 
 /**
@@ -11,15 +12,13 @@ import java.util.logging.Logger
 interface PlasmaConfig {
 
     companion object {
-        private val p: Plugin? = if (getPlugin() == null) null else getPlugin()
-
         /**
          * Fetches the PlasmaEnchants plugin.
          * @return Plugin
          */
         @JvmStatic
-        fun getPlugin(): Plugin? {
-            return Bukkit.getPluginManager().getPlugin("PlasmaEnchants")
+        fun getPlugin(): Plugin {
+            return Bukkit.getPluginManager().getPlugin("PlasmaEnchants") ?: throw IllegalStateException("PlasmaEnchants is not loaded!")
         }
 
         /**
@@ -28,8 +27,7 @@ interface PlasmaConfig {
          */
         @JvmStatic
         fun getLogger(): Logger? {
-            if (p == null) return null
-            return p.logger
+            return getPlugin().logger
         }
 
         /**
@@ -37,11 +35,8 @@ interface PlasmaConfig {
          * @return PlasmaConfig Instance
          */
         @JvmStatic
-        fun getConfig(): PlasmaConfig? {
-            if (p == null) return null
-            if (p is PlasmaConfig) return p
-
-            return null
+        fun getConfig(): PlasmaConfig {
+            return getPlugin() as PlasmaConfig
         }
 
         /**
@@ -61,8 +56,8 @@ interface PlasmaConfig {
          * Fetches the Plugin's Data Folder.
          * @return Data Folder
          */
-        fun getDataFolder(): File? {
-            return p?.dataFolder
+        fun getDataFolder(): File {
+            return getPlugin().dataFolder
         }
 
         /**
@@ -70,8 +65,8 @@ interface PlasmaConfig {
          * @return Player Data Directory
          */
         @JvmStatic
-        fun getPlayerDirectory(): File? {
-            return getDataFolder()?.resolve("players")
+        fun getPlayerDirectory(): File {
+            return getDataFolder().resolve("players")
         }
     }
 
@@ -80,15 +75,16 @@ interface PlasmaConfig {
      * @param key The key to fetch
      * @return The message
      */
-    fun get(key: String): String
+    fun get(key: String): String?
 
     /**
      * Fetches a message from the Language file, with the plugin prefix in front.
      * @param key The key to fetch
      * @return The message
      */
-    fun getMessage(key: String): String {
-        return get("plugin.prefix") + get("plugin.prefix")
+    fun getMessage(key: String): String? {
+        if (get(key) == null) return null
+        return get("plugin.prefix") + get(key)
     }
 
     /**
@@ -96,5 +92,19 @@ interface PlasmaConfig {
      * @return Language Configured
      */
     fun getLanguage(): String?
+
+    /**
+     * Fetches the locale set in the configuration.
+     * @return Locale Configured
+     */
+    fun getLocale(): Locale {
+        return when (getLanguage()) {
+            "fr" -> Locale.FRENCH
+            "de" -> Locale.GERMAN
+            "it" -> Locale.ITALIAN
+            "zh" -> Locale.CHINESE
+            else -> Locale.ENGLISH
+        }
+    }
 
 }
