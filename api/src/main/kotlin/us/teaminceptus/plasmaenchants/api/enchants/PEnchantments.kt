@@ -526,9 +526,9 @@ enum class PEnchantments(
 
     private val nameKey = "enchantment.${name.lowercase()}"
 
-    override fun getName(): String = PlasmaConfig.getConfig()?.get(nameKey) ?: name.lowercase().replaceFirstChar { it.uppercase() }
+    override fun getName(): String = PlasmaConfig.getConfig().get(nameKey) ?: name.lowercase().replaceFirstChar { it.uppercase() }
 
-    override fun getDescription(): String = PlasmaConfig.getConfig()?.get("$nameKey.desc") ?: "No description provided."
+    override fun getDescription(): String = PlasmaConfig.getConfig().get("$nameKey.desc") ?: "No description provided."
 
     override fun getType(): PEnchantment.Type<*> = info.type
 
