@@ -1,7 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 val lampVersion = "3.1.5"
 
 dependencies {
@@ -14,16 +10,16 @@ dependencies {
 
 tasks {
     kotlinSourcesJar {
-        archiveClassifier.set("")
+        archiveClassifier.set("sources")
     }
 
-    withType<ProcessResources> {
+    processResources {
         filesMatching(listOf("plugin.yml", "paper-plugin.yml")) {
             expand(project.properties)
         }
     }
 
-    withType<ShadowJar> {
+    shadowJar {
         dependsOn(kotlinSourcesJar)
         archiveClassifier.set("")
     }

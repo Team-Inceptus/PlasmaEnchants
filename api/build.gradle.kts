@@ -1,6 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("org.jetbrains.dokka") version "1.8.10"
 }
@@ -19,7 +16,7 @@ tasks {
         from(dokkaJavadoc.flatMap { it.outputDirectory })
     }
 
-    withType<ShadowJar> {
+    shadowJar {
         dependsOn(kotlinSourcesJar, "javadocJar")
     }
 }
