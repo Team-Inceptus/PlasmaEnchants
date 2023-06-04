@@ -1,5 +1,6 @@
 package us.teaminceptus.plasmaenchants.api.enchants
 
+import org.bukkit.Keyed
 import org.bukkit.Material
 import org.bukkit.event.Event
 import org.bukkit.event.block.BlockBreakEvent
@@ -15,7 +16,7 @@ import java.util.stream.Collectors
 /**
  * Represents a PlasmaEnchants Enchantment.
  */
-interface PEnchantment : BiConsumer<Event, Int> {
+interface PEnchantment : BiConsumer<Event, Int>, Keyed {
 
     /**
      * Fetches the name of this PEnchantment.
@@ -104,6 +105,20 @@ interface PEnchantment : BiConsumer<Event, Int> {
         }
 
         fun getEventClass(): Class<T> = clazz
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Type<*>
+
+            return clazz == other.clazz
+        }
+
+        override fun hashCode(): Int {
+            return clazz.hashCode()
+        }
+
     }
 
     /**
