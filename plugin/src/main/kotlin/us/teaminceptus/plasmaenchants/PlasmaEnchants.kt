@@ -14,8 +14,16 @@ import java.io.IOException
  */
 class PlasmaEnchants : JavaPlugin(), PlasmaConfig {
 
+    private fun loadClasses() {
+        PlasmaEvents(this)
+        PlasmaCommands(this)
+    }
+
     override fun onEnable() {
         saveDefaultConfig()
+
+        loadClasses()
+        logger.info("Loaded Classes...")
 
         logger.info("Done!")
     }
@@ -26,7 +34,7 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig {
 
     // Configuration
 
-    override fun get(key: String): String {
+    override fun get(key: String): String? {
         val p = Properties()
         val lang: String = if (getLanguage().equals("en", ignoreCase = true)) "" else "_" + getLanguage()
 
@@ -35,10 +43,14 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig {
 
             p.load(str)
             str.close()
-            ChatColor.translateAlternateColorCodes('&', p.getProperty(key, "Unknown Value"))
+
+            val prop = p.getProperty("key", "null")
+            if (prop.equals("null")) return null
+
+            ChatColor.translateAlternateColorCodes('&', p.getProperty(key))
         } catch (e: IOException) {
             print(e)
-            "Unknown Value"
+            null
         }
     }
 
