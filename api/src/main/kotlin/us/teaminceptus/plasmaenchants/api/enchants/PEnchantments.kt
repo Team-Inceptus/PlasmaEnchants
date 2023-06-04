@@ -2,6 +2,7 @@ package us.teaminceptus.plasmaenchants.api.enchants
 
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.Statistic
 import org.bukkit.block.Beacon
@@ -539,6 +540,8 @@ enum class PEnchantments(
     override fun getMaxLevel(): Int = maxLevel
 
     override fun accept(e: Event, level: Int) = info.action(e, level)
+
+    override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.getPlugin(), name.lowercase())
 
     private class Action<T : Event>(val type: PEnchantment.Type<T>, action: (T, Int) -> Unit) {
         val action: (Event, Int) -> Unit
