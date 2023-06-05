@@ -2,6 +2,10 @@ plugins {
     id("org.jetbrains.dokka") version "1.8.10"
 }
 
+dependencies {
+    compileOnly("com.mojang:authlib:1.5.25")
+}
+
 description = "API for the Premium Plugin PlasmaEnchants"
 
 tasks {
