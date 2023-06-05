@@ -16,6 +16,10 @@ tasks {
         from(dokkaJavadoc.flatMap { it.outputDirectory })
     }
 
+    processResources {
+        include("**/*.properties")
+    }
+
     shadowJar {
         dependsOn(kotlinSourcesJar, "javadocJar")
     }
