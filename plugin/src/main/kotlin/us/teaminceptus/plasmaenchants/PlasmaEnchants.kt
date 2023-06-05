@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.ChatColor
 import us.teaminceptus.plasmaenchants.api.PlasmaConfig
 import us.teaminceptus.plasmaenchants.api.PlasmaRegistry
+import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments
 import java.util.Properties
@@ -18,6 +19,9 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
     companion object {
         @JvmStatic
         private val enchantments = mutableSetOf<PEnchantment>()
+
+        @JvmStatic
+        private val artifacts = mutableSetOf<PArtifact>()
     }
 
     private fun loadClasses() {
@@ -73,6 +77,11 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
         enchantments.add(enchantment)
     }
 
+    override fun register(artifact: PArtifact) {
+        if (artifacts.contains(artifact)) throw IllegalArgumentException("Artifact already registered!")
+        artifacts.add(artifact)
+    }
+
     override fun getEnchantments(): Set<PEnchantment> {
         return enchantments
     }
@@ -80,6 +89,15 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
     override fun unregister(enchantment: PEnchantment) {
         if (!enchantments.contains(enchantment)) throw IllegalArgumentException("Enchantment not registered!")
         enchantments.remove(enchantment)
+    }
+
+    override fun unregister(artifact: PArtifact) {
+        if (!artifacts.contains(artifact)) throw IllegalArgumentException("Artifact not registered!")
+        artifacts.remove(artifact)
+    }
+
+    override fun getArtifacts(): Set<PArtifact> {
+        return artifacts
     }
 
 
