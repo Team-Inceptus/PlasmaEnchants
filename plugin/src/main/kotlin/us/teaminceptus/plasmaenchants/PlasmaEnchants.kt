@@ -1,10 +1,11 @@
 package us.teaminceptus.plasmaenchants
 
 import org.bukkit.plugin.java.JavaPlugin
-import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.ChatColor
 import us.teaminceptus.plasmaenchants.api.PlasmaConfig
-import us.teaminceptus.plasmaenchants.PlasmaEnchants
+import us.teaminceptus.plasmaenchants.api.PlasmaRegistry
+import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
+import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments
 import java.util.Properties
 import java.io.InputStream
 import java.io.IOException
@@ -12,11 +13,18 @@ import java.io.IOException
 /**
  * Represents the main PlasmaEnchants Plugin
  */
-class PlasmaEnchants : JavaPlugin(), PlasmaConfig {
+class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
+
+    companion object {
+        @JvmStatic
+        private val enchantments = mutableSetOf<PEnchantment>()
+    }
 
     private fun loadClasses() {
         PlasmaEvents(this)
         PlasmaCommands(this)
+
+        PEnchantments.values().forEach(::register)
     }
 
     override fun onEnable() {
@@ -57,5 +65,22 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig {
     override fun getLanguage(): String? {
         return config.getString("language", "en")
     }
+
+    // Registry Implementation
+
+    override fun register(enchantment: PEnchantment) {
+        if (enchantments.contains(enchantment)) throw IllegalArgumentException("Enchantment already registered!")
+        enchantments.add(enchantment)
+    }
+
+    override fun getEnchantments(): Set<PEnchantment> {
+        return enchantments
+    }
+
+    override fun unregister(enchantment: PEnchantment) {
+        if (!enchantments.contains(enchantment)) throw IllegalArgumentException("Enchantment not registered!")
+        enchantments.remove(enchantment)
+    }
+
 
 }
