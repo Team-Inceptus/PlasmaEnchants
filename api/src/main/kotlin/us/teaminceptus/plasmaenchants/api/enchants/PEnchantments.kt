@@ -22,16 +22,17 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 import us.teaminceptus.plasmaenchants.api.PlasmaConfig
-import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Target.*
-import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.ATTACKING
-import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.DAMAGE
-import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.DEFENDING
-import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.BLOCK_BREAK
-import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.MINING
-import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment.Type.Companion.PASSIVE
+import us.teaminceptus.plasmaenchants.api.PTarget
+import us.teaminceptus.plasmaenchants.api.PTarget.*
+import us.teaminceptus.plasmaenchants.api.PType
+import us.teaminceptus.plasmaenchants.api.PType.Companion.ATTACKING
+import us.teaminceptus.plasmaenchants.api.PType.Companion.DAMAGE
+import us.teaminceptus.plasmaenchants.api.PType.Companion.DEFENDING
+import us.teaminceptus.plasmaenchants.api.PType.Companion.BLOCK_BREAK
+import us.teaminceptus.plasmaenchants.api.PType.Companion.MINING
+import us.teaminceptus.plasmaenchants.api.PType.Companion.PASSIVE
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.isOre
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.matchType
-import java.util.*
 import kotlin.math.absoluteValue
 
 /**
@@ -39,7 +40,7 @@ import kotlin.math.absoluteValue
  */
 @Suppress("unchecked_cast")
 enum class PEnchantments(
-    private val target: PEnchantment.Target,
+    private val target: PTarget,
     private val maxLevel: Int = 1,
     private val info: Action<*>,
     private val conflicts: Array<PEnchantment>
@@ -512,14 +513,14 @@ enum class PEnchantments(
     ;
 
     constructor(
-        target: PEnchantment.Target,
+        target: PTarget,
         maxLevel: Int,
         info: Action<out Event>,
         conflicts: Collection<PEnchantment> = emptyList()
     ) : this(target, maxLevel, info, conflicts.toTypedArray())
 
     constructor(
-        target: PEnchantment.Target,
+        target: PTarget,
         maxLevel: Int,
         info: Action<out Event>,
         conflicts: PEnchantment
@@ -531,9 +532,9 @@ enum class PEnchantments(
 
     override fun getDescription(): String = PlasmaConfig.getConfig().get("$nameKey.desc") ?: "No description provided."
 
-    override fun getType(): PEnchantment.Type<*> = info.type
+    override fun getType(): PType<*> = info.type
 
-    override fun getTarget(): PEnchantment.Target = target
+    override fun getTarget(): PTarget = target
 
     override fun getConflicts(): List<PEnchantment> = listOf(*conflicts)
 
@@ -543,7 +544,7 @@ enum class PEnchantments(
 
     override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.getPlugin(), name.lowercase())
 
-    private class Action<T : Event>(val type: PEnchantment.Type<T>, action: (T, Int) -> Unit) {
+    private class Action<T : Event>(val type: PType<T>, action: (T, Int) -> Unit) {
         val action: (Event, Int) -> Unit
 
         init {
