@@ -33,6 +33,7 @@ import us.teaminceptus.plasmaenchants.api.PType.Companion.MINING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.PASSIVE
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.isOre
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.matchType
+import java.util.function.Predicate
 import kotlin.math.absoluteValue
 
 /**
@@ -43,7 +44,7 @@ enum class PEnchantments(
     private val target: PTarget,
     private val maxLevel: Int = 1,
     private val info: Action<*>,
-    private val conflicts: Array<PEnchantment>
+    private val conflicts: Predicate<PEnchantments>
 ) : PEnchantment {
 
     // Attacking Enchantments
@@ -171,7 +172,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     UNDEAD_COLLECTOR(
         MELEE_WEAPONS, 3, Action(ATTACKING) { event, level ->
@@ -194,7 +195,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     AQUATIC_COLLECTOR(
         SWORDS, 3, Action(ATTACKING) { event, level ->
@@ -218,7 +219,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     NETHER_COLLECTOR(
         MELEE_WEAPONS, 3, Action(ATTACKING) { event, level ->
@@ -243,7 +244,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     ORE_COLLECTOR(
         AXES, 4, Action(ATTACKING) { event, level ->
@@ -275,7 +276,7 @@ enum class PEnchantments(
 
             val count = mined.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     END_COLLECTOR(
         MELEE_WEAPONS, 4, Action(ATTACKING) { event, level ->
@@ -290,7 +291,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.07 * count)
-        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     BOSS_COLLECTOR(
         MELEE_WEAPONS, 5, Action(ATTACKING) { event, level ->
@@ -305,7 +306,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.1 * count)
-        }, PEnchantments.values().filter { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     // Defending Enchantments
 
@@ -517,7 +518,7 @@ enum class PEnchantments(
         maxLevel: Int,
         info: Action<out Event>,
         conflicts: Collection<PEnchantment> = emptyList()
-    ) : this(target, maxLevel, info, conflicts.toTypedArray())
+    ) : this(target, maxLevel, info, { conflicts.contains(it) })
 
     constructor(
         target: PTarget,
@@ -536,7 +537,7 @@ enum class PEnchantments(
 
     override fun getTarget(): PTarget = target
 
-    override fun getConflicts(): List<PEnchantment> = listOf(*conflicts)
+    override fun getConflicts(): List<PEnchantment> = values().filter { conflicts.test(it) }.toList()
 
     override fun getMaxLevel(): Int = maxLevel
 
