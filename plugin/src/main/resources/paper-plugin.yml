@@ -1,7 +1,0 @@
-name: PlasmaEnchants
-main: us.teaminceptus.plasmaenchants.PlasmaEnchants
-version: ${project.version}
-description: ${project.description}
-api-version: 1.14
-load-after:
-  - name: Kotlin
