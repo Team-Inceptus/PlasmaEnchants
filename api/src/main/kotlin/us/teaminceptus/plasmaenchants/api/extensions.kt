@@ -5,10 +5,12 @@ import org.bukkit.NamespacedKey
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataAdapterContext
 import org.bukkit.persistence.PersistentDataType
+import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
 import java.io.*
 
-private val key = NamespacedKey(PlasmaConfig.getPlugin(), "enchants")
+private val enchantKey = NamespacedKey(PlasmaConfig.getPlugin(), "enchants")
+private val artifactsKey = NamespacedKey(PlasmaConfig.getPlugin(), "artifacts")
 
 @Suppress("unchecked_cast")
 private val stringIntMap: PersistentDataType<ByteArray, Map<String, Int>> = object : PersistentDataType<ByteArray, Map<String, Int>> {
@@ -40,30 +42,42 @@ private val stringIntMap: PersistentDataType<ByteArray, Map<String, Int>> = obje
 
 }
 
+// Enchantments
+
 fun ItemMeta.getPlasmaEnchants(): Map<PEnchantment, Int> {
     val map = mutableMapOf<PEnchantment, Int>()
-    persistentDataContainer[key, stringIntMap]?.forEach { (key, value) ->
+    persistentDataContainer[enchantKey, stringIntMap]?.forEach { (key, value) ->
         val enchant = PlasmaConfig.getRegistry().getEnchantments().firstOrNull { it.key.key == key } ?: return@forEach
         map[enchant] = value
     }
 
     return ImmutableMap.copyOf(map)
 }
-
 fun ItemMeta.hasEnchant(enchant: PEnchantment): Boolean = getPlasmaEnchants().containsKey(enchant)
-fun ItemMeta.getEnchantLevel(enchant: PEnchantment): Int = persistentDataContainer[key, stringIntMap]!![enchant.key.key] ?: 0
+fun ItemMeta.getEnchantLevel(enchant: PEnchantment): Int = persistentDataContainer[enchantKey, stringIntMap]!![enchant.key.key] ?: 0
 fun ItemMeta.hasConflictingEnchant(enchant: PEnchantment): Boolean = hasEnchant(enchant) && getPlasmaEnchants().filterKeys { it.conflictsWith(enchant) }.isNotEmpty()
-
 fun ItemMeta.addEnchant(enchant: PEnchantment, level: Int) {
     val map = HashMap(getPlasmaEnchants().map { it.key.key.key to it.value }.toMap())
     map[enchant.key.key] = level
 
-    persistentDataContainer[key, stringIntMap] = map
+    persistentDataContainer[enchantKey, stringIntMap] = map
 }
-
 fun ItemMeta.removeEnchant(enchant: PEnchantment) {
     val map = HashMap(getPlasmaEnchants().map { it.key.key.key to it.value }.toMap())
     map.remove(enchant.key.key)
 
-    persistentDataContainer[key, stringIntMap] = map
+    persistentDataContainer[enchantKey, stringIntMap] = map
 }
+
+// Artifacts
+fun ItemMeta.getArtifact(): PArtifact? {
+    return PlasmaConfig.getRegistry().getArtifact(
+        NamespacedKey(
+            PlasmaConfig.getPlugin(),
+            persistentDataContainer[artifactsKey, PersistentDataType.STRING] ?: return null
+        )
+    )
+}
+fun ItemMeta.hasArtifact(): Boolean = persistentDataContainer.has(artifactsKey, PersistentDataType.STRING)
+fun ItemMeta.setArtifact(artifact: PArtifact) = persistentDataContainer.set(artifactsKey, PersistentDataType.STRING, artifact.key.key)
+fun ItemMeta.removeArtifact() = persistentDataContainer.remove(artifactsKey)
