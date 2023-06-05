@@ -1,5 +1,6 @@
 package us.teaminceptus.plasmaenchants.api
 
+import com.google.common.collect.ImmutableSet
 import org.bukkit.Material
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
@@ -139,25 +140,40 @@ enum class PTarget {
     ARMOR(HELMETS, CHESTPLATES, LEGGINGS, BOOTS),
 
     /**
+     * Represents a Bow
+     */
+    BOW(Material.BOW),
+
+    /**
+     * Represents a Crossbow
+     */
+    CROSSBOW(Material.CROSSBOW),
+
+    /**
+     * Represents all Ranged Weapons (Bows and Crossbows)
+     */
+    RANGED(BOW, CROSSBOW),
+
+    /**
      * Target that applies to all materials.
      */
-    ALL(TOOLS, ARMOR)
+    ALL(TOOLS, ARMOR, RANGED)
 
     ;
 
-    private val validMaterials: List<Material>
+    private val valid: List<Material>
 
     constructor(vararg validMaterials: Material) {
-        this.validMaterials = validMaterials.toList()
+        this.valid = validMaterials.toList()
             .stream()
             .filter { it != Material.AIR }
             .collect(Collectors.toList())
     }
 
     constructor(vararg targets: PTarget) {
-        this.validMaterials = targets.toList()
+        this.valid = targets.toList()
             .stream()
-            .map { it.validMaterials }
+            .map { it.valid }
             .flatMap { it.stream() }
             .filter { it != Material.AIR }
             .collect(Collectors.toList())
@@ -173,10 +189,10 @@ enum class PTarget {
 
     /**
      * Fetches all of the valid materiasl this Target supports.
-     * @return Array of Valid Materials
+     * @return Immutable Set of Valid Materials
      */
-    fun getValidMaterials(): List<Material> {
-        return validMaterials
+    fun getValidMaterials(): Set<Material> {
+        return ImmutableSet.copyOf(valid)
     }
 
     /**
@@ -185,6 +201,6 @@ enum class PTarget {
      * @return True if the Material is valid, false otherwise
      */
     fun isValid(material: Material): Boolean {
-        return validMaterials.contains(material)
+        return valid.contains(material)
     }
 }
