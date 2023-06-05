@@ -1,5 +1,6 @@
 package us.teaminceptus.plasmaenchants.api.player
 
+import org.bukkit.NamespacedKey
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
@@ -12,7 +13,7 @@ import java.io.File
  */
 class PlasmaPlayer(private val p: OfflinePlayer) {
 
-    private val pConfig: FileConfiguration?
+    private val pConfig: FileConfiguration
     private val pFile: File = PlasmaConfig.getDataFolder().resolve("${p.uniqueId}.yml")
 
     init {
@@ -33,7 +34,7 @@ class PlasmaPlayer(private val p: OfflinePlayer) {
      * Fetches the Player's Configuration.
      * @return Player's Configuration
      */
-    fun getConfig(): FileConfiguration? {
+    fun getConfig(): FileConfiguration {
         return pConfig
     }
 
