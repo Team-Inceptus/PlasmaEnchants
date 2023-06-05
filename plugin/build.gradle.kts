@@ -14,7 +14,7 @@ tasks {
     }
 
     processResources {
-        filesMatching(listOf("plugin.yml", "paper-plugin.yml")) {
+        filesMatching("**/*.yml") {
             expand(project.properties)
         }
     }

@@ -5,6 +5,7 @@ description: ${project.description}
 api-version: 1.14
 load: POSTWORLD
 authors: [GamerCoder]
+softdepend: [Kotlin]
 website: "https://github.com/Team-Inceptus/PlasmaEnchants"
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:1.8.21
