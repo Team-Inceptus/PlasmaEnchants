@@ -1,5 +1,6 @@
 package us.teaminceptus.plasmaenchants
 
+import revxrsal.commands.annotation.Command
 import revxrsal.commands.bukkit.BukkitCommandHandler
 
 internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
@@ -20,6 +21,8 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
 
             handler.registerBrigadier()
             handler.locale = plugin.getLocale()
+
+            plugin.logger.info("Loaded Command Handler")
         }
     }
 
