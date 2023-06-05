@@ -56,6 +56,7 @@ interface PlasmaConfig {
          * Fetches the Plugin's Data Folder.
          * @return Data Folder
          */
+        @JvmStatic
         fun getDataFolder(): File {
             return getPlugin().dataFolder
         }
@@ -67,6 +68,15 @@ interface PlasmaConfig {
         @JvmStatic
         fun getPlayerDirectory(): File {
             return getDataFolder().resolve("players")
+        }
+
+        /**
+         * Fetches the PlasmaRegistry instance.
+         * @return PlasmaRegistry Instance
+         */
+        @JvmStatic
+        fun getRegistry(): PlasmaRegistry {
+            return getPlugin() as PlasmaRegistry
         }
     }
 

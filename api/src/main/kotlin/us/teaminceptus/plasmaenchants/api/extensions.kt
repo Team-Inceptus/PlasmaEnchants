@@ -6,7 +6,6 @@ import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataAdapterContext
 import org.bukkit.persistence.PersistentDataType
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
-import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments
 import java.io.*
 
 private val key = NamespacedKey(PlasmaConfig.getPlugin(), "enchants")
@@ -44,7 +43,7 @@ private val stringIntMap: PersistentDataType<ByteArray, Map<String, Int>> = obje
 fun ItemMeta.getPlasmaEnchants(): Map<PEnchantment, Int> {
     val map = mutableMapOf<PEnchantment, Int>()
     persistentDataContainer[key, stringIntMap]?.forEach { (key, value) ->
-        val enchant = PEnchantments.values().firstOrNull { it.key.key == key } ?: return@forEach
+        val enchant = PlasmaConfig.getRegistry().getEnchantments().firstOrNull { it.key.key == key } ?: return@forEach
         map[enchant] = value
     }
 
