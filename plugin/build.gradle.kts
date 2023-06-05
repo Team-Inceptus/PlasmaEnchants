@@ -14,9 +14,7 @@ tasks {
     }
 
     processResources {
-        filesMatching("**/*.yml") {
-            expand(project.properties)
-        }
+        expand(project.properties)
     }
 
     shadowJar {

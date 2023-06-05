@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.8.21"
-    id("org.sonarqube") version "4.1.0.3113"
+    id("org.sonarqube") version "4.0.0.2929"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 
     java
@@ -47,6 +47,7 @@ allprojects {
         maven("https://oss.sonatype.org/content/repositories/snapshots")
         maven("https://oss.sonatype.org/content/repositories/central")
 
+        maven("https://libraries.minecraft.net/")
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     }
 
@@ -111,12 +112,8 @@ allprojects {
                 attributes["Implementation-Vendor"] = pAuthor
             }
 
-            from("src/main/resources") {
-                include("**/*")
-            }
-
             relocate("revxrsal.commands", "us.teaminceptus.shaded.lamp")
-            relocate("org.bstats.bukkit", "us.teaminceptus.shaded.bstats")
+            relocate("org.bstats", "us.teaminceptus.shaded.bstats")
 
             archiveClassifier.set("")
         }
