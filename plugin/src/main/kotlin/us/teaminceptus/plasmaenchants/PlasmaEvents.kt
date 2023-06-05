@@ -3,8 +3,6 @@ package us.teaminceptus.plasmaenchants
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
-import org.bukkit.event.EventPriority
-import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDamageEvent
@@ -14,8 +12,7 @@ import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
-import org.bukkit.plugin.RegisteredListener
-import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
+import us.teaminceptus.plasmaenchants.api.PType
 import us.teaminceptus.plasmaenchants.api.events.PlayerTickEvent
 import us.teaminceptus.plasmaenchants.api.getPlasmaEnchants
 
@@ -25,7 +22,7 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
         plugin.server.pluginManager.registerEvents(this, plugin)
     }
 
-    private fun execute(item: ItemStack, event: Event, type: PEnchantment.Type<*>) {
+    private fun execute(item: ItemStack, event: Event, type: PType<*>) {
         val meta: ItemMeta = item.itemMeta ?: return
 
         val enchants = meta.getPlasmaEnchants().filter { it.key.getType() == type }
@@ -37,7 +34,7 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
         if (event.damager !is Player) return
         val player = event.damager as Player
 
-        execute(player.inventory.itemInMainHand, event, PEnchantment.Type.ATTACKING)
+        execute(player.inventory.itemInMainHand, event, PType.ATTACKING)
     }
 
     @EventHandler
@@ -46,7 +43,7 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
         val player = event.entity as Player
         val items = player.inventory.armorContents
 
-        items.forEach { item -> execute(item, event, PEnchantment.Type.DEFENDING) }
+        items.forEach { item -> execute(item, event, PType.DEFENDING) }
     }
 
     @EventHandler
@@ -55,14 +52,14 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
         val player = event.entity as Player
         val items = player.inventory.armorContents
 
-        items.forEach { item -> execute(item, event, PEnchantment.Type.DAMAGE) }
+        items.forEach { item -> execute(item, event, PType.DAMAGE) }
     }
 
     @EventHandler
-    fun onBlockBreak(event: BlockBreakEvent) = execute(event.player.inventory.itemInMainHand, event, PEnchantment.Type.BLOCK_BREAK)
+    fun onBlockBreak(event: BlockBreakEvent) = execute(event.player.inventory.itemInMainHand, event, PType.BLOCK_BREAK)
 
     @EventHandler
-    fun onBlockDamage(event: BlockDamageEvent) = execute(event.player.inventory.itemInMainHand, event, PEnchantment.Type.MINING)
+    fun onBlockDamage(event: BlockDamageEvent) = execute(event.player.inventory.itemInMainHand, event, PType.MINING)
 
     @EventHandler
     fun passive(event: PlayerTickEvent) {
@@ -73,13 +70,13 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
             listOf(player.inventory.itemInOffHand)
         ).flatten()
 
-        items.forEach { item -> execute(item, event, PEnchantment.Type.PASSIVE) }
+        items.forEach { item -> execute(item, event, PType.PASSIVE) }
     }
 
     @EventHandler
-    fun onInteract(event: PlayerInteractEvent) { execute(event.item ?: return, event, PEnchantment.Type.INTERACT) }
+    fun onInteract(event: PlayerInteractEvent) { execute(event.item ?: return, event, PType.INTERACT) }
 
     @EventHandler
-    fun onBowShoot(event: EntityShootBowEvent) { execute(event.bow ?: return, event, PEnchantment.Type.SHOOT_BOW) }
+    fun onBowShoot(event: EntityShootBowEvent) { execute(event.bow ?: return, event, PType.SHOOT_BOW) }
 
 }
