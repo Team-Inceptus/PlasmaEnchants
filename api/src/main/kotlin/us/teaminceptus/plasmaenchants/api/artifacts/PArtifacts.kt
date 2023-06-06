@@ -5,12 +5,16 @@ import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.World
 import org.bukkit.block.Biome
+import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffectType
 import us.teaminceptus.plasmaenchants.api.PTarget
 import us.teaminceptus.plasmaenchants.api.PTarget.*
 import us.teaminceptus.plasmaenchants.api.PType
 import us.teaminceptus.plasmaenchants.api.PType.Companion.ATTACKING
+import us.teaminceptus.plasmaenchants.api.PType.Companion.BLOCK_BREAK
+import us.teaminceptus.plasmaenchants.api.PType.Companion.SHOOT_BOW
 import us.teaminceptus.plasmaenchants.api.PlasmaConfig
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments
@@ -41,11 +45,47 @@ enum class PArtifacts(
             if (event.damager.location.block.biome == Biome.DESERT)
                 event.damage *= 1.25
         }, ItemStack(Material.SAND, 64)
-    )
+    ),
+
+    RED_SAND(
+        MELEE_WEAPONS, Action(ATTACKING) { event ->
+            if (event.damager.location.block.biome.name.contains("BADLANDS"))
+                event.damage *= 1.25
+        }, ItemStack(Material.RED_SAND, 64)
+    ),
 
     // Armor Artifacts
 
     // Ranged Artifacts
+
+    FLINT(
+        CROSSBOW, Action(SHOOT_BOW) { event ->
+            event.projectile.velocity.multiply(1.25)
+        }, ItemStack(Material.FLINT, 64)
+    ),
+
+    // Tool Artifacts
+
+    IRON(
+        PICKAXES, Action(BLOCK_BREAK) { event ->
+            if (event.block.type.name.contains("IRON_ORE") && event.isDropItems)
+                event.block.getDrops(event.player.inventory.itemInMainHand).forEach { event.player.world.dropItemNaturally(event.block.location, it) }
+        }, ItemStack(Material.IRON_INGOT, 16)
+    ),
+
+    GOLD(
+        PICKAXES, Action(BLOCK_BREAK) { event ->
+            if (event.block.type.name.contains("GOLD_ORE") && event.isDropItems)
+                event.block.getDrops(event.player.inventory.itemInMainHand).forEach { event.player.world.dropItemNaturally(event.block.location, it) }
+        }, ItemStack(Material.GOLD_INGOT, 16)
+    ),
+
+    DIAMOND(
+        PICKAXES, Action(BLOCK_BREAK) { event ->
+            if (event.block.type.name.contains("DIAMOND_ORE") && event.isDropItems)
+                event.block.getDrops(event.player.inventory.itemInMainHand).forEach { event.player.world.dropItemNaturally(event.block.location, it) }
+        }, ItemStack(Material.DIAMOND, 16)
+    ),
 
     ;
 
@@ -62,6 +102,8 @@ enum class PArtifacts(
     override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.getPlugin(), name.lowercase())
 
     override fun getColor(): ChatColor = color
+
+    override fun accept(t: Event) = info.action(t)
 
     private class Action<T : Event>(val type: PType<T>, action: (T) -> Unit) {
         val action: (Event) -> Unit
