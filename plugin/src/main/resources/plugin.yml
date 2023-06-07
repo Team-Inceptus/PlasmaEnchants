@@ -9,3 +9,21 @@ softdepend: [Kotlin]
 website: "https://github.com/Team-Inceptus/PlasmaEnchants"
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:1.8.21
+
+permissions:
+  plasmaenchants.*:
+    default: op
+    description: Gives access to all PlasmaEnchants commands
+    children:
+      plasmaenchants.user: true
+      plasmaenchants.admin: true
+
+  # Admin
+  plasmaenchants.admin:
+    default: op
+    description: Gives access to all PlasmaEnchants admin commands
+
+  # User
+  plasmaenchants.user:
+    default: true
+    description: Gives access to all PlasmaEnchants user commands
