@@ -52,7 +52,7 @@ allprojects {
     }
 
     dependencies {
-        compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.8.21")
+        compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.8.22")
         compileOnly("org.jetbrains:annotations:24.0.1")
         compileOnly("org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT") {
             version {
