@@ -23,6 +23,14 @@ permissions:
     default: op
     description: Gives access to all PlasmaEnchants admin commands
 
+  plasmaenchants.admin.manage_enchants:
+    default: op
+    description: Gives access to add and remove enchantments from items
+
+  plasmaenchants.admin.manage_artifacts:
+    default: op
+    description: Gives access to add and remove artifacts from items
+
   # User
   plasmaenchants.user:
     default: true
