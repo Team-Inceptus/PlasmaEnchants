@@ -72,4 +72,10 @@ interface PArtifact : Keyed, Consumer<Event> {
      * @return ChatColor Prefix Color
      */
     fun getColor(): ChatColor
+
+    /**
+     * Fetches the String representation of this artifact.
+     * @return String Representation
+     */
+    fun asString(): String = String.format(PlasmaConfig.getConfig().getLocale(), PlasmaConfig.getConfig().get("constants.artifact") ?: "%s Artifact", "${getColor()}${getName()}")
 }

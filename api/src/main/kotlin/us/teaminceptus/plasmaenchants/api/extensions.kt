@@ -8,6 +8,8 @@ import org.bukkit.persistence.PersistentDataType
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
 import java.io.*
+import java.util.*
+import kotlin.collections.HashMap
 
 private val enchantKey = NamespacedKey(PlasmaConfig.getPlugin(), "enchants")
 private val artifactsKey = NamespacedKey(PlasmaConfig.getPlugin(), "artifacts")
@@ -63,12 +65,22 @@ fun ItemMeta.addEnchant(enchant: PEnchantment, level: Int) {
     map[enchant.key.key] = level
 
     persistentDataContainer[enchantKey, stringIntMap] = map
+
+    val nLore = mutableListOf<String>()
+    nLore.addAll(lore ?: mutableListOf())
+    nLore.add(enchant.toString(level))
+    lore = nLore
 }
 fun ItemMeta.removeEnchant(enchant: PEnchantment) {
     val map = HashMap(getPlasmaEnchants().map { it.key.key.key to it.value }.toMap())
     map.remove(enchant.key.key)
 
     persistentDataContainer[enchantKey, stringIntMap] = map
+
+    val nLore = mutableListOf<String>()
+    nLore.addAll(lore ?: mutableListOf())
+    nLore.removeIf { it.contains(enchant.getName()) }
+    lore = nLore
 }
 
 // Artifacts
@@ -81,5 +93,45 @@ fun ItemMeta.getArtifact(): PArtifact? {
     )
 }
 fun ItemMeta.hasArtifact(): Boolean = persistentDataContainer.has(artifactsKey, PersistentDataType.STRING)
-fun ItemMeta.setArtifact(artifact: PArtifact) = persistentDataContainer.set(artifactsKey, PersistentDataType.STRING, artifact.key.key)
-fun ItemMeta.removeArtifact() = persistentDataContainer.remove(artifactsKey)
+fun ItemMeta.setArtifact(artifact: PArtifact) {
+    persistentDataContainer.set(artifactsKey, PersistentDataType.STRING, artifact.key.key)
+
+    val nLore = mutableListOf<String>()
+    nLore.addAll(lore ?: mutableListOf())
+    nLore.add(0, artifact.asString())
+    lore = nLore
+}
+fun ItemMeta.removeArtifact() {
+    persistentDataContainer.remove(artifactsKey)
+
+    val nLore = mutableListOf<String>()
+    nLore.addAll(lore ?: mutableListOf())
+    nLore.removeAt(0)
+    lore = nLore
+}
+
+// Kotlin Util
+
+private val ROMAN_NUMERALS = TreeMap<Long, String>().apply {
+    putAll(mutableMapOf(
+        1000L to "M",
+        900L to "CM",
+        500L to "D",
+        400L to "CD",
+        100L to "C",
+        90L to "XC",
+        50L to "L",
+        40L to "XL",
+        10L to "X",
+        9L to "IX",
+        5L to "V",
+        4L to "IV",
+        1L to "I"
+    ))
+}
+
+fun Number.toRoman(): String {
+    val number = toLong()
+    val l: Long = ROMAN_NUMERALS.floorKey(number)
+    return if (number == l) ROMAN_NUMERALS[number]!! else ROMAN_NUMERALS[l] + (number - l).toRoman()
+}
