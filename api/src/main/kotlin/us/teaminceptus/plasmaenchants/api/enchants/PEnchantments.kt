@@ -527,11 +527,9 @@ enum class PEnchantments(
         conflicts: PEnchantment
     ) : this(target, maxLevel, info, listOf(conflicts))
 
-    private val nameKey = "enchantment.${name.lowercase()}"
+    override fun getName(): String = name.lowercase().replaceFirstChar { it.uppercase() }
 
-    override fun getName(): String = PlasmaConfig.getConfig().get(nameKey) ?: name.lowercase().replaceFirstChar { it.uppercase() }
-
-    override fun getDescription(): String = PlasmaConfig.getConfig().get("$nameKey.desc") ?: "No description provided."
+    override fun getDescription(): String = PlasmaConfig.getConfig().get("enchant.${name.lowercase()}.desc") ?: "No description provided."
 
     override fun getType(): PType<*> = info.type
 

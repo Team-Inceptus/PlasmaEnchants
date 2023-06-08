@@ -89,11 +89,9 @@ enum class PArtifacts(
 
     ;
 
-    private val nameKey = "artifact.${name.lowercase()}"
+    override fun getName(): String = name.lowercase().replaceFirstChar { it.uppercase() }
 
-    override fun getName(): String = PlasmaConfig.getConfig().get(nameKey) ?: name.lowercase().replaceFirstChar { it.uppercase() }
-
-    override fun getDescription(): String = PlasmaConfig.getConfig().get("$nameKey.desc") ?: "No description provided."
+    override fun getDescription(): String = PlasmaConfig.getConfig().get("artifact.${name.lowercase()}.desc") ?: "No description provided."
 
     override fun getType(): PType<*> = info.type
 
@@ -102,6 +100,8 @@ enum class PArtifacts(
     override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.getPlugin(), name.lowercase())
 
     override fun getColor(): ChatColor = color
+
+    override fun toString(): String = asString()
 
     override fun accept(t: Event) = info.action(t)
 
