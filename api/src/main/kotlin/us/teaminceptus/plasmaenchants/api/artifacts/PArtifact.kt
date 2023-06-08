@@ -5,17 +5,19 @@ import com.mojang.authlib.properties.Property
 import org.bukkit.ChatColor
 import org.bukkit.Keyed
 import org.bukkit.Material
+import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import us.teaminceptus.plasmaenchants.api.PTarget
 import us.teaminceptus.plasmaenchants.api.PType
 import us.teaminceptus.plasmaenchants.api.PlasmaConfig
 import java.util.*
+import java.util.function.Consumer
 
 /**
  * Represents an artifact that can be applied to an item.
  */
-interface PArtifact : Keyed {
+interface PArtifact : Keyed, Consumer<Event> {
 
     companion object {
         /**
@@ -70,4 +72,10 @@ interface PArtifact : Keyed {
      * @return ChatColor Prefix Color
      */
     fun getColor(): ChatColor
+
+    /**
+     * Fetches the String representation of this artifact.
+     * @return String Representation
+     */
+    fun asString(): String = String.format(PlasmaConfig.getConfig().getLocale(), PlasmaConfig.getConfig().get("constants.artifact") ?: "%s Artifact", "${getColor()}${getName()}")
 }

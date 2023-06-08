@@ -1,10 +1,12 @@
 package us.teaminceptus.plasmaenchants
 
+import com.google.common.collect.ImmutableSet
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.ChatColor
 import us.teaminceptus.plasmaenchants.api.PlasmaConfig
 import us.teaminceptus.plasmaenchants.api.PlasmaRegistry
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
+import us.teaminceptus.plasmaenchants.api.artifacts.PArtifacts
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments
 import java.util.Properties
@@ -29,6 +31,7 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
         PlasmaCommands(this)
 
         PEnchantments.values().forEach(::register)
+        PArtifacts.values().forEach(::register)
     }
 
     override fun onEnable() {
@@ -41,7 +44,11 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
     }
 
     override fun onDisable() {
-        
+        artifacts.clear()
+        enchantments.clear()
+        logger.info("Unloaded Classes...")
+
+        logger.info("Done!")
     }
 
     // Configuration
@@ -83,7 +90,7 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
     }
 
     override fun getEnchantments(): Set<PEnchantment> {
-        return enchantments
+        return ImmutableSet.copyOf(enchantments)
     }
 
     override fun unregister(enchantment: PEnchantment) {
@@ -97,7 +104,7 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
     }
 
     override fun getArtifacts(): Set<PArtifact> {
-        return artifacts
+        return ImmutableSet.copyOf(artifacts)
     }
 
 

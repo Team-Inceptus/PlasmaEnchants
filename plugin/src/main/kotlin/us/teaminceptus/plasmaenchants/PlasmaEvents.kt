@@ -1,6 +1,7 @@
 package us.teaminceptus.plasmaenchants
 
 import org.bukkit.entity.Player
+import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -14,6 +15,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import us.teaminceptus.plasmaenchants.api.PType
 import us.teaminceptus.plasmaenchants.api.events.PlayerTickEvent
+import us.teaminceptus.plasmaenchants.api.getArtifact
 import us.teaminceptus.plasmaenchants.api.getPlasmaEnchants
 
 internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
@@ -23,10 +25,14 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
     }
 
     private fun execute(item: ItemStack, event: Event, type: PType<*>) {
+        if (event is Cancellable && event.isCancelled) return
         val meta: ItemMeta = item.itemMeta ?: return
 
         val enchants = meta.getPlasmaEnchants().filter { it.key.getType() == type }
         enchants.forEach { it.key.accept(event, it.value) }
+
+        val artifact = meta.getArtifact().takeIf { it != null && it.getType() == type} ?: return
+        artifact.accept(event)
     }
 
     @EventHandler
