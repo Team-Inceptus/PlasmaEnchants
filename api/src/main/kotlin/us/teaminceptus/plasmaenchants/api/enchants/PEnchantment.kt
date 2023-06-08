@@ -4,6 +4,7 @@ import org.bukkit.Keyed
 import org.bukkit.event.Event
 import us.teaminceptus.plasmaenchants.api.PTarget
 import us.teaminceptus.plasmaenchants.api.PType
+import us.teaminceptus.plasmaenchants.api.toRoman
 import java.util.function.BiConsumer
 
 /**
@@ -56,5 +57,12 @@ interface PEnchantment : BiConsumer<Event, Int>, Keyed {
         if (enchantment == null) return false
         return getConflicts().contains(enchantment) || enchantment.getConflicts().contains(this)
     }
+
+    /**
+     * Converts this PEnchantment to a string as shown in the lore.
+     * @param level Level of Enchantment
+     * @return String Representation of Enchantment
+     */
+    fun toString(level: Int): String = "${getName()} ${level.toRoman()}"
 
 }
