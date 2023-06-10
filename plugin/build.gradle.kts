@@ -4,6 +4,7 @@ dependencies {
     api(project(":plasmaenchants-api"))
 
     implementation("org.bstats:bstats-bukkit:3.0.2")
+    implementation("com.jeff_media:SpigotUpdateChecker:3.0.3")
     implementation("com.github.Revxrsal.Lamp:bukkit:$lampVersion")
     implementation("com.github.Revxrsal.Lamp:common:$lampVersion")
 }

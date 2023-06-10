@@ -49,6 +49,7 @@ allprojects {
 
         maven("https://libraries.minecraft.net/")
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+        maven("https://hub.jeff-media.com/nexus/repository/jeff-media-public/")
     }
 
     dependencies {

@@ -1,6 +1,9 @@
 package us.teaminceptus.plasmaenchants
 
 import com.google.common.collect.ImmutableSet
+import com.jeff_media.updatechecker.UpdateCheckSource
+import com.jeff_media.updatechecker.UpdateChecker
+import org.bstats.bukkit.Metrics
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.ChatColor
 import us.teaminceptus.plasmaenchants.api.PlasmaConfig
@@ -19,6 +22,8 @@ import java.io.IOException
 class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
 
     companion object {
+        private const val BSTATS_ID = 18713
+
         @JvmStatic
         private val enchantments = mutableSetOf<PEnchantment>()
 
@@ -39,6 +44,22 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
 
         loadClasses()
         logger.info("Loaded Classes...")
+
+        val github = "Team-Inceptus/PlasmaEnchants"
+        UpdateChecker(this, UpdateCheckSource.GITHUB_RELEASE_TAG, github)
+            .setDownloadLink("https://github.com/$github/releases/latest/")
+            .setSupportLink("https://discord.gg/WVFNWEvuqX")
+            .setNotifyOpsOnJoin(true)
+            .setChangelogLink("https://github.com/$github/releases/latest/")
+            .setUserAgent("Team-Inceptus/PlasmaEnchants v${PlasmaEnchants::class.java.`package`.implementationVersion}")
+            .setColoredConsoleOutput(true)
+            .setDonationLink("https://www.patreon.com/teaminceptus")
+            .setNotifyRequesters(true)
+            .checkEveryXHours(1.0)
+            .checkNow()
+
+        Metrics(this, BSTATS_ID)
+        logger.info("Loaded Addons...")
 
         logger.info("Done!")
     }
