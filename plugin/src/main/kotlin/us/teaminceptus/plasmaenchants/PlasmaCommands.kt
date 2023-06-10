@@ -9,6 +9,8 @@ import revxrsal.commands.bukkit.annotation.CommandPermission
 import us.teaminceptus.plasmaenchants.api.*
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
+import java.lang.String.format
+import java.util.*
 
 internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
 
@@ -30,9 +32,6 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
 
         @JvmStatic
         private fun getFailure(key: String): String = "${get("plugin.prefix")}${ChatColor.RED}${get(key)}"
-
-        @JvmStatic
-        private fun format(str: String, vararg args: Any): String = String.format(PlasmaConfig.getConfig().getLocale(), str, args)
     }
 
     init {
@@ -54,6 +53,8 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
                 .registerParameterSuggestions(PEnchantment::class.java, SuggestionProvider.map(plugin::getEnchantments) { enchant -> enchant.key.key })
                 .registerParameterSuggestions(PArtifact::class.java, SuggestionProvider.map(plugin::getArtifacts) { artifact -> artifact.key.key })
 
+            handler.register(this, PlasmaEnchantsCommands())
+
             handler.registerBrigadier()
             handler.locale = plugin.getLocale()
 
@@ -64,7 +65,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
     @Command("plasmaenchants", "penchants")
     @Description("The main command for managing PlasmaEnchants Features")
     @Usage("/plasmaenchants <...>")
-    private class PlasmaCommands {
+    private class PlasmaEnchantsCommands {
 
         @Subcommand("enchant add", "enchantment add", "enchants add", "enchantments add")
         @CommandPermission("plasmaenchants.admin.manage_enchants")
@@ -78,6 +79,9 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
                 return p.sendMessage(getFailure("error.argument.level"))
 
             val meta = item.itemMeta!!
+
+            if (meta.hasEnchant(enchantment))
+                return p.sendMessage(getFailure("error.enchant.exists"))
 
             if (meta.hasConflictingEnchant(enchantment))
                 return p.sendMessage(getFailure("error.enchant.conflict"))
