@@ -63,7 +63,7 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
             p.load(str)
             str.close()
 
-            val prop = p.getProperty("key", "null")
+            val prop = p.getProperty(key, "null")
             if (prop.equals("null")) return null
 
             ChatColor.translateAlternateColorCodes('&', p.getProperty(key))
@@ -73,8 +73,8 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
         }
     }
 
-    override fun getLanguage(): String? {
-        return config.getString("language", "en")
+    override fun getLanguage(): String {
+        return config.getString("language", "en")!!
     }
 
     // Registry Implementation
