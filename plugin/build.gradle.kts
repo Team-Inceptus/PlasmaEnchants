@@ -9,6 +9,10 @@ dependencies {
 }
 
 tasks {
+    compileKotlin {
+        kotlinOptions.javaParameters = true
+    }
+
     kotlinSourcesJar {
         archiveClassifier.set("sources")
     }

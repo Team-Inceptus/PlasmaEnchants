@@ -8,7 +8,7 @@ authors: [GamerCoder]
 softdepend: [Kotlin]
 website: "https://github.com/Team-Inceptus/PlasmaEnchants"
 libraries:
-  - org.jetbrains.kotlin:kotlin-stdlib:1.8.21
+  - org.jetbrains.kotlin:kotlin-stdlib:${project.ext.kotlin_version}
 
 permissions:
   plasmaenchants.*:
