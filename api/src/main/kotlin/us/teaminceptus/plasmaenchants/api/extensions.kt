@@ -59,7 +59,7 @@ fun ItemMeta.hasEnchant(enchant: PEnchantment): Boolean = getPlasmaEnchants().co
 fun ItemMeta.hasPlasmaEnchants(): Boolean = getPlasmaEnchants().isNotEmpty()
 fun ItemMeta.clearPlasmaEnchants() { persistentDataContainer[enchantKey, stringIntMap] = mutableMapOf() }
 fun ItemMeta.getEnchantLevel(enchant: PEnchantment): Int = persistentDataContainer[enchantKey, stringIntMap]!![enchant.key.key] ?: 0
-fun ItemMeta.hasConflictingEnchant(enchant: PEnchantment): Boolean = hasEnchant(enchant) && getPlasmaEnchants().filterKeys { it.conflictsWith(enchant) }.isNotEmpty()
+fun ItemMeta.hasConflictingEnchant(enchant: PEnchantment): Boolean = getPlasmaEnchants().filterKeys { it.conflictsWith(enchant) }.isNotEmpty()
 fun ItemMeta.addEnchant(enchant: PEnchantment, level: Int) {
     val map = HashMap(getPlasmaEnchants().map { it.key.key.key to it.value }.toMap())
     map[enchant.key.key] = level
