@@ -29,6 +29,7 @@ This plugin is built in Kotlin. While the plugin will automatically download the
 ## 🔮 Future Features
 
 Coming Soon...
+
 ---
 ## 💻 PlasmaEnchants API
 ![GitHub](https://img.shields.io/github/license/Team-Inceptus/PlasmaEnchants)
