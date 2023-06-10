@@ -1,5 +1,6 @@
 package us.teaminceptus.plasmaenchants.api.enchants
 
+import org.bukkit.ChatColor
 import org.bukkit.Keyed
 import org.bukkit.event.Event
 import us.teaminceptus.plasmaenchants.api.PTarget
@@ -63,6 +64,6 @@ interface PEnchantment : BiConsumer<Event, Int>, Keyed {
      * @param level Level of Enchantment
      * @return String Representation of Enchantment
      */
-    fun toString(level: Int): String = "${getName()} ${level.toRoman()}"
+    fun toString(level: Int): String = "${getType().getColor()}${getName()} ${level.toRoman()}"
 
 }

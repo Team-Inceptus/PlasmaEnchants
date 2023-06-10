@@ -8,6 +8,7 @@ import org.bukkit.Statistic
 import org.bukkit.block.Beacon
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
+import org.bukkit.block.BlockFace.*
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Illager
@@ -20,6 +21,7 @@ import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
 import us.teaminceptus.plasmaenchants.api.PlasmaConfig
 import us.teaminceptus.plasmaenchants.api.PTarget
@@ -33,6 +35,7 @@ import us.teaminceptus.plasmaenchants.api.PType.Companion.MINING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.PASSIVE
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.isOre
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.matchType
+import java.util.LinkedList
 import java.util.function.Predicate
 import kotlin.math.absoluteValue
 
@@ -52,13 +55,13 @@ enum class PEnchantments(
     POISONING(
         SWORDS, 2, Action(ATTACKING) { event, level ->
             if (event.entity is LivingEntity)
-                    (event.entity as LivingEntity).addPotionEffect(PotionEffect(PotionEffectType.POISON, 20 * 5, level - 1))
+                    (event.entity as LivingEntity).addPotionEffect(PotionEffect(PotionEffectType.POISON, 20 * 7, level - 1))
         }),
 
     WITHERING(
         MELEE_WEAPONS, 1, Action(ATTACKING) { event, _ ->
             if (event.entity is LivingEntity)
-                    (event.entity as LivingEntity).addPotionEffect(PotionEffect(PotionEffectType.WITHER, 20 * 3, 0))
+                    (event.entity as LivingEntity).addPotionEffect(PotionEffect(PotionEffectType.WITHER, 20 * 7, 0))
         }, POISONING),
 
     BANE_OF_ILLAGER(
@@ -474,33 +477,30 @@ enum class PEnchantments(
         PICKAXES, 1, Action(BLOCK_BREAK) { event, _ ->
             if (!event.block.type.isOre()) return@Action
 
-            fun findVein(block: Block): Set<Block> {
-                val set = mutableSetOf<Block>()
-                listOf(
-                    BlockFace.UP,
-                    BlockFace.DOWN,
-                    BlockFace.NORTH,
-                    BlockFace.EAST,
-                    BlockFace.SOUTH,
-                    BlockFace.WEST,
-                ).forEach {
-                    val relative = block.getRelative(it)
-                    if (relative.type == block.type) {
-                        set.add(relative)
-                        set.addAll(findVein(relative))
-                    }
-                }
+            val faces = listOf(UP, DOWN, NORTH, EAST, SOUTH, WEST)
+            fun getConnected(ore: Block): Set<Block> {
+                val results = hashSetOf<Block>()
+                val queue = LinkedList<Block>()
+                queue.add(ore)
 
-                return set
+                var current = queue.poll()
+                while (current != null) {
+                    for (face in faces) {
+                        val relative = current.getRelative(face)
+                        if (relative.type == ore.type && results.add(relative))
+                            queue.add(relative)
+                    }
+                    current = queue.poll()
+                }
+                return results
             }
 
-            val vein = findVein(event.block)
-            vein.forEach { it.breakNaturally(event.player.inventory.itemInMainHand) }
+            getConnected(event.block).forEach { it.breakNaturally(event.player.inventory.itemInMainHand) }
         }),
 
     BEDROCK_MINER(
         PICKAXES, 1, Action(MINING) { event, _ ->
-            if (event.block.type == Material.OBSIDIAN)
+            if (event.block.type.name.contains("OBSIDIAN"))
                 event.instaBreak = true
         }),
 
@@ -527,7 +527,7 @@ enum class PEnchantments(
         conflicts: PEnchantment
     ) : this(target, maxLevel, info, listOf(conflicts))
 
-    override fun getName(): String = name.lowercase().replaceFirstChar { it.uppercase() }
+    override fun getName(): String = name.split("_").joinToString(" ") { it -> it.lowercase().replaceFirstChar { it.uppercase() } }
 
     override fun getDescription(): String = PlasmaConfig.getConfig().get("enchant.${name.lowercase()}.desc") ?: "No description provided."
 
