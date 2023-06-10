@@ -101,7 +101,7 @@ interface PlasmaConfig {
      * Fetches the language set in the configuration.
      * @return Language Configured
      */
-    fun getLanguage(): String?
+    fun getLanguage(): String
 
     /**
      * Fetches the locale set in the configuration.
@@ -109,11 +109,12 @@ interface PlasmaConfig {
      */
     fun getLocale(): Locale {
         return when (getLanguage()) {
+            "en" -> Locale.ENGLISH
             "fr" -> Locale.FRENCH
             "de" -> Locale.GERMAN
             "it" -> Locale.ITALIAN
             "zh" -> Locale.CHINESE
-            else -> Locale.ENGLISH
+            else -> Locale(getLanguage())
         }
     }
 
