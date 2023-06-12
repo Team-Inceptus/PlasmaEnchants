@@ -4,10 +4,14 @@ import com.google.common.collect.ImmutableSet
 import com.jeff_media.updatechecker.UpdateCheckSource
 import com.jeff_media.updatechecker.UpdateChecker
 import org.bstats.bukkit.Metrics
+import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.ChatColor
-import us.teaminceptus.plasmaenchants.api.PlasmaConfig
-import us.teaminceptus.plasmaenchants.api.PlasmaRegistry
+import org.bukkit.entity.Player
+import org.bukkit.event.HandlerList
+import org.bukkit.event.player.PlayerEvent
+import org.bukkit.scheduler.BukkitRunnable
+import us.teaminceptus.plasmaenchants.api.*
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifacts
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
@@ -16,19 +20,54 @@ import java.util.Properties
 import java.io.InputStream
 import java.io.IOException
 
+private const val BSTATS_ID = 18713
+private const val github = "Team-Inceptus/PlasmaEnchants"
+
 /**
  * Represents the main PlasmaEnchants Plugin
  */
 class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
 
     companion object {
-        private const val BSTATS_ID = 18713
+        @JvmStatic
+        private val passiveTask = object : BukkitRunnable() {
+            override fun run() {
+                Bukkit.getOnlinePlayers().forEach {
+                    val items = listOfNotNull(
+                        it.inventory.armorContents.toList(),
+                        listOf(it.inventory.itemInMainHand),
+                        listOf(it.inventory.itemInOffHand)
+                    ).flatten()
+
+                    items.forEach { item ->
+                        val meta = item.itemMeta!!
+
+                        meta.getPlasmaEnchants().filter { entry -> entry.key.type == PType.PASSIVE }.forEach { entry -> entry.key.accept(PlayerTickEvent(it), entry.value) }
+                        if (meta.hasArtifact() && meta.getArtifact()!!.type == PType.PASSIVE) meta.getArtifact()!!.accept(PlayerTickEvent(it))
+                    }
+                }
+            }
+        }
 
         @JvmStatic
         private val enchantments = mutableSetOf<PEnchantment>()
 
         @JvmStatic
         private val artifacts = mutableSetOf<PArtifact>()
+    }
+
+    private class PlayerTickEvent(player: Player) : PlayerEvent(player) {
+
+        private companion object {
+            @JvmStatic
+            val HANDLERS = HandlerList()
+
+            @JvmStatic
+            fun getHandlerList(): HandlerList = HANDLERS
+        }
+
+        override fun getHandlers(): HandlerList = HANDLERS
+
     }
 
     private fun loadClasses() {
@@ -45,7 +84,9 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
         loadClasses()
         logger.info("Loaded Classes...")
 
-        val github = "Team-Inceptus/PlasmaEnchants"
+        passiveTask.runTaskTimer(this, 0, 1)
+        logger.info("Loaded Tasks...")
+
         UpdateChecker(this, UpdateCheckSource.GITHUB_RELEASE_TAG, github)
             .setDownloadLink("https://github.com/$github/releases/latest/")
             .setSupportLink("https://discord.gg/WVFNWEvuqX")
@@ -68,6 +109,9 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
         artifacts.clear()
         enchantments.clear()
         logger.info("Unloaded Classes...")
+        
+        passiveTask.cancel()
+        logger.info("Stopped Tasks...")
 
         logger.info("Done!")
     }
@@ -76,7 +120,7 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
 
     override fun get(key: String): String? {
         val p = Properties()
-        val lang: String = if (getLanguage().equals("en", ignoreCase = true)) "" else "_" + getLanguage()
+        val lang: String = if (language.equals("en", ignoreCase = true)) "" else "_$language"
 
         return try {
             val str: InputStream = PlasmaEnchants::class.java.getResourceAsStream("/lang/plasmaenchants$lang.properties") as InputStream
@@ -94,9 +138,8 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
         }
     }
 
-    override fun getLanguage(): String {
-        return config.getString("language", "en")!!
-    }
+    override val language: String
+        get() = config.getString("language", "en")!!
 
     // Registry Implementation
 
