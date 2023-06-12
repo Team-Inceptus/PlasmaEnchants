@@ -1,53 +1,53 @@
 package us.teaminceptus.plasmaenchants.api.enchants
 
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.NamespacedKey
-import org.bukkit.Sound
-import org.bukkit.Statistic
+import org.bukkit.*
 import org.bukkit.block.Beacon
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.BlockFace.*
+import org.bukkit.block.data.Ageable
 import org.bukkit.enchantments.Enchantment
-import org.bukkit.entity.EntityType
-import org.bukkit.entity.Illager
-import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
-import org.bukkit.entity.Projectile
+import org.bukkit.entity.*
 import org.bukkit.event.Event
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
+import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
-import us.teaminceptus.plasmaenchants.api.PlasmaConfig
 import us.teaminceptus.plasmaenchants.api.PTarget
 import us.teaminceptus.plasmaenchants.api.PTarget.*
 import us.teaminceptus.plasmaenchants.api.PType
 import us.teaminceptus.plasmaenchants.api.PType.Companion.ATTACKING
+import us.teaminceptus.plasmaenchants.api.PType.Companion.BLOCK_BREAK
 import us.teaminceptus.plasmaenchants.api.PType.Companion.DAMAGE
 import us.teaminceptus.plasmaenchants.api.PType.Companion.DEFENDING
-import us.teaminceptus.plasmaenchants.api.PType.Companion.BLOCK_BREAK
 import us.teaminceptus.plasmaenchants.api.PType.Companion.MINING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.PASSIVE
+import us.teaminceptus.plasmaenchants.api.PType.Companion.SHOOT_BOW
+import us.teaminceptus.plasmaenchants.api.PlasmaConfig
+import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.getBlockFace
+import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.getConnected
+import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.getSquareRotation
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.isOre
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.matchType
-import java.util.LinkedList
+import java.util.*
 import java.util.function.Predicate
 import kotlin.math.absoluteValue
+
 
 /**
  * Represents all of the Default PlasmaEnchants Enchantments.
  */
-@Suppress("unchecked_cast")
+@Suppress("unchecked_cast", "deprecation")
 enum class PEnchantments(
-    private val target: PTarget,
-    private val maxLevel: Int = 1,
+    override val target: PTarget,
+    override val maxLevel: Int = 1,
     private val info: Action<*>,
-    private val conflicts: Predicate<PEnchantments>
+    private val conflictsP: Predicate<PEnchantments>
 ) : PEnchantment {
 
     // Attacking Enchantments
@@ -159,10 +159,48 @@ enum class PEnchantments(
 
     IRON_FIST(
         CHESTPLATES, 10, Action(ATTACKING) { event, level ->
+            if (event.damager !is Player) return@Action
+
             val p = event.damager as Player
             if (p.equipment?.itemInMainHand != null) return@Action
 
             event.damage *= 1 + (level * 0.3)
+        }),
+
+    BEHEADING(
+        MELEE_WEAPONS, 1, Action(ATTACKING) { event, _ ->
+            if (event.entity !is LivingEntity) return@Action
+            val entity = event.entity as LivingEntity
+
+            if (event.finalDamage < entity.health) {
+                val head: ItemStack = when (entity.type) {
+                    EntityType.SKELETON -> ItemStack(Material.SKELETON_SKULL)
+                    EntityType.WITHER_SKELETON -> ItemStack(Material.WITHER_SKELETON_SKULL)
+                    EntityType.ZOMBIE -> ItemStack(Material.ZOMBIE_HEAD)
+                    EntityType.CREEPER -> ItemStack(Material.CREEPER_HEAD)
+                    EntityType.PLAYER -> {
+                        val player = event.entity as Player
+                        val item = ItemStack(Material.PLAYER_HEAD)
+                        val meta = item.itemMeta as SkullMeta
+                        meta.owningPlayer = player
+                        item.itemMeta = meta
+
+                        item
+                    }
+                    else -> {
+                        val name = "MHF_${entity.type.name.split("_").joinToString("") { c -> c.lowercase().replaceFirstChar { it.uppercase() } }}"
+
+                        val item = ItemStack(Material.PLAYER_HEAD)
+                        val meta = item.itemMeta as SkullMeta
+                        meta.owner = name
+                        item.itemMeta = meta
+
+                        item
+                    }
+                }
+
+                entity.world.dropItemNaturally(entity.location, head)
+            }
         }),
 
     // Attacking Enchantments - Collectors
@@ -175,7 +213,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
 
     UNDEAD_COLLECTOR(
         MELEE_WEAPONS, 3, Action(ATTACKING) { event, level ->
@@ -198,7 +236,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
 
     AQUATIC_COLLECTOR(
         SWORDS, 3, Action(ATTACKING) { event, level ->
@@ -222,7 +260,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
 
     NETHER_COLLECTOR(
         MELEE_WEAPONS, 3, Action(ATTACKING) { event, level ->
@@ -247,7 +285,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
 
     ORE_COLLECTOR(
         AXES, 4, Action(ATTACKING) { event, level ->
@@ -279,7 +317,7 @@ enum class PEnchantments(
 
             val count = mined.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
 
     END_COLLECTOR(
         MELEE_WEAPONS, 4, Action(ATTACKING) { event, level ->
@@ -294,7 +332,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.07 * count)
-        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
 
     BOSS_COLLECTOR(
         MELEE_WEAPONS, 5, Action(ATTACKING) { event, level ->
@@ -309,7 +347,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.1 * count)
-        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
 
     // Defending Enchantments
 
@@ -451,6 +489,27 @@ enum class PEnchantments(
 
     // Mining Enchantments
 
+    TELEPATHY(
+        TOOLS, 1, Action(BLOCK_BREAK) { event, _ ->
+            event.isDropItems = false
+
+            val drops = event.block.getDrops(event.player.inventory.itemInMainHand)
+            event.player.inventory.addItem(*drops.toTypedArray()).values.forEach {
+                event.block.world.dropItemNaturally(event.block.location, it)
+            }
+        }),
+
+    BLAST(
+        PICKAXES, 2, Action(BLOCK_BREAK) { event, level ->
+            val face = getBlockFace(event.player) ?: return@Action
+
+            getSquareRotation(event.block.location, face, level + 1)
+                .filter { !it.type.isAir && it.type != Material.OBSIDIAN && it.type != Material.BEDROCK }
+                .forEach {
+                    it.breakNaturally(event.player.inventory.itemInMainHand)
+                }
+        }),
+
     SMELTING(
         PICKAXES, 1, Action(BLOCK_BREAK) { event, _ ->
             if (event.player.inventory.itemInMainHand.containsEnchantment(Enchantment.SILK_TOUCH)) return@Action
@@ -476,25 +535,6 @@ enum class PEnchantments(
     VEIN_RIPPER(
         PICKAXES, 1, Action(BLOCK_BREAK) { event, _ ->
             if (!event.block.type.isOre()) return@Action
-
-            val faces = listOf(UP, DOWN, NORTH, EAST, SOUTH, WEST)
-            fun getConnected(ore: Block): Set<Block> {
-                val results = hashSetOf<Block>()
-                val queue = LinkedList<Block>()
-                queue.add(ore)
-
-                var current = queue.poll()
-                while (current != null) {
-                    for (face in faces) {
-                        val relative = current.getRelative(face)
-                        if (relative.type == ore.type && results.add(relative))
-                            queue.add(relative)
-                    }
-                    current = queue.poll()
-                }
-                return results
-            }
-
             getConnected(event.block).forEach { it.breakNaturally(event.player.inventory.itemInMainHand) }
         }),
 
@@ -504,12 +544,100 @@ enum class PEnchantments(
                 event.instaBreak = true
         }),
 
+    HARVEST(
+        HOES, 3, Action(BLOCK_BREAK) { event, level ->
+            if (!event.isDropItems) return@Action
+            if (event.block.type.createBlockData() !is Ageable) return@Action
+
+            val drops = event.block.getDrops(event.player.inventory.itemInMainHand)
+
+            for (i in 1..level)
+                drops.forEach { event.block.world.dropItemNaturally(event.block.location, it) }
+        }),
+
+    REPLENISH(
+        HOES, 1, Action(BLOCK_BREAK) { event, _ ->
+            if (event.block.type.createBlockData() !is Ageable) return@Action
+            val type = event.block.type
+
+            object : BukkitRunnable() {
+                override fun run() {
+                    event.block.type = type
+                }
+            }.runTaskLater(PlasmaConfig.getPlugin(), 1)
+        }),
+
+    LUMBERJACK(
+        AXES, 1, Action(BLOCK_BREAK) { event, _ ->
+            if (!Tag.LOGS.isTagged(event.block.type)) return@Action
+
+            val leaves = Material.matchMaterial(event.block.type.name.split("_")[0] + "_LEAVES") ?: Material.OAK_LEAVES
+            getConnected(event.block) { it.type == event.block.type || it.type == leaves }.forEach { it.breakNaturally(event.player.inventory.itemInMainHand) }
+        }),
+
     // Passive Enchantments
 
     JUMP(
         BOOTS, 5, Action(PASSIVE) { event, level ->
             event.player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 3, level - 1))
         }),
+
+    HERMES(
+        BOOTS, 2, Action(PASSIVE) { event, level ->
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW_FALLING, 3, level - 1))
+        }, JUMP),
+
+    // Ranged Enchantments
+
+    SNIPING(
+        BOW, 3, Action(SHOOT_BOW) { event, level -> event.projectile.velocity = event.projectile.velocity.multiply(1 + (level * 0.1)) }),
+
+    MITOSIS(
+        BOW, 2, Action(SHOOT_BOW) { event, level ->
+            if (event.projectile !is Projectile) return@Action
+            val projectile = event.projectile as Projectile
+
+            var count = 0
+
+            object : BukkitRunnable() {
+                override fun run() {
+                    if (projectile.isDead || count >= (level * 10)) {
+                        cancel()
+                        return
+                    }
+
+                    val duplicated = projectile.world.spawn(projectile.location, projectile.javaClass)
+                    duplicated.shooter = projectile.shooter
+                    duplicated.velocity = projectile.velocity
+                    count++
+                }
+            }.runTaskTimer(PlasmaConfig.getPlugin(), 0, 100 / level.toLong())
+        }
+    ),
+
+    PRESSURIZED(
+        RANGED, 6, Action(SHOOT_BOW) { event, level ->
+            val mod = (event.entity.location.y / (event.entity.world.maxHeight * 2)) * level
+
+            event.projectile.velocity = event.projectile.velocity.multiply((1 + mod).coerceAtMost(5.5))
+        }),
+
+    EXPLOSIVE_SHOT(
+        BOW, 3, Action(ATTACKING) { event, level ->
+            if (event.entity !is LivingEntity) return@Action
+            if (event.damager !is Projectile) return@Action
+
+            event.entity.world.createExplosion(event.damager.location, (level + 1).toFloat())
+        }),
+
+    WEIGHT(
+        RANGED, 4, Action(ATTACKING) { event, level ->
+            if (event.entity !is LivingEntity) return@Action
+            if (event.damager !is Projectile) return@Action
+
+            event.entity.velocity.add(event.damager.location.direction.multiply(level * 1.25))
+        }),
+
 
     ;
 
@@ -527,28 +655,28 @@ enum class PEnchantments(
         conflicts: PEnchantment
     ) : this(target, maxLevel, info, listOf(conflicts))
 
-    override fun getName(): String = name.split("_").joinToString(" ") { it -> it.lowercase().replaceFirstChar { it.uppercase() } }
+    override val displayName
+        get() = this.name.split("_").joinToString(" ") { it -> it.lowercase().replaceFirstChar { it.uppercase() } }
 
-    override fun getDescription(): String = PlasmaConfig.getConfig().get("enchant.${name.lowercase()}.desc") ?: "No description provided."
+    override val description
+        get() = PlasmaConfig.getConfig().get("enchant.${displayName.lowercase()}.desc") ?: "No description provided."
 
-    override fun getType(): PType<*> = info.type
+    override val type
+        get() = info.type
 
-    override fun getTarget(): PTarget = target
-
-    override fun getConflicts(): List<PEnchantment> = values().filter { conflicts.test(it) }.toList()
-
-    override fun getMaxLevel(): Int = maxLevel
+    override val conflicts
+        get() = values().filter { conflictsP.test(it) }.toList()
 
     override fun accept(e: Event, level: Int) = info.action(e, level)
 
-    override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.getPlugin(), name.lowercase())
+    override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.getPlugin(), displayName.lowercase())
 
     private class Action<T : Event>(val type: PType<T>, action: (T, Int) -> Unit) {
         val action: (Event, Int) -> Unit
 
         init {
             this.action = { event, level ->
-                if (type.getEventClass().isAssignableFrom(event::class.java))
+                if (type.eventClass.isAssignableFrom(event::class.java))
                     action(event as T, level)
             }
         }
@@ -565,6 +693,64 @@ enum class PEnchantments(
 
             return null
         }
+
+        @JvmStatic
+        private val connectedFaces = listOf(UP, DOWN, NORTH, EAST, SOUTH, WEST)
+
+        fun getConnected(block: Block, predicate: (Block) -> Boolean = { block.type == it.type}): Set<Block> {
+            val results = hashSetOf<Block>()
+            val queue = LinkedList<Block>()
+            queue.add(block)
+
+            var current = queue.poll()
+            while (current != null) {
+                for (face in connectedFaces) {
+                    val relative = current.getRelative(face)
+                    if (predicate(relative) && results.add(relative))
+                        queue.add(relative)
+                }
+                current = queue.poll()
+            }
+            return results
+        }
+
+        @JvmStatic
+        fun getSquare(location: Location, radius: Int): List<Block> {
+            val blocks: MutableList<Block> = ArrayList()
+            for (x in location.blockX - radius..location.blockX + radius)
+                for (z in location.blockZ - radius..location.blockZ + radius)
+                    blocks.add(location.world!!.getBlockAt(x, location.blockY, z))
+
+            return blocks
+        }
+
+        @JvmStatic
+        fun getSquareRotation(loc: Location, face: BlockFace, radius: Int): List<Block> {
+            val blocks = getSquare(loc, radius)
+            if (face == UP || face == DOWN) return blocks
+
+            val rotated = mutableListOf<Block>()
+            blocks.forEach {
+                val center = loc.clone()
+                val v = it.location.toVector().subtract(loc.toVector())
+
+                if (face == NORTH || face == SOUTH) v.rotateAroundX(Math.toRadians(90.0))
+                else v.rotateAroundZ(Math.toRadians(90.0))
+
+                rotated.add(center.add(v).block)
+            }
+
+            return rotated
+        }
+
+        @JvmStatic
+        fun getBlockFace(player: Player): BlockFace? {
+            val targets = player.getLastTwoTargetBlocks(null, 100)
+            if (targets.size != 2 || !targets[1].type.isOccluding) return null
+
+            return targets[1].getFace(targets[0])
+        }
+
     }
 
 }

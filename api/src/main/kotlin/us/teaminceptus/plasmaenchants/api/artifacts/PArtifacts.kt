@@ -3,21 +3,22 @@ package us.teaminceptus.plasmaenchants.api.artifacts
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
-import org.bukkit.World
 import org.bukkit.block.Biome
-import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import us.teaminceptus.plasmaenchants.api.PTarget
 import us.teaminceptus.plasmaenchants.api.PTarget.*
 import us.teaminceptus.plasmaenchants.api.PType
 import us.teaminceptus.plasmaenchants.api.PType.Companion.ATTACKING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.BLOCK_BREAK
+import us.teaminceptus.plasmaenchants.api.PType.Companion.DEFENDING
+import us.teaminceptus.plasmaenchants.api.PType.Companion.PASSIVE
 import us.teaminceptus.plasmaenchants.api.PType.Companion.SHOOT_BOW
 import us.teaminceptus.plasmaenchants.api.PlasmaConfig
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
-import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments
 
 /**
  * Represents a PlasmaEnchants Artifact.
@@ -25,10 +26,10 @@ import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments
  */
 @Suppress("unchecked_cast")
 enum class PArtifacts(
-    private val target: PTarget,
+    override val target: PTarget,
     private val info: Action<*>,
-    private val ringItems: ItemStack,
-    private val color: ChatColor = ChatColor.YELLOW
+    override val ringItem: ItemStack,
+    override val color: ChatColor = ChatColor.YELLOW
 ) : PArtifact {
 
     // Melee Artifacts
@@ -55,6 +56,27 @@ enum class PArtifacts(
     ),
 
     // Armor Artifacts
+
+    LAVA(
+        CHESTPLATES, Action(DEFENDING) { event ->
+            event.damager.fireTicks += 120
+        }, ItemStack(Material.OBSIDIAN, 24)
+    ),
+
+    KELP(
+        BOOTS, Action(PASSIVE) { event ->
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.DOLPHINS_GRACE, 20, 2, true))
+        }, ItemStack(Material.KELP, 64)
+    ),
+
+    EXPERIENCE(
+        LEGGINGS, Action(ATTACKING) { event ->
+            if (event.damager !is Player) return@Action
+            val player = event.damager as Player
+
+            event.damage *= (player.level * 0.03)
+        }, ItemStack(Material.EXPERIENCE_BOTTLE, 12)
+    ),
 
     // Ranged Artifacts
 
@@ -89,17 +111,16 @@ enum class PArtifacts(
 
     ;
 
-    override fun getName(): String = name.lowercase().replaceFirstChar { it.uppercase() }
+    override val displayName
+        get() = name.lowercase().replaceFirstChar { it.uppercase() }
 
-    override fun getDescription(): String = PlasmaConfig.getConfig().get("artifact.${name.lowercase()}.desc") ?: "No description provided."
+    override val description
+        get() = PlasmaConfig.getConfig().get("artifact.${displayName.lowercase()}.desc") ?: "No description provided."
 
-    override fun getType(): PType<*> = info.type
+    override val type
+        get() = info.type
 
-    override fun getTarget(): PTarget = target
-
-    override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.getPlugin(), name.lowercase())
-
-    override fun getColor(): ChatColor = color
+    override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.getPlugin(), displayName.lowercase())
 
     override fun toString(): String = asString()
 
@@ -110,7 +131,7 @@ enum class PArtifacts(
 
         init {
             this.action = { event ->
-                if (type.getEventClass().isAssignableFrom(event::class.java))
+                if (type.eventClass.isAssignableFrom(event::class.java))
                     action(event as T)
             }
         }
