@@ -79,7 +79,7 @@ fun ItemMeta.removeEnchant(enchant: PEnchantment) {
 
     val nLore = mutableListOf<String>()
     nLore.addAll(lore ?: mutableListOf())
-    nLore.removeIf { it.contains(enchant.getName()) }
+    nLore.removeIf { it.contains(enchant.displayName) }
     lore = nLore
 }
 

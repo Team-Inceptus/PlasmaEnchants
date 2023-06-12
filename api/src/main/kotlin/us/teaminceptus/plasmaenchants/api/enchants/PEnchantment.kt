@@ -1,8 +1,8 @@
 package us.teaminceptus.plasmaenchants.api.enchants
 
-import org.bukkit.ChatColor
 import org.bukkit.Keyed
 import org.bukkit.event.Event
+import org.bukkit.inventory.ItemStack
 import us.teaminceptus.plasmaenchants.api.PTarget
 import us.teaminceptus.plasmaenchants.api.PType
 import us.teaminceptus.plasmaenchants.api.toRoman
@@ -14,40 +14,41 @@ import java.util.function.BiConsumer
 interface PEnchantment : BiConsumer<Event, Int>, Keyed {
 
     /**
-     * Fetches the name of this PEnchantment.
+     * Fetches the display name of this PEnchantment.
      * @return Name of Enchantment
      */
-    fun getName(): String
+    val displayName: String
 
     /**
      * Fetches the description of this PEnchantment.
      * @return Description of Enchantment
      */
-    fun getDescription(): String
+    val description: String
 
     /**
      * Fetches the maximum level of this PEnchantment.
      * @return Maximum Level
      */
-    fun getMaxLevel(): Int = 1
+    val maxLevel: Int
+        get() = 1
 
     /**
      * Fetches the Target Type of this PEnchantment.
      * @return Target Type
      */
-    fun getTarget(): PTarget
+    val target: PTarget
 
     /**
      * Fetches the Type of this PEnchantment.
      * @return Type
      */
-    fun getType(): PType<*>
+    val type: PType<*>
 
     /**
      * Fetches the list of conflicts for this PEnchantment.
      * @return List of Conflicts
      */
-    fun getConflicts(): List<PEnchantment>
+    val conflicts: List<PEnchantment>
 
     /**
      * Whether or not this PEnchantment conflicts with another PEnchantment.
@@ -56,7 +57,7 @@ interface PEnchantment : BiConsumer<Event, Int>, Keyed {
      */
     fun conflictsWith(enchantment: PEnchantment?): Boolean {
         if (enchantment == null) return false
-        return getConflicts().contains(enchantment) || enchantment.getConflicts().contains(this)
+        return conflicts.contains(enchantment) || enchantment.conflicts.contains(this)
     }
 
     /**
@@ -64,6 +65,6 @@ interface PEnchantment : BiConsumer<Event, Int>, Keyed {
      * @param level Level of Enchantment
      * @return String Representation of Enchantment
      */
-    fun toString(level: Int): String = "${getType().getColor()}${getName()} ${level.toRoman()}"
+    fun toString(level: Int): String = "${type.color}$displayName ${level.toRoman()}"
 
 }

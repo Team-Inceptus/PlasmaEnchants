@@ -26,7 +26,7 @@ interface PlasmaConfig {
          * @return Plugin's Logger
          */
         @JvmStatic
-        fun getLogger(): Logger? {
+        fun getLogger(): Logger {
             return getPlugin().logger
         }
 
@@ -44,7 +44,7 @@ interface PlasmaConfig {
          */
         @JvmStatic
         fun print(e: Throwable) {
-            val logger: Logger = getLogger() ?: return
+            val logger: Logger = getLogger()
 
             logger.severe(e.javaClass.simpleName)
             logger.severe("--------------")
@@ -101,21 +101,20 @@ interface PlasmaConfig {
      * Fetches the language set in the configuration.
      * @return Language Configured
      */
-    fun getLanguage(): String
+    val language: String
 
     /**
      * Fetches the locale set in the configuration.
      * @return Locale Configured
      */
-    fun getLocale(): Locale {
-        return when (getLanguage()) {
+    val locale: Locale
+        get() = when (language) {
             "en" -> Locale.ENGLISH
             "fr" -> Locale.FRENCH
             "de" -> Locale.GERMAN
             "it" -> Locale.ITALIAN
             "zh" -> Locale.CHINESE
-            else -> Locale(getLanguage())
+            else -> Locale(language)
         }
-    }
 
 }

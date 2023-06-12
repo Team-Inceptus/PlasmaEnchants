@@ -47,35 +47,43 @@ interface PArtifact : Keyed, Consumer<Event> {
      * Fetches the human-readable name of this artifact.
      * @return Name of artifact
      */
-    fun getName(): String
+    val displayName: String
 
     /**
      * Fetches the human-readable description of this artifact.
      * @return Description of artifact
      */
-    fun getDescription(): String
+    val description: String
 
     /**
      * Fetches the Target Type of this artifact.
      * @return Target Type
      */
-    fun getTarget(): PTarget
+    val target: PTarget
 
     /**
      * Fetches the Type of this artifact.
      * @return Type
      */
-    fun getType(): PType<*>
+    val type: PType<*>
 
     /**
      * Fetches the color of this artifact.
      * @return ChatColor Prefix Color
      */
-    fun getColor(): ChatColor
+    val color: ChatColor
+
+
+    /**
+     * <p>Fetches the ring item used in the crafting of this Artifact.</p>
+     * <p>When crafting an artifact, this item (and its count) will surround [PArtifact.RAW_ARTIFACT] to produce this artifact in item form.</p>
+     * @return Artifact Ring Item
+     */
+    val ringItem: ItemStack
 
     /**
      * Fetches the String representation of this artifact.
      * @return String Representation
      */
-    fun asString(): String = String.format(PlasmaConfig.getConfig().getLocale(), PlasmaConfig.getConfig().get("constants.artifact") ?: "%s Artifact", "${getColor()}${getName()}")
+    fun asString(): String = String.format(PlasmaConfig.getConfig().locale, PlasmaConfig.getConfig().get("constants.artifact") ?: "%s Artifact", "${color}${displayName}")
 }

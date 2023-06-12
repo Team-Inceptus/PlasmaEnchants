@@ -56,7 +56,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
             handler.register(this, PlasmaEnchantsCommands())
 
             handler.registerBrigadier()
-            handler.locale = plugin.getLocale()
+            handler.locale = plugin.locale
 
             plugin.logger.info("Loaded Command Handler")
         }
@@ -72,10 +72,10 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
         fun addEnchantment(p: Player, enchantment: PEnchantment, @Default("1") level: Int) {
             val item = p.inventory.itemInMainHand
 
-            if (!enchantment.getTarget().isValid(item.type))
+            if (!enchantment.target.isValid(item.type))
                 return p.sendMessage(getFailure("error.argument.item.held"))
 
-            if (enchantment.getMaxLevel() < level)
+            if (enchantment.maxLevel < level)
                 return p.sendMessage(getFailure("error.argument.level"))
 
             val meta = item.itemMeta!!
@@ -89,7 +89,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
             meta.addEnchant(enchantment, level)
             item.itemMeta = meta
 
-            p.sendMessage(format(getSuccess("success.enchant.add"), "${ChatColor.GOLD}${enchantment.getName()} ${level.toRoman()}${ChatColor.GREEN}"))
+            p.sendMessage(format(getSuccess("success.enchant.add"), "${ChatColor.GOLD}${enchantment.displayName} ${level.toRoman()}${ChatColor.GREEN}"))
         }
 
         @Subcommand("enchant remove", "enchantment remove", "enchants remove", "enchantments remove")
@@ -97,7 +97,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
         fun removeEnchantment(p: Player, enchantment: PEnchantment) {
             val item = p.inventory.itemInMainHand
 
-            if (!enchantment.getTarget().isValid(item.type))
+            if (!enchantment.target.isValid(item.type))
                 return p.sendMessage(getFailure("error.argument.item.held"))
 
             val meta = item.itemMeta!!
@@ -108,7 +108,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
             meta.removeEnchant(enchantment)
             item.itemMeta = meta
 
-            p.sendMessage(format(getSuccess("success.enchant.remove"), "${ChatColor.GOLD}${enchantment.getName()}${ChatColor.GREEN}"))
+            p.sendMessage(format(getSuccess("success.enchant.remove"), "${ChatColor.GOLD}${enchantment.displayName}${ChatColor.GREEN}"))
         }
 
         @Subcommand("enchant clear", "enchantment clear", "enchants clear", "enchantments clear")
@@ -132,7 +132,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
         fun setArtifact(p: Player, artifact: PArtifact) {
             val item = p.inventory.itemInMainHand
 
-            if (!artifact.getTarget().isValid(item.type))
+            if (!artifact.target.isValid(item.type))
                 return p.sendMessage(getFailure("error.argument.item.held"))
 
             val meta = item.itemMeta!!
@@ -140,7 +140,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
             meta.setArtifact(artifact)
             item.itemMeta = meta
 
-            p.sendMessage(format(getSuccess("success.artifact.set"), "${ChatColor.GOLD}${artifact.getName()}"))
+            p.sendMessage(format(getSuccess("success.artifact.set"), "${ChatColor.GOLD}${artifact.displayName}"))
         }
 
         @Subcommand("artifact remove", "artifacts remove")
