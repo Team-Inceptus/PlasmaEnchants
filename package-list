@@ -1,0 +1,10 @@
+$dokka.format:javadoc-v1
+$dokka.linkExtension:html
+$dokka.location:us.teaminceptus.plasmaenchants.api.artifacts/PArtifact.Companion///PointingToDeclaration/us/teaminceptus/plasmaenchants/api/artifacts/PArtifact.Companion.html
+$dokka.location:us.teaminceptus.plasmaenchants.api/PType.Companion///PointingToDeclaration/us/teaminceptus/plasmaenchants/api/PType.Companion.html
+$dokka.location:us.teaminceptus.plasmaenchants.api/PlasmaConfig.Companion///PointingToDeclaration/us/teaminceptus/plasmaenchants/api/PlasmaConfig.Companion.html
+us.teaminceptus.plasmaenchants.api
+us.teaminceptus.plasmaenchants.api.artifacts
+us.teaminceptus.plasmaenchants.api.enchants
+us.teaminceptus.plasmaenchants.api.player
+
