@@ -1,6 +1,7 @@
 package us.teaminceptus.plasmaenchants.api.enchants
 
 import org.bukkit.*
+import org.bukkit.attribute.Attribute
 import org.bukkit.block.Beacon
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
@@ -201,6 +202,14 @@ enum class PEnchantments(
 
                 entity.world.dropItemNaturally(entity.location, head)
             }
+        }),
+
+    DEFENDER(
+        MELEE_WEAPONS, 4, Action(ATTACKING) { event, level ->
+            val damager = event.damager as? LivingEntity ?: return@Action
+
+            if (damager.health == damager.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value)
+                event.damage *= 1 + (level * 0.75)
         }),
 
     // Attacking Enchantments - Collectors
