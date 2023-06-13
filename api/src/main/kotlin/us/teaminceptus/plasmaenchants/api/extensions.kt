@@ -61,6 +61,8 @@ fun ItemMeta.clearPlasmaEnchants() { persistentDataContainer[enchantKey, stringI
 fun ItemMeta.getEnchantLevel(enchant: PEnchantment): Int = persistentDataContainer[enchantKey, stringIntMap]!![enchant.key.key] ?: 0
 fun ItemMeta.hasConflictingEnchant(enchant: PEnchantment): Boolean = getPlasmaEnchants().filterKeys { it.conflictsWith(enchant) }.isNotEmpty()
 fun ItemMeta.addEnchant(enchant: PEnchantment, level: Int) {
+    if (hasEnchant(enchant)) throw IllegalArgumentException("Item already has enchantment ${enchant.key.key}")
+
     val map = HashMap(getPlasmaEnchants().map { it.key.key.key to it.value }.toMap())
     map[enchant.key.key] = level
 
@@ -75,11 +77,40 @@ fun ItemMeta.removeEnchant(enchant: PEnchantment) {
     val map = HashMap(getPlasmaEnchants().map { it.key.key.key to it.value }.toMap())
     map.remove(enchant.key.key)
 
+    val amount = getEnchantLevel(enchant)
+
     persistentDataContainer[enchantKey, stringIntMap] = map
 
     val nLore = mutableListOf<String>()
     nLore.addAll(lore ?: mutableListOf())
-    nLore.removeIf { it.contains(enchant.displayName) }
+    nLore.remove(enchant.toString(amount))
+    lore = nLore
+}
+
+fun ItemMeta.combinePlasmaEnchants(other: ItemMeta) {
+    val others = other.getPlasmaEnchants()
+
+    val nLore = mutableListOf<String>()
+    nLore.addAll(lore ?: mutableListOf())
+
+    val map = HashMap(getPlasmaEnchants().map { it.key.key.key to it.value }.toMap())
+    others.keys.forEach {
+        val key = it.key.key
+        if (map.containsKey(key)) {
+            val old = map[key]!!
+            val amount = old + others[it]!!
+            map[key] = amount
+
+            nLore.remove(it.toString(old))
+            nLore.add(it.toString(amount))
+        }
+        else {
+            map[key] = others[it]!!
+            nLore.add(it.toString(others[it]!!))
+        }
+    }
+
+    persistentDataContainer[enchantKey, stringIntMap] = map
     lore = nLore
 }
 
@@ -101,6 +132,7 @@ fun ItemMeta.setArtifact(artifact: PArtifact) {
     nLore.add(0, artifact.asString())
     lore = nLore
 }
+
 fun ItemMeta.removeArtifact() {
     persistentDataContainer.remove(artifactsKey)
 
