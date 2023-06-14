@@ -89,6 +89,7 @@ fun ItemMeta.removeEnchant(enchant: PEnchantment) {
 
 fun ItemMeta.combinePlasmaEnchants(other: ItemMeta) {
     val others = other.getPlasmaEnchants()
+    if (others.isEmpty()) return
 
     val nLore = mutableListOf<String>()
     nLore.addAll(lore ?: mutableListOf())
