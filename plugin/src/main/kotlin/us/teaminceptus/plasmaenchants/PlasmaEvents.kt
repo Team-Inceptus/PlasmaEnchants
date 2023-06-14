@@ -94,21 +94,40 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
     fun anvil(event: PrepareAnvilEvent) {
         val inv = event.inventory
 
-        val first = (inv.getItem(0) ?: return).clone()
+        val first = inv.getItem(0) ?: return
         val second = inv.getItem(1) ?: return
 
         val fMeta = first.itemMeta ?: return
         val sMeta = second.itemMeta ?: return
 
-        if (fMeta.hasArtifact() && sMeta.hasArtifact() && fMeta.getArtifact()!! != sMeta.getArtifact()!!) {
-            event.result = null
-            return
+        val fArtifact = fMeta.hasArtifact()
+        val sArtifact = sMeta.hasArtifact()
+
+        return when {
+            fArtifact && sArtifact && (fMeta.getArtifact() != sMeta.getArtifact()) -> {
+                event.result = null
+            }
+            !fArtifact && sArtifact -> {
+                val clone = first.clone()
+                val meta = clone.itemMeta!!
+
+                val artifact = sMeta.getArtifact()!!
+                meta.setArtifact(artifact)
+                meta.combinePlasmaEnchants(sMeta)
+
+                clone.itemMeta = meta
+                event.result = clone
+            }
+            else -> {
+                val clone = first.clone()
+                val meta = clone.itemMeta!!
+
+                meta.combinePlasmaEnchants(sMeta)
+                clone.itemMeta = meta
+
+                event.result = clone
+            }
         }
-
-        fMeta.combinePlasmaEnchants(sMeta)
-        first.itemMeta = fMeta
-
-        event.result = first
     }
 
 }
