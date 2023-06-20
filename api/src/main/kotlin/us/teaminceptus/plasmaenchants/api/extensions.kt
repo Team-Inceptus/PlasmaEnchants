@@ -11,8 +11,8 @@ import java.io.*
 import java.util.*
 import kotlin.collections.HashMap
 
-private val enchantKey = NamespacedKey(PlasmaConfig.getPlugin(), "enchants")
-private val artifactsKey = NamespacedKey(PlasmaConfig.getPlugin(), "artifacts")
+val enchantKey = NamespacedKey(PlasmaConfig.plugin, "enchants")
+val artifactsKey = NamespacedKey(PlasmaConfig.plugin, "artifacts")
 
 @Suppress("unchecked_cast")
 private val stringIntMap: PersistentDataType<ByteArray, Map<String, Int>> = object : PersistentDataType<ByteArray, Map<String, Int>> {
@@ -49,7 +49,7 @@ private val stringIntMap: PersistentDataType<ByteArray, Map<String, Int>> = obje
 fun ItemMeta.getPlasmaEnchants(): Map<PEnchantment, Int> {
     val map = mutableMapOf<PEnchantment, Int>()
     persistentDataContainer[enchantKey, stringIntMap]?.forEach { (key, value) ->
-        val enchant = PlasmaConfig.getRegistry().getEnchantments().firstOrNull { it.key.key == key } ?: return@forEach
+        val enchant = PlasmaConfig.registry.enchantments.firstOrNull { it.key.key == key } ?: return@forEach
         map[enchant] = value
     }
 
@@ -116,24 +116,27 @@ fun ItemMeta.combinePlasmaEnchants(other: ItemMeta) {
 }
 
 // Artifacts
-fun ItemMeta.getArtifact(): PArtifact? {
-    return PlasmaConfig.getRegistry().getArtifact(
-        NamespacedKey(
-            PlasmaConfig.getPlugin(),
-            persistentDataContainer[artifactsKey, PersistentDataType.STRING] ?: return null
+inline var ItemMeta.artifact: PArtifact?
+    get() {
+        return PlasmaConfig.registry.getArtifact(
+            NamespacedKey(
+                PlasmaConfig.plugin,
+                persistentDataContainer[artifactsKey, PersistentDataType.STRING] ?: return null
+            )
         )
-    )
-}
+    }
+    set(value) {
+        if (value == null) return removeArtifact()
+
+        persistentDataContainer.set(artifactsKey, PersistentDataType.STRING, value.key.key)
+
+        val nLore = mutableListOf<String>()
+        nLore.addAll(lore ?: mutableListOf())
+        nLore.add(0, value.asString())
+        lore = nLore
+    }
+
 fun ItemMeta.hasArtifact(): Boolean = persistentDataContainer.has(artifactsKey, PersistentDataType.STRING)
-fun ItemMeta.setArtifact(artifact: PArtifact) {
-    persistentDataContainer.set(artifactsKey, PersistentDataType.STRING, artifact.key.key)
-
-    val nLore = mutableListOf<String>()
-    nLore.addAll(lore ?: mutableListOf())
-    nLore.add(0, artifact.asString())
-    lore = nLore
-}
-
 fun ItemMeta.removeArtifact() {
     persistentDataContainer.remove(artifactsKey)
 

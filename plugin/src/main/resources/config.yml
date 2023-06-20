@@ -14,3 +14,256 @@
 # - zh (Chinese / 中国人)
 # - it (Italian / Italiano)
 language: en
+
+# Configuration for Enchantments
+enchantments:
+
+  # Natural Enchantment Spawning via World Events Configuration
+  spawn:
+
+    # A List of Enchantments that shouldn't spawn naturally
+    blacklisted-enchants: []
+
+    # A List of Enchantments that can only spawn naturally
+    #
+    # If this isn't empty, only these enchantments can spawn naturally
+    whitelisted-enchants: []
+
+    # The Minimum Enchantment Level for a naturally spawned enchanted book - Global Default
+    min-level: 1
+
+    # The Maximum Enchantment Level for a naturally spawned enchanted book - Global Default
+    max-level: 2
+
+    # When spawning an Enchantment Book, the chance will be multiplied by this number and the luck level for the player.
+    luck-modifier: 1.05
+
+    # Enchanted Books received through killing a mob
+    drops:
+      # A List of Mob Types that shouldn't drop Enchanted Books
+      # Available Mob Types: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html
+      blacklisted-mobs: []
+
+      # A List of Mob Types that can drop Enchanted Books
+      # This overrides/supercedes blacklisted mobs; If not empty, only these mobs can drop enchanted books
+      whitelisted-mobs: []
+
+      # The Minimum Enchantment Level for a dropped enchanted book
+      # Set to 'default' to use the global default
+      min-level: default
+
+      # The Maximum Enchantment Level for a dropped enchanted book
+      # Set to 'default' to use the global default
+      max-level: default
+
+      chance:
+        # Chance of a Mob dropping a random Enchanted Book by default
+        # Example: 0.1 = 10%
+        global: 0.3
+
+        # Additional Enchantment Chance Configuration
+        # Example:
+        #
+        # - mob: zombie
+        #   chance: 0.5
+        #   min-level: default
+        #   max-level: 3
+        #   whitelisted-enchants:
+        #     - withering
+        #   blacklisted-enchants:
+        #     - poisoning
+        config: []
+
+    # Enchanted Books received through Generated Loot
+    # This ONLY applies to Loot Tables generated from chests & other containers, not Entity Loot Tables.
+    loot:
+      # A List of Loot Tables that shouldn't generate Enchanted Books
+      # Available Loot Tables: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/loot/LootTables.html
+      blacklisted-loottables: []
+
+      # A List of Loot Tables that can be fished up
+      # This overrides/supercedes blacklisted loot tables; If not empty, only these loot tables can spawn enchanted books
+      whitelisted-loottables: []
+
+      # The Minimum Enchantment Level for a generated enchanted book
+      # Set to 'default' to use the global default
+      min-level: default
+
+      # The Maximum Enchantment Level for a generated enchanted book
+      # Set to 'default' to use the global default
+      max-level: default
+
+      chance:
+        # Chance of a Loot Table generating a random Enchanted Book by default
+        # Example: 0.1 = 10%
+        global: 0.3
+
+        # Add Additional Loot Tables Here (case insensitive)
+        # Example:
+        #
+        # - table: BURIED_TREASURE
+        #   chance: 0.5
+        #   min-level: 1
+        #   max-level: default
+        #   whitelisted-enchants:
+        #     - IRON_FIST
+        #   blacklisted-enchants:
+        #     - beacon_of_defending
+        config: []
+
+    # Enchanted Books received through Fishing
+    fishing:
+      # A List of Enchantments that shouldn't be fished up
+      # If not empty, this overrides the global blacklisted enchantments
+      blacklisted-enchants: []
+
+      # A List of Enchantments that can only be fished up
+      # If this isn't empty, only these enchantments can be fished up and this overrides the global whitelisted enchantments
+      whitelisted-enchants: []
+
+      # The Minimum Enchantment Level for a fished enchanted book
+      # Set to 'default' to use the global default
+      min-level: default
+
+      # The Maximum Enchantment Level for a fished enchanted book
+      # Set to 'default' to use the global default
+      max-level: default
+
+      chance:
+        # Chance of a fished item being an enchanted book by default
+        # Example: 0.1 = 10%
+        global: 0.04
+
+        # For each level of the Luck of the Sea enchantment, the chance will be multiplied by this number
+        luck-of-the-sea-modifier: 1.05
+
+    # Enchanted Books received through Mining Blocks
+    mining:
+      # A List of Blocks that shouldn't drop Enchanted Books
+      # Available Blocks: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+      blacklisted-blocks: []
+
+      # A List of Blocks that can drop Enchanted Books
+      # This overrides/supercedes blacklisted blocks; If not empty, only these blocks can drop enchanted books
+      whitelisted-blocks: []
+
+      # The Minimum Enchantment Level for an enchanted book dropped
+      # Set to 'default' to use the global default
+      min-level: default
+
+      # The Maximum Enchantment Level for an enchanted book dropped
+      # Set to 'default' to use the global default
+      max-level: default
+
+      chance:
+        # Chance of a block dropping an enchanted book by default
+        global: 0.01
+
+        # Add Additional Blocks Here (case insensitive)
+        # Example:
+        #
+        # - block: DIAMOND_ORE
+        #   chance: 0.5
+        #   min-level: default
+        #   max-level: default
+        #   whitelisted-enchants:
+        #     - DEFENDER
+        #   blacklisted-enchants:
+        #     - boss_collector
+        config: []
+
+  # Villager Trading for Enchantments Configuration
+  trades:
+
+    # A List of Villager Professions which can have trades for Enchanted Books
+    # Available Professions: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Villager.Profession.html
+    professions:
+      - LIBRARIAN
+
+    # A List of Villager Spawn Types which can't trade for Enchantment Books
+    # Available Spawn Types: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Villager.Type.html
+    blacklisted-types: []
+
+    # A List of Villager Spawn Types which can trade for Enchantment Books
+    # This overrides/supercedes blacklisted types; If not empty, only these types can trade for enchanted books
+    whitelisted-types: []
+
+    # The minimum villager trade level for creating a trade for an Enchanted Book
+    min-villager-level: 1
+
+    # The maximum villager trade level for creating a trade for an Enchanted Book
+    max-villager-level: 5
+
+    # Enchantment Trade Configuration
+    enchants:
+      # A List of Enchantments that can't be traded for
+      # If not empty, this overrides the global blacklisted enchantments
+      blacklisted-enchants: []
+
+      # A List of Enchantments that can be traded for
+      # If this isn't empty, only these enchantments can be traded for and this overrides the global whitelisted enchantments
+      whitelisted-enchants: []
+
+      # The minimum enchantment level for a villager trade
+      min-level: 1
+
+      # The maximum enchantment level for a villager trade
+      max-level: 5
+
+      # Villager Trade Chance Configuration
+      replace:
+        # Whether only enchantment book trades should be replaced
+        only-enchantment-books: false
+
+        # Chance of a villager trade being replaced with an Enchanted Book trade
+        chance: 0.25
+
+        # A List of Predicates to replace existing enchantment trades with a PlasmaEnchants Enchantment Book Trade
+        # Example:
+        #
+        # - bukkit: Protection # The Bukkit Enchantment/Material to replace
+        #   plasma: defender # The PlasmaEnchants Enchantment to replace it with
+        #   min-bukkit-level: 1
+        #   max-bukkit-level: 4
+        #   min-plasma-level: default
+        #   max-plasma-level: 3
+        # - bukkit: COOKED_BEEF # The Bukkit Enchantment/Material to replace
+        #   plasma: mob_collector # The PlasmaEnchants Enchantment to replace it with
+        #   min-bukkit-level: 2
+        #   max-bukkit-level: 4
+        #   min-plasma-level: default
+        #   max-plasma-level: default
+        config: []
+
+# Artifact Configuration
+artifacts:
+  # A List of Artifacts that are disabled
+  disabled-artifacts: []
+
+  # Raw Artifact Spawning Configuration
+  spawn:
+    # The Chance of a raw artifact dropping from a killed mob
+    killing:
+
+      # The default chance of a raw artifact dropping from a mob
+      # Example: 0.25 = 25%
+      global-chance: 0.05
+
+      # Additional Artifact Drop Chances
+      # Example:
+      #
+      # zombie: 0.1
+
+    # The Chance of a raw artifact dropping from a block
+    mining:
+      # The default chance of a raw artifact dropping from a block
+      # Example: 0.25 = 25%
+      global-chance: 0.03
+
+      # Additional Artifact Drop Chances
+      # Examples:
+      #
+      # IRON_ore: 0.5
+      # Dirt: 0
+      # STONE: 0.01
+      # grass_block: 0.005

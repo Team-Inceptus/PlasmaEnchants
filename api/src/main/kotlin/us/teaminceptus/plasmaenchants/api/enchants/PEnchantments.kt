@@ -573,7 +573,7 @@ enum class PEnchantments(
                 override fun run() {
                     event.block.type = type
                 }
-            }.runTaskLater(PlasmaConfig.getPlugin(), 1)
+            }.runTaskLater(PlasmaConfig.plugin, 1)
         }),
 
     LUMBERJACK(
@@ -620,7 +620,7 @@ enum class PEnchantments(
                     duplicated.velocity = projectile.velocity
                     count++
                 }
-            }.runTaskTimer(PlasmaConfig.getPlugin(), 0, 100 / level.toLong())
+            }.runTaskTimer(PlasmaConfig.plugin, 0, 100 / level.toLong())
         }
     ),
 
@@ -668,7 +668,7 @@ enum class PEnchantments(
         get() = this.name.split("_").joinToString(" ") { it -> it.lowercase().replaceFirstChar { it.uppercase() } }
 
     override val description
-        get() = PlasmaConfig.getConfig().get("enchant.${displayName.lowercase()}.desc") ?: "No description provided."
+        get() = PlasmaConfig.config.get("enchant.${displayName.lowercase()}.desc") ?: "No description provided."
 
     override val type
         get() = info.type
@@ -678,7 +678,7 @@ enum class PEnchantments(
 
     override fun accept(e: Event, level: Int) = info.action(e, level)
 
-    override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.getPlugin(), displayName.lowercase())
+    override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.plugin, name.lowercase())
 
     private class Action<T : Event>(val type: PType<T>, action: (T, Int) -> Unit) {
         val action: (Event, Int) -> Unit
