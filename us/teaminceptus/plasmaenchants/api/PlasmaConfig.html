@@ -261,17 +261,185 @@ public interface <span class="typeNameLabel"><a href=PlasmaConfig.html>PlasmaCon
                                         </tr>
                                         
                                         <tr id="i2" class="altColor">
-                                            <td class="colFirst"><code>abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#getLanguage()>getLanguage</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#getArtifactSpawnGlobalKillChance(org.bukkit.entity.EntityType)>getArtifactSpawnGlobalKillChance</a>(EntityType type) </code>
                                             </th>
-                                            <td class="colLast">Fetches the language set in the configuration.</td>
+                                            <td class="colLast">Fetches the chance for a specific entity type for a raw artifact to spawn when its type is killed.</td>
                                         </tr>
                                         
                                         <tr id="i3" class="rowColor">
+                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#setArtifactSpawnGlobalKillChance(org.bukkit.entity.EntityType,java.lang.Double)>setArtifactSpawnGlobalKillChance</a>(EntityType type, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> value) </code>
+                                            </th>
+                                            <td class="colLast">Sets the chance for a specific entity type for a raw artifact to spawn when its type is killed.</td>
+                                        </tr>
+                                        
+                                        <tr id="i4" class="altColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#getArtifactSpawnGlobalMiningChance(org.bukkit.Material)>getArtifactSpawnGlobalMiningChance</a>(Material material) </code>
+                                            </th>
+                                            <td class="colLast">Fetches the chance for a specific material for a raw artifact to spawn when the block is mined.</td>
+                                        </tr>
+                                        
+                                        <tr id="i5" class="rowColor">
+                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#setArtifactSpawnGlobalMiningChance(org.bukkit.Material,java.lang.Double)>setArtifactSpawnGlobalMiningChance</a>(Material material, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> value) </code>
+                                            </th>
+                                            <td class="colLast">Sets the chance for a specific material for a raw artifact to spawn when the block is mined.</td>
+                                        </tr>
+                                        
+                                        <tr id="i6" class="altColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#getLanguage()>getLanguage</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i7" class="rowColor">
+                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#setLanguage(java.lang.String)>setLanguage</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> language) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i8" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html>Locale</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#getLocale()>getLocale</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i9" class="rowColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#getBlacklistedSpawnEnchantments()>getBlacklistedSpawnEnchantments</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i10" class="altColor">
+                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#setBlacklistedSpawnEnchantments(java.util.List)>setBlacklistedSpawnEnchantments</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>&gt; blacklistedSpawnEnchantments) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i11" class="rowColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#getWhitelistedSpawnEnchantments()>getWhitelistedSpawnEnchantments</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i12" class="altColor">
+                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#setWhitelistedSpawnEnchantments(java.util.List)>setWhitelistedSpawnEnchantments</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>&gt; whitelistedSpawnEnchantments) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i13" class="rowColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#getEnchantmenSpawnMinLevel()>getEnchantmenSpawnMinLevel</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i14" class="altColor">
+                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#setEnchantmenSpawnMinLevel(java.lang.Integer)>setEnchantmenSpawnMinLevel</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> enchantmenSpawnMinLevel) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i15" class="rowColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#getEnchantmentSpawnMaxLevel()>getEnchantmentSpawnMaxLevel</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i16" class="altColor">
+                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#setEnchantmentSpawnMaxLevel(java.lang.Integer)>setEnchantmentSpawnMaxLevel</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> enchantmentSpawnMaxLevel) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i17" class="rowColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#getEnchantmentSpawnLuckModifier()>getEnchantmentSpawnLuckModifier</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i18" class="altColor">
+                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#setEnchantmentSpawnLuckModifier(java.lang.Double)>setEnchantmentSpawnLuckModifier</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> enchantmentSpawnLuckModifier) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i19" class="rowColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=artifacts/PArtifact.html>PArtifact</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#getDisabledArtifacts()>getDisabledArtifacts</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i20" class="altColor">
+                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#setDisabledArtifacts(java.util.List)>setDisabledArtifacts</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=artifacts/PArtifact.html>PArtifact</a>&gt; disabledArtifacts) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i21" class="rowColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#getArtifactSpawnGlobalKillChance()>getArtifactSpawnGlobalKillChance</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i22" class="altColor">
+                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#setArtifactSpawnGlobalKillChance(java.lang.Double)>setArtifactSpawnGlobalKillChance</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> artifactSpawnGlobalKillChance) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i23" class="rowColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#getArtifactSpawnGlobalMiningChance()>getArtifactSpawnGlobalMiningChance</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i24" class="altColor">
+                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaConfig.html#setArtifactSpawnGlobalMiningChance(java.lang.Double)>setArtifactSpawnGlobalMiningChance</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> artifactSpawnGlobalMiningChance) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -368,6 +536,108 @@ public interface <span class="typeNameLabel"><a href=PlasmaConfig.html>PlasmaCon
                                     </li>
                                 </ul>
                                 
+                                <a id="getArtifactSpawnGlobalKillChance(org.bukkit.entity.EntityType)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getArtifactSpawnGlobalKillChance</h4>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> <a href=PlasmaConfig.html#getArtifactSpawnGlobalKillChance(org.bukkit.entity.EntityType)>getArtifactSpawnGlobalKillChance</a>(EntityType type)</pre>
+                                        <div class="block"><p>Fetches the chance for a specific entity type for a raw artifact to spawn when its type is killed.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>type</code> - The entity type to fetch</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setArtifactSpawnGlobalKillChance(org.bukkit.entity.EntityType,java.lang.Double)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setArtifactSpawnGlobalKillChance</h4>
+                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=PlasmaConfig.html#setArtifactSpawnGlobalKillChance(org.bukkit.entity.EntityType,java.lang.Double)>setArtifactSpawnGlobalKillChance</a>(EntityType type, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> value)</pre>
+                                        <div class="block"><p>Sets the chance for a specific entity type for a raw artifact to spawn when its type is killed.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>type</code> - The entity type to fetch</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>value</code> - Mining Drop Chance for EntityType</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getArtifactSpawnGlobalMiningChance(org.bukkit.Material)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getArtifactSpawnGlobalMiningChance</h4>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> <a href=PlasmaConfig.html#getArtifactSpawnGlobalMiningChance(org.bukkit.Material)>getArtifactSpawnGlobalMiningChance</a>(Material material)</pre>
+                                        <div class="block"><p>Fetches the chance for a specific material for a raw artifact to spawn when the block is mined.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>material</code> - The material to fetch</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setArtifactSpawnGlobalMiningChance(org.bukkit.Material,java.lang.Double)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setArtifactSpawnGlobalMiningChance</h4>
+                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=PlasmaConfig.html#setArtifactSpawnGlobalMiningChance(org.bukkit.Material,java.lang.Double)>setArtifactSpawnGlobalMiningChance</a>(Material material, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> value)</pre>
+                                        <div class="block"><p>Sets the chance for a specific material for a raw artifact to spawn when the block is mined.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>material</code> - The material to fetch</dd>
+                                            
+                                            
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
                                 <a id="getLanguage()">
                                     <!--   -->
                                 </a>
@@ -376,8 +646,23 @@ public interface <span class="typeNameLabel"><a href=PlasmaConfig.html>PlasmaCon
                                           >
                                     <li class="blockList">
                                         <h4>getLanguage</h4>
-                                        <pre class="methodSignature"> abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=PlasmaConfig.html#getLanguage()>getLanguage</a>()</pre>
-                                        <div class="block"><p>Fetches the language set in the configuration.</p></div>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=PlasmaConfig.html#getLanguage()>getLanguage</a>()</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setLanguage(java.lang.String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setLanguage</h4>
+                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=PlasmaConfig.html#setLanguage(java.lang.String)>setLanguage</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> language)</pre>
+                                        <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -387,11 +672,251 @@ public interface <span class="typeNameLabel"><a href=PlasmaConfig.html>PlasmaCon
                                     <!--   -->
                                 </a>
                                 <ul class=
-                                              "blockListLast"
+                                              "blockList"
                                           >
                                     <li class="blockList">
                                         <h4>getLocale</h4>
                                         <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html>Locale</a> <a href=PlasmaConfig.html#getLocale()>getLocale</a>()</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getBlacklistedSpawnEnchantments()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getBlacklistedSpawnEnchantments</h4>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>&gt; <a href=PlasmaConfig.html#getBlacklistedSpawnEnchantments()>getBlacklistedSpawnEnchantments</a>()</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setBlacklistedSpawnEnchantments(java.util.List)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setBlacklistedSpawnEnchantments</h4>
+                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=PlasmaConfig.html#setBlacklistedSpawnEnchantments(java.util.List)>setBlacklistedSpawnEnchantments</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>&gt; blacklistedSpawnEnchantments)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getWhitelistedSpawnEnchantments()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getWhitelistedSpawnEnchantments</h4>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>&gt; <a href=PlasmaConfig.html#getWhitelistedSpawnEnchantments()>getWhitelistedSpawnEnchantments</a>()</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setWhitelistedSpawnEnchantments(java.util.List)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setWhitelistedSpawnEnchantments</h4>
+                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=PlasmaConfig.html#setWhitelistedSpawnEnchantments(java.util.List)>setWhitelistedSpawnEnchantments</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>&gt; whitelistedSpawnEnchantments)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getEnchantmenSpawnMinLevel()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getEnchantmenSpawnMinLevel</h4>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> <a href=PlasmaConfig.html#getEnchantmenSpawnMinLevel()>getEnchantmenSpawnMinLevel</a>()</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setEnchantmenSpawnMinLevel(java.lang.Integer)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setEnchantmenSpawnMinLevel</h4>
+                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=PlasmaConfig.html#setEnchantmenSpawnMinLevel(java.lang.Integer)>setEnchantmenSpawnMinLevel</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> enchantmenSpawnMinLevel)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getEnchantmentSpawnMaxLevel()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getEnchantmentSpawnMaxLevel</h4>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> <a href=PlasmaConfig.html#getEnchantmentSpawnMaxLevel()>getEnchantmentSpawnMaxLevel</a>()</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setEnchantmentSpawnMaxLevel(java.lang.Integer)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setEnchantmentSpawnMaxLevel</h4>
+                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=PlasmaConfig.html#setEnchantmentSpawnMaxLevel(java.lang.Integer)>setEnchantmentSpawnMaxLevel</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> enchantmentSpawnMaxLevel)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getEnchantmentSpawnLuckModifier()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getEnchantmentSpawnLuckModifier</h4>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> <a href=PlasmaConfig.html#getEnchantmentSpawnLuckModifier()>getEnchantmentSpawnLuckModifier</a>()</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setEnchantmentSpawnLuckModifier(java.lang.Double)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setEnchantmentSpawnLuckModifier</h4>
+                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=PlasmaConfig.html#setEnchantmentSpawnLuckModifier(java.lang.Double)>setEnchantmentSpawnLuckModifier</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> enchantmentSpawnLuckModifier)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getDisabledArtifacts()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getDisabledArtifacts</h4>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=artifacts/PArtifact.html>PArtifact</a>&gt; <a href=PlasmaConfig.html#getDisabledArtifacts()>getDisabledArtifacts</a>()</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setDisabledArtifacts(java.util.List)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setDisabledArtifacts</h4>
+                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=PlasmaConfig.html#setDisabledArtifacts(java.util.List)>setDisabledArtifacts</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=artifacts/PArtifact.html>PArtifact</a>&gt; disabledArtifacts)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getArtifactSpawnGlobalKillChance()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getArtifactSpawnGlobalKillChance</h4>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> <a href=PlasmaConfig.html#getArtifactSpawnGlobalKillChance()>getArtifactSpawnGlobalKillChance</a>()</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setArtifactSpawnGlobalKillChance(java.lang.Double)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setArtifactSpawnGlobalKillChance</h4>
+                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=PlasmaConfig.html#setArtifactSpawnGlobalKillChance(java.lang.Double)>setArtifactSpawnGlobalKillChance</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> artifactSpawnGlobalKillChance)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getArtifactSpawnGlobalMiningChance()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getArtifactSpawnGlobalMiningChance</h4>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> <a href=PlasmaConfig.html#getArtifactSpawnGlobalMiningChance()>getArtifactSpawnGlobalMiningChance</a>()</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setArtifactSpawnGlobalMiningChance(java.lang.Double)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setArtifactSpawnGlobalMiningChance</h4>
+                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=PlasmaConfig.html#setArtifactSpawnGlobalMiningChance(java.lang.Double)>setArtifactSpawnGlobalMiningChance</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> artifactSpawnGlobalMiningChance)</pre>
                                         <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->

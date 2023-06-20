@@ -262,11 +262,11 @@ public interface <span class="typeNameLabel"><a href=PlasmaRegistry.html>PlasmaR
                                         </tr>
                                         
                                         <tr id="i3" class="rowColor">
-                                            <td class="colFirst"><code>abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>&gt;</code>
+                                            <td class="colFirst"><code><a href=enchants/PEnchantment.html>PEnchantment</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=PlasmaRegistry.html#getEnchantments()>getEnchantments</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaRegistry.html#getEnchantment(java.lang.String)>getEnchantment</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
                                             </th>
-                                            <td class="colLast">Fetches all of the registered PEnchantments.</td>
+                                            <td class="colLast">Fetches a PEnchantment from the registry.</td>
                                         </tr>
                                         
                                         <tr id="i4" class="altColor">
@@ -302,19 +302,35 @@ public interface <span class="typeNameLabel"><a href=PlasmaRegistry.html>PlasmaR
                                         </tr>
                                         
                                         <tr id="i8" class="altColor">
-                                            <td class="colFirst"><code>abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=artifacts/PArtifact.html>PArtifact</a>&gt;</code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=PlasmaRegistry.html#getArtifacts()>getArtifacts</a>() </code>
-                                            </th>
-                                            <td class="colLast">Fetches all of the registered PlasmaEnchants Artifacts.</td>
-                                        </tr>
-                                        
-                                        <tr id="i9" class="rowColor">
                                             <td class="colFirst"><code><a href=artifacts/PArtifact.html>PArtifact</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=PlasmaRegistry.html#getArtifact(org.bukkit.NamespacedKey)>getArtifact</a>(NamespacedKey key) </code>
                                             </th>
                                             <td class="colLast">Fetches a PArtifact from the registry.</td>
+                                        </tr>
+                                        
+                                        <tr id="i9" class="rowColor">
+                                            <td class="colFirst"><code><a href=artifacts/PArtifact.html>PArtifact</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaRegistry.html#getArtifact(java.lang.String)>getArtifact</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
+                                            </th>
+                                            <td class="colLast">Fetches a PArtifact from the registry.</td>
+                                        </tr>
+                                        
+                                        <tr id="i10" class="altColor">
+                                            <td class="colFirst"><code>abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaRegistry.html#getEnchantments()>getEnchantments</a>() </code>
+                                            </th>
+                                            <td class="colLast">Fetches all of the registered PEnchantments.</td>
+                                        </tr>
+                                        
+                                        <tr id="i11" class="rowColor">
+                                            <td class="colFirst"><code>abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=artifacts/PArtifact.html>PArtifact</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PlasmaRegistry.html#getArtifacts()>getArtifacts</a>() </code>
+                                            </th>
+                                            <td class="colLast">Fetches all of the registered PlasmaEnchants Artifacts.</td>
                                         </tr>
                                         
                                         </tbody>
@@ -433,16 +449,25 @@ public interface <span class="typeNameLabel"><a href=PlasmaRegistry.html>PlasmaR
                                     </li>
                                 </ul>
                                 
-                                <a id="getEnchantments()">
+                                <a id="getEnchantment(java.lang.String)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>getEnchantments</h4>
-                                        <pre class="methodSignature"> abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>&gt; <a href=PlasmaRegistry.html#getEnchantments()>getEnchantments</a>()</pre>
-                                        <div class="block"><p>Fetches all of the registered PEnchantments.</p></div>
+                                        <h4>getEnchantment</h4>
+                                        <pre class="methodSignature"> <a href=enchants/PEnchantment.html>PEnchantment</a> <a href=PlasmaRegistry.html#getEnchantment(java.lang.String)>getEnchantment</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key)</pre>
+                                        <div class="block"><p>Fetches a PEnchantment from the registry.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>key</code> - String key of PEnchantment</dd>
+                                            
+                                            
+                                        </dl>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -544,26 +569,11 @@ public interface <span class="typeNameLabel"><a href=PlasmaRegistry.html>PlasmaR
                                     </li>
                                 </ul>
                                 
-                                <a id="getArtifacts()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getArtifacts</h4>
-                                        <pre class="methodSignature"> abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=artifacts/PArtifact.html>PArtifact</a>&gt; <a href=PlasmaRegistry.html#getArtifacts()>getArtifacts</a>()</pre>
-                                        <div class="block"><p>Fetches all of the registered PlasmaEnchants Artifacts.</p></div>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
                                 <a id="getArtifact(org.bukkit.NamespacedKey)">
                                     <!--   -->
                                 </a>
                                 <ul class=
-                                              "blockListLast"
+                                              "blockList"
                                           >
                                     <li class="blockList">
                                         <h4>getArtifact</h4>
@@ -578,6 +588,60 @@ public interface <span class="typeNameLabel"><a href=PlasmaRegistry.html>PlasmaR
                                             
                                             
                                         </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getArtifact(java.lang.String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getArtifact</h4>
+                                        <pre class="methodSignature"> <a href=artifacts/PArtifact.html>PArtifact</a> <a href=PlasmaRegistry.html#getArtifact(java.lang.String)>getArtifact</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key)</pre>
+                                        <div class="block"><p>Fetches a PArtifact from the registry.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>key</code> - String key of PArtifact</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getEnchantments()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getEnchantments</h4>
+                                        <pre class="methodSignature"> abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>&gt; <a href=PlasmaRegistry.html#getEnchantments()>getEnchantments</a>()</pre>
+                                        <div class="block"><p>Fetches all of the registered PEnchantments.</p></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getArtifacts()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getArtifacts</h4>
+                                        <pre class="methodSignature"> abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=artifacts/PArtifact.html>PArtifact</a>&gt; <a href=PlasmaRegistry.html#getArtifacts()>getArtifacts</a>()</pre>
+                                        <div class="block"><p>Fetches all of the registered PlasmaEnchants Artifacts.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
