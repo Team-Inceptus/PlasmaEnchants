@@ -21,7 +21,7 @@ class PType<T : Event> private constructor(
 
     /**
      * Fetches the color prefix of this Type.
-     * @return Color
+     * @return Prefix Color
      */
     val color: ChatColor = ChatColor.GRAY
 ) {
