@@ -27,10 +27,10 @@ interface PArtifact : Keyed, Consumer<Event> {
         val RAW_ARTIFACT = ItemStack(Material.PLAYER_HEAD).apply {
             val meta = itemMeta as SkullMeta
 
-            meta.setDisplayName("${ChatColor.YELLOW}${PlasmaConfig.getConfig().get("artifact.raw")}")
+            meta.setDisplayName("${ChatColor.YELLOW}${PlasmaConfig.config.get("artifact.raw")}")
 
             val p = Properties()
-            p.load(PlasmaConfig.getPlugin().javaClass.getResourceAsStream("/util/heads.properties"))
+            p.load(PlasmaConfig.plugin.javaClass.getResourceAsStream("/util/heads.properties"))
 
             val profile = GameProfile(UUID.randomUUID(), null)
             profile.properties.put("textures", Property("textures", p.getProperty("raw_artifact")))
@@ -85,5 +85,8 @@ interface PArtifact : Keyed, Consumer<Event> {
      * Fetches the String representation of this artifact.
      * @return String Representation
      */
-    fun asString(): String = String.format(PlasmaConfig.getConfig().locale, PlasmaConfig.getConfig().get("constants.artifact") ?: "%s Artifact", "${color}${displayName}")
+    fun asString(): String = String.format(PlasmaConfig.config.locale, PlasmaConfig.config.get("constants.artifact") ?: "%s Artifact", "${color}${displayName}")
+
+    val isDisabled: Boolean
+        get() = PlasmaConfig.config.disabledArtifacts.contains(this)
 }

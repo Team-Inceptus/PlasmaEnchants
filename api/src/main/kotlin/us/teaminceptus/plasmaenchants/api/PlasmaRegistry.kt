@@ -17,23 +17,29 @@ interface PlasmaRegistry {
     /**
      * Fetches a PEnchantment from the registry.
      * @param key NamespacedKey of PEnchantment
+     * @return [PEnchantment] with key, or null if not found
      */
-    fun getEnchantment(key: NamespacedKey): PEnchantment? {
-        return getEnchantments().firstOrNull { it.key == key }
-    }
+    fun getEnchantment(key: NamespacedKey): PEnchantment? = enchantments.firstOrNull { it.key == key }
+
+    /**
+     * Fetches a PEnchantment from the registry.
+     * @param key String key of PEnchantment
+     * @return [PEnchantment] with key, or null if not found
+     */
+    fun getEnchantment(key: String): PEnchantment? = enchantments.firstOrNull { it.key.key == key }
 
     /**
      * Fetches all of the registered PEnchantments.
      * @return Immutable Set of PEnchantments
      */
-    fun getEnchantments(): Set<PEnchantment>
-
+    val enchantments: Set<PEnchantment>
+    
     /**
      * Checks if a PEnchantment is registered.
      * @param enchantment PEnchantment to check
      */
     fun isRegistered(enchantment: PEnchantment): Boolean {
-        return getEnchantments().contains(enchantment)
+        return enchantments.contains(enchantment)
     }
 
     /**
@@ -48,7 +54,7 @@ interface PlasmaRegistry {
      * Fetches all of the registered PlasmaEnchants Artifacts.
      * @return Immutable Set of PArtifacts
      */
-    fun getArtifacts(): Set<PArtifact>
+    val artifacts: Set<PArtifact>
 
     /**
      * Fetches a PArtifact from the registry.
@@ -56,8 +62,15 @@ interface PlasmaRegistry {
      * @return [PArtifact] with key, or null if not found
      */
     fun getArtifact(key: NamespacedKey): PArtifact? {
-        return getArtifacts().firstOrNull { it.key == key }
+        return artifacts.firstOrNull { it.key == key }
     }
+
+    /**
+     * Fetches a PArtifact from the registry.
+     * @param key String key of PArtifact
+     * @return [PArtifact] with key, or null if not found
+     */
+    fun getArtifact(key: String): PArtifact? = artifacts.firstOrNull { it.key.key == key }
 
     /**
      * Checks if a PArtifact is registered.
@@ -65,7 +78,7 @@ interface PlasmaRegistry {
      * @return true if registered, false if not
      */
     fun isRegistered(artifact: PArtifact): Boolean {
-        return getArtifacts().contains(artifact)
+        return artifacts.contains(artifact)
     }
 
     /**

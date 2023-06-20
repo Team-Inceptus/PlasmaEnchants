@@ -43,7 +43,7 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
                         val meta = item.itemMeta!!
 
                         meta.getPlasmaEnchants().filter { entry -> entry.key.type == PType.PASSIVE }.forEach { entry -> entry.key.accept(PlayerTickEvent(it), entry.value) }
-                        if (meta.hasArtifact() && meta.getArtifact()!!.type == PType.PASSIVE) meta.getArtifact()!!.accept(PlayerTickEvent(it))
+                        if (meta.hasArtifact() && meta.artifact!!.type == PType.PASSIVE) meta.artifact!!.accept(PlayerTickEvent(it))
                     }
                 }
             }
@@ -82,6 +82,7 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
         saveDefaultConfig()
 
         loadClasses()
+        PlasmaConfig.loadConfig()
         logger.info("Loaded Classes...")
 
         passiveTask.runTaskTimer(this, 0, 1)
@@ -106,8 +107,8 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
     }
 
     override fun onDisable() {
-        artifacts.clear()
-        enchantments.clear()
+        Companion.artifacts.clear()
+        Companion.enchantments.clear()
         logger.info("Unloaded Classes...")
         
         passiveTask.cancel()
@@ -138,38 +139,33 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
         }
     }
 
-    override val language: String
-        get() = config.getString("language", "en")!!
-
     // Registry Implementation
 
     override fun register(enchantment: PEnchantment) {
         if (enchantments.contains(enchantment)) throw IllegalArgumentException("Enchantment already registered!")
-        enchantments.add(enchantment)
+        Companion.enchantments.add(enchantment)
     }
 
     override fun register(artifact: PArtifact) {
         if (artifacts.contains(artifact)) throw IllegalArgumentException("Artifact already registered!")
-        artifacts.add(artifact)
-    }
-
-    override fun getEnchantments(): Set<PEnchantment> {
-        return ImmutableSet.copyOf(enchantments)
+        Companion.artifacts.add(artifact)
     }
 
     override fun unregister(enchantment: PEnchantment) {
         if (!enchantments.contains(enchantment)) throw IllegalArgumentException("Enchantment not registered!")
-        enchantments.remove(enchantment)
+        Companion.enchantments.remove(enchantment)
     }
 
     override fun unregister(artifact: PArtifact) {
         if (!artifacts.contains(artifact)) throw IllegalArgumentException("Artifact not registered!")
-        artifacts.remove(artifact)
+        Companion.artifacts.remove(artifact)
     }
 
-    override fun getArtifacts(): Set<PArtifact> {
-        return ImmutableSet.copyOf(artifacts)
-    }
+    override val artifacts: Set<PArtifact>
+        get() = ImmutableSet.copyOf(Companion.artifacts)
+
+    override val enchantments: Set<PEnchantment>
+        get() = ImmutableSet.copyOf(Companion.enchantments)
 
 
 }

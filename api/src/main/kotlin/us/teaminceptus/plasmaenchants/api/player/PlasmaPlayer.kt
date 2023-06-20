@@ -14,7 +14,7 @@ import java.io.File
 class PlasmaPlayer(private val p: OfflinePlayer) {
 
     private val pConfig: FileConfiguration
-    private val pFile: File = PlasmaConfig.getDataFolder().resolve("${p.uniqueId}.yml")
+    private val pFile: File = PlasmaConfig.dataFolder.resolve("${p.uniqueId}.yml")
 
     init {
         if (!pFile.exists()) pFile.createNewFile()

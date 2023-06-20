@@ -1,5 +1,6 @@
 package us.teaminceptus.plasmaenchants
 
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
@@ -39,7 +40,7 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
             val enchants = meta.getPlasmaEnchants().filter { it.key.type == type }
             enchants.forEach { it.key.accept(event, it.value) }
 
-            val artifact = meta.getArtifact().takeIf { it != null && it.type == type } ?: return
+            val artifact = meta.artifact.takeIf { it != null && it.type == type } ?: return
             artifact.accept(event)
         }
     }
@@ -97,22 +98,29 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
         val first = inv.getItem(0) ?: return
         val second = inv.getItem(1) ?: return
 
+        if (first.type != second.type && second.type != Material.ENCHANTED_BOOK) return
+        
         val fMeta = first.itemMeta ?: return
         val sMeta = second.itemMeta ?: return
+
+        if (sMeta.getPlasmaEnchants().keys.any { fMeta.hasConflictingEnchant(it) }) {
+            event.result = null
+            return
+        }
 
         val fArtifact = fMeta.hasArtifact()
         val sArtifact = sMeta.hasArtifact()
 
         return when {
-            fArtifact && sArtifact && (fMeta.getArtifact() != sMeta.getArtifact()) -> {
+            fArtifact && sArtifact && (fMeta.artifact != sMeta.artifact) -> {
                 event.result = null
             }
             !fArtifact && sArtifact -> {
                 val clone = first.clone()
                 val meta = clone.itemMeta!!
 
-                val artifact = sMeta.getArtifact()!!
-                meta.setArtifact(artifact)
+                val artifact = sMeta.artifact!!
+                meta.artifact = artifact
                 meta.combinePlasmaEnchants(sMeta)
 
                 clone.itemMeta = meta

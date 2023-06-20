@@ -22,10 +22,10 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
         private fun hasHandler(): Boolean = ::handler.isInitialized
 
         @JvmStatic
-        private fun get(key: String): String = PlasmaConfig.getConfig().get(key) ?: "Unknown Value"
+        private fun get(key: String): String = PlasmaConfig.config.get(key) ?: "Unknown Value"
 
         @JvmStatic
-        private fun getMessage(key: String): String = PlasmaConfig.getConfig().getMessage(key) ?: "Unknown Value"
+        private fun getMessage(key: String): String = PlasmaConfig.config.getMessage(key) ?: "Unknown Value"
 
         @JvmStatic
         private fun getSuccess(key: String): String = "${get("plugin.prefix")}${ChatColor.GREEN}${get(key)}"
@@ -43,15 +43,15 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
             handler
                 .registerValueResolver(PEnchantment::class.java) resolver@{ ctx ->
                     val name = ctx.popForParameter()
-                    return@resolver plugin.getEnchantments().first { it.key.key.equals(name, ignoreCase = true) }
+                    return@resolver plugin.enchantments.first { it.key.key.equals(name, ignoreCase = true) }
                 }.registerValueResolver(PArtifact::class.java) resolver@{ ctx ->
                     val name = ctx.popForParameter()
-                    return@resolver plugin.getArtifacts().first { it.key.key.equals(name, ignoreCase = true) }
+                    return@resolver plugin.artifacts.first { it.key.key.equals(name, ignoreCase = true) }
                 }
 
             handler.autoCompleter
-                .registerParameterSuggestions(PEnchantment::class.java, SuggestionProvider.map(plugin::getEnchantments) { enchant -> enchant.key.key })
-                .registerParameterSuggestions(PArtifact::class.java, SuggestionProvider.map(plugin::getArtifacts) { artifact -> artifact.key.key })
+                .registerParameterSuggestions(PEnchantment::class.java, SuggestionProvider.map(plugin::enchantments) { enchant -> enchant.key.key })
+                .registerParameterSuggestions(PArtifact::class.java, SuggestionProvider.map(plugin::artifacts) { artifact -> artifact.key.key })
 
             handler.register(this, PlasmaEnchantsCommands())
 
@@ -137,7 +137,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
 
             val meta = item.itemMeta!!
 
-            meta.setArtifact(artifact)
+            meta.artifact = artifact
             item.itemMeta = meta
 
             p.sendMessage(format(getSuccess("success.artifact.set"), "${ChatColor.GOLD}${artifact.displayName}"))

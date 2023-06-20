@@ -156,12 +156,12 @@ enum class PArtifacts(
         get() = name.lowercase().replaceFirstChar { it.uppercase() }
 
     override val description
-        get() = PlasmaConfig.getConfig().get("artifact.${displayName.lowercase()}.desc") ?: "No description provided."
+        get() = PlasmaConfig.config.get("artifact.${displayName.lowercase()}.desc") ?: "No description provided."
 
     override val type
         get() = info.type
 
-    override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.getPlugin(), displayName.lowercase())
+    override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.plugin, displayName.lowercase())
 
     override fun toString(): String = asString()
 
