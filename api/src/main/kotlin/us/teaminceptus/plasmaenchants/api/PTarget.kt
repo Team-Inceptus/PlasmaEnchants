@@ -165,18 +165,16 @@ enum class PTarget {
 
     constructor(vararg validMaterials: Material) {
         this.valid = validMaterials.toList()
-            .stream()
             .filter { it != Material.AIR }
-            .collect(Collectors.toList())
+            .toList()
     }
 
     constructor(vararg targets: PTarget) {
         this.valid = targets.toList()
-            .stream()
             .map { it.valid }
-            .flatMap { it.stream() }
+            .flatten()
             .filter { it != Material.AIR }
-            .collect(Collectors.toList())
+            .toList()
     }
 
     private fun mapTargets(targets: Array<PTarget>): ArrayList<Material> {
@@ -201,6 +199,6 @@ enum class PTarget {
      * @return True if the Material is valid, false otherwise
      */
     fun isValid(material: Material): Boolean {
-        return valid.contains(material)
+        return valid.contains(material) || material == Material.ENCHANTED_BOOK
     }
 }
