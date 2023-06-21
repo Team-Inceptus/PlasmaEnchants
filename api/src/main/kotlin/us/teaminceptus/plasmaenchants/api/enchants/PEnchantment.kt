@@ -1,10 +1,12 @@
 package us.teaminceptus.plasmaenchants.api.enchants
 
 import org.bukkit.Keyed
+import org.bukkit.Material
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import us.teaminceptus.plasmaenchants.api.PTarget
 import us.teaminceptus.plasmaenchants.api.PType
+import us.teaminceptus.plasmaenchants.api.PlasmaConfig
 import us.teaminceptus.plasmaenchants.api.toRoman
 import java.util.function.BiConsumer
 
@@ -66,5 +68,19 @@ interface PEnchantment : BiConsumer<Event, Int>, Keyed {
      * @return String Representation of Enchantment
      */
     fun toString(level: Int): String = "${type.color}$displayName ${level.toRoman()}"
+
+    /**
+     * Generates an [Material.ENCHANTED_BOOK] book for this PEnchantment.
+     * @param level Level of Enchantment
+     * @return Enchanted Book
+     */
+    fun generateBook(level: Int): ItemStack
+
+    val isDisabled: Boolean
+        /**
+         * Whether or not this PEnchantment is disabled.
+         * @return true if disabled, false otherwise
+         */
+        get() = PlasmaConfig.config.disabledEnchantments.contains(this)
 
 }

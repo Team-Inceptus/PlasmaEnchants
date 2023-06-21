@@ -19,9 +19,8 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
-import us.teaminceptus.plasmaenchants.api.PTarget
+import us.teaminceptus.plasmaenchants.api.*
 import us.teaminceptus.plasmaenchants.api.PTarget.*
-import us.teaminceptus.plasmaenchants.api.PType
 import us.teaminceptus.plasmaenchants.api.PType.Companion.ATTACKING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.BLOCK_BREAK
 import us.teaminceptus.plasmaenchants.api.PType.Companion.DAMAGE
@@ -29,12 +28,12 @@ import us.teaminceptus.plasmaenchants.api.PType.Companion.DEFENDING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.MINING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.PASSIVE
 import us.teaminceptus.plasmaenchants.api.PType.Companion.SHOOT_BOW
-import us.teaminceptus.plasmaenchants.api.PlasmaConfig
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.getBlockFace
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.getConnected
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.getSquareRotation
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.isOre
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.matchType
+import us.teaminceptus.plasmaenchants.api.util.NAMESPACEDKEY_INT_MAP
 import java.util.*
 import java.util.function.Predicate
 import kotlin.math.absoluteValue
@@ -679,6 +678,13 @@ enum class PEnchantments(
     override fun accept(e: Event, level: Int) = info.action(e, level)
 
     override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.plugin, name.lowercase())
+
+    override fun generateBook(level: Int): ItemStack = ItemStack(Material.ENCHANTED_BOOK).apply {
+            itemMeta = itemMeta!!.apply {
+                lore = Collections.singletonList("${ChatColor.GRAY}${this@PEnchantments.displayName} ${level.toRoman()}")
+                addEnchant(this@PEnchantments, level)
+            }
+        }
 
     private class Action<T : Event>(val type: PType<T>, action: (T, Int) -> Unit) {
         val action: (Event, Int) -> Unit

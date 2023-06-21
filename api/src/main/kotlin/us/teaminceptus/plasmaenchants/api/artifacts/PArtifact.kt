@@ -7,6 +7,8 @@ import org.bukkit.Keyed
 import org.bukkit.Material
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.Recipe
+import org.bukkit.inventory.ShapedRecipe
 import org.bukkit.inventory.meta.SkullMeta
 import us.teaminceptus.plasmaenchants.api.PTarget
 import us.teaminceptus.plasmaenchants.api.PType
@@ -73,7 +75,6 @@ interface PArtifact : Keyed, Consumer<Event> {
      */
     val color: ChatColor
 
-
     /**
      * <p>Fetches the ring item used in the crafting of this Artifact.</p>
      * <p>When crafting an artifact, this item (and its count) will surround [PArtifact.RAW_ARTIFACT] to produce this artifact in item form.</p>
@@ -82,11 +83,27 @@ interface PArtifact : Keyed, Consumer<Event> {
     val ringItem: ItemStack
 
     /**
+     * Fetches a ShapedRecipe instance clone for this artifact.
+     * @return ShapedRecipe
+     */
+    val recipe: ShapedRecipe
+
+    /**
+     * Fetches the ItemStack representation of this artifact.
+     * @return ItemStack Representation
+     */
+    val item: ItemStack
+
+    /**
      * Fetches the String representation of this artifact.
      * @return String Representation
      */
     fun asString(): String = String.format(PlasmaConfig.config.locale, PlasmaConfig.config.get("constants.artifact") ?: "%s Artifact", "${color}${displayName}")
 
     val isDisabled: Boolean
+        /**
+         * Fetches whether this artifact is disabled.
+         * @return true if disabled, false otherwise
+         */
         get() = PlasmaConfig.config.disabledArtifacts.contains(this)
 }

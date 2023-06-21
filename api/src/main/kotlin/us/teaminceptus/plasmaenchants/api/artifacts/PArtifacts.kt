@@ -4,10 +4,15 @@ import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.block.Biome
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.*
 import org.bukkit.event.Event
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.RecipeChoice
+import org.bukkit.inventory.ShapedRecipe
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import us.teaminceptus.plasmaenchants.api.PTarget
@@ -19,6 +24,7 @@ import us.teaminceptus.plasmaenchants.api.PType.Companion.DEFENDING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.PASSIVE
 import us.teaminceptus.plasmaenchants.api.PType.Companion.SHOOT_BOW
 import us.teaminceptus.plasmaenchants.api.PlasmaConfig
+import us.teaminceptus.plasmaenchants.api.artifactsKey
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
 
 /**
@@ -30,6 +36,7 @@ enum class PArtifacts(
     override val target: PTarget,
     private val info: Action<*>,
     override val ringItem: ItemStack,
+    private val base: ItemStack,
     override val color: ChatColor = ChatColor.YELLOW
 ) : PArtifact {
 
@@ -39,21 +46,21 @@ enum class PArtifacts(
         MELEE_WEAPONS, Action(ATTACKING) { event ->
             if (event.damager.location.block.biome.name.contains("PLAINS"))
                 event.damage *= 1.05
-        }, ItemStack(Material.DIRT, 64)
+        }, ItemStack(Material.DIRT, 64), Material.COARSE_DIRT
     ),
 
     SAND(
         MELEE_WEAPONS, Action(ATTACKING) { event ->
             if (event.damager.location.block.biome == Biome.DESERT)
                 event.damage *= 1.1
-        }, ItemStack(Material.SAND, 64)
+        }, ItemStack(Material.SAND, 64), Material.SAND
     ),
 
     RED_SAND(
         MELEE_WEAPONS, Action(ATTACKING) { event ->
             if (event.damager.location.block.biome.name.contains("BADLANDS"))
                 event.damage *= 1.1
-        }, ItemStack(Material.RED_SAND, 64)
+        }, ItemStack(Material.RED_SAND, 64), Material.RED_SAND
     ),
 
     WITHER(
@@ -63,7 +70,7 @@ enum class PArtifacts(
 
             if (target is Wither || target is WitherSkeleton)
                 event.damage *= 3.0
-        }, ItemStack(Material.NETHER_STAR, 6)
+        }, ItemStack(Material.NETHER_STAR, 6), Material.WITHER_ROSE
     ),
 
     MEAT(
@@ -75,7 +82,7 @@ enum class PArtifacts(
                 EntityType.SHEEP, EntityType.RABBIT, EntityType.COD, EntityType.SALMON -> event.damage *= 4.0
                 else -> return@Action
             }
-        }, ItemStack(Material.BEEF, 32)
+        }, ItemStack(Material.BEEF, 32), Material.COOKED_BEEF
     ),
 
     // Armor Artifacts
@@ -83,13 +90,13 @@ enum class PArtifacts(
     LAVA(
         CHESTPLATES, Action(DEFENDING) { event ->
             event.damager.fireTicks += 120
-        }, ItemStack(Material.OBSIDIAN, 24)
+        }, ItemStack(Material.OBSIDIAN, 24), Material.LAVA_BUCKET
     ),
 
     KELP(
         BOOTS, Action(PASSIVE) { event ->
             event.player.addPotionEffect(PotionEffect(PotionEffectType.DOLPHINS_GRACE, 20, 2, true))
-        }, ItemStack(Material.KELP, 64)
+        }, ItemStack(Material.KELP, 64), Material.KELP
     ),
 
     EXPERIENCE(
@@ -98,25 +105,25 @@ enum class PArtifacts(
             val player = event.damager as Player
 
             event.damage *= 1 + (player.level * 0.03).coerceAtMost(2.5)
-        }, ItemStack(Material.EXPERIENCE_BOTTLE, 12)
+        }, ItemStack(Material.EXPERIENCE_BOTTLE, 12), Material.EXPERIENCE_BOTTLE
     ),
 
     PHANTOM(
         HELMETS, Action(DEFENDING) { event ->
             if (event.damager is Phantom || event.cause == DamageCause.FLY_INTO_WALL) event.isCancelled = true
-        }, ItemStack(Material.PHANTOM_MEMBRANE, 8)
+        }, ItemStack(Material.PHANTOM_MEMBRANE, 8), Material.PHANTOM_MEMBRANE
     ),
 
     FEATHER(
         BOOTS, Action(PASSIVE) { event ->
             event.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW_FALLING, 2, 0, true))
-        }, ItemStack(Material.FEATHER, 32)
+        }, ItemStack(Material.FEATHER, 32), Material.FEATHER
     ),
 
     SEA(
         LEGGINGS, Action(DEFENDING) { event ->
             if (event.cause == DamageCause.DROWNING || event.damager is Guardian) event.isCancelled = true
-        }, ItemStack(Material.HEART_OF_THE_SEA)
+        }, ItemStack(Material.HEART_OF_THE_SEA), Material.HEART_OF_THE_SEA
     ),
 
     // Ranged Artifacts
@@ -124,7 +131,7 @@ enum class PArtifacts(
     FLINT(
         CROSSBOW, Action(SHOOT_BOW) { event ->
             event.projectile.velocity.multiply(1.2)
-        }, ItemStack(Material.FLINT, 64)
+        }, ItemStack(Material.FLINT, 64), Material.FLINT
     ),
 
     // Tool Artifacts
@@ -133,27 +140,35 @@ enum class PArtifacts(
         PICKAXES, Action(BLOCK_BREAK) { event ->
             if (event.block.type.name.contains("IRON_ORE") && event.isDropItems)
                 event.block.getDrops(event.player.inventory.itemInMainHand).forEach { event.player.world.dropItemNaturally(event.block.location, it) }
-        }, ItemStack(Material.IRON_INGOT, 16)
+        }, ItemStack(Material.IRON_INGOT, 16), Material.IRON_INGOT
     ),
 
     GOLD(
         PICKAXES, Action(BLOCK_BREAK) { event ->
             if (event.block.type.name.contains("GOLD_ORE") && event.isDropItems)
                 event.block.getDrops(event.player.inventory.itemInMainHand).forEach { event.player.world.dropItemNaturally(event.block.location, it) }
-        }, ItemStack(Material.GOLD_INGOT, 16)
+        }, ItemStack(Material.GOLD_INGOT, 16), Material.GOLD_INGOT
     ),
 
     DIAMOND(
         PICKAXES, Action(BLOCK_BREAK) { event ->
             if (event.block.type.name.contains("DIAMOND_ORE") && event.isDropItems)
                 event.block.getDrops(event.player.inventory.itemInMainHand).forEach { event.player.world.dropItemNaturally(event.block.location, it) }
-        }, ItemStack(Material.DIAMOND, 16)
+        }, ItemStack(Material.DIAMOND, 16), Material.DIAMOND
     ),
 
     ;
 
+    constructor(
+        target: PTarget,
+        info: Action<*>,
+        ringItem: ItemStack,
+        base: Material,
+        color: ChatColor = ChatColor.YELLOW
+    ) : this (target, info, ringItem, ItemStack(base), color)
+
     override val displayName
-        get() = name.lowercase().replaceFirstChar { it.uppercase() }
+        get() = this.name.split("_").joinToString(" ") { it -> it.lowercase().replaceFirstChar { it.uppercase() } }
 
     override val description
         get() = PlasmaConfig.config.get("artifact.${displayName.lowercase()}.desc") ?: "No description provided."
@@ -161,7 +176,31 @@ enum class PArtifacts(
     override val type
         get() = info.type
 
-    override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.plugin, displayName.lowercase())
+    override val recipe: ShapedRecipe
+        get() {
+            val recipe = ShapedRecipe(NamespacedKey(PlasmaConfig.plugin, name.lowercase()), item)
+
+            recipe.shape("RRR", "RAR", "RRR")
+            recipe.setIngredient('R', ExactAmountChoice(ringItem))
+            recipe.setIngredient('A', ExactAmountChoice(PArtifact.RAW_ARTIFACT))
+            recipe.group = "PlasmaEnchants Artifact"
+
+            return recipe
+        }
+
+    override val item: ItemStack
+        get() = base.clone().apply {
+            itemMeta = itemMeta!!.apply {
+                setDisplayName("$color$${asString()}")
+
+                addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true)
+                addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS)
+
+                persistentDataContainer[artifactsKey, PersistentDataType.STRING] = key.key
+            }
+        }
+
+    override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.plugin, "${name.lowercase()}_artifact")
 
     override fun toString(): String = asString()
 
@@ -177,5 +216,12 @@ enum class PArtifacts(
             }
         }
     }
+
+    @Suppress("deprecation")
+    private class ExactAmountChoice(stack: ItemStack): RecipeChoice.ExactChoice(stack) {
+        override fun test(recipe: ItemStack): Boolean =
+            recipe.amount == this.itemStack.amount && super.test(recipe)
+    }
+
 
 }
