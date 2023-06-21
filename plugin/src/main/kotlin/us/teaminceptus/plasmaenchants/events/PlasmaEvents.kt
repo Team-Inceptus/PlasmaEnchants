@@ -1,4 +1,4 @@
-package us.teaminceptus.plasmaenchants
+package us.teaminceptus.plasmaenchants.events
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -11,11 +11,17 @@ import org.bukkit.event.block.BlockDamageEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityShootBowEvent
+import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.PrepareAnvilEvent
+import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.inventory.CraftingInventory
 import org.bukkit.inventory.GrindstoneInventory
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.RecipeChoice.ExactChoice
 import org.bukkit.inventory.meta.ItemMeta
+import us.teaminceptus.plasmaenchants.PlasmaEnchants
 import us.teaminceptus.plasmaenchants.api.*
 
 internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
@@ -37,7 +43,7 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
         items.forEach { item ->
             val meta: ItemMeta = item.itemMeta ?: return
 
-            val enchants = meta.getPlasmaEnchants().filter { it.key.type == type }
+            val enchants = meta.plasmaEnchants.filter { it.key.type == type }
             enchants.forEach { it.key.accept(event, it.value) }
 
             val artifact = meta.artifact.takeIf { it != null && it.type == type } ?: return
@@ -79,7 +85,7 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
         val item = event.currentItem ?: return
         val meta = item.itemMeta ?: return
 
-        val exp = meta.getPlasmaEnchants().map { it.value }.sum()
+        val exp = meta.plasmaEnchants.map { it.value }.sum()
         meta.clearPlasmaEnchants()
         item.itemMeta = meta
 
@@ -103,7 +109,7 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
         val fMeta = first.itemMeta ?: return
         val sMeta = second.itemMeta ?: return
 
-        if (sMeta.getPlasmaEnchants().keys.any { fMeta.hasConflictingEnchant(it) }) {
+        if (sMeta.plasmaEnchants.keys.any { fMeta.hasConflictingEnchant(it) }) {
             event.result = null
             return
         }
@@ -137,5 +143,7 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
             }
         }
     }
+
+    // Artifact Crafting
 
 }

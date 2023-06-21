@@ -16,6 +16,8 @@ import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifacts
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments
+import us.teaminceptus.plasmaenchants.events.PlasmaEvents
+import us.teaminceptus.plasmaenchants.events.SpawnEvents
 import java.util.Properties
 import java.io.InputStream
 import java.io.IOException
@@ -42,7 +44,7 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
                     items.forEach { item ->
                         val meta = item.itemMeta!!
 
-                        meta.getPlasmaEnchants().filter { entry -> entry.key.type == PType.PASSIVE }.forEach { entry -> entry.key.accept(PlayerTickEvent(it), entry.value) }
+                        meta.plasmaEnchants.filter { entry -> entry.key.type == PType.PASSIVE }.forEach { entry -> entry.key.accept(PlayerTickEvent(it), entry.value) }
                         if (meta.hasArtifact() && meta.artifact!!.type == PType.PASSIVE) meta.artifact!!.accept(PlayerTickEvent(it))
                     }
                 }
@@ -72,6 +74,8 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
 
     private fun loadClasses() {
         PlasmaEvents(this)
+        SpawnEvents(this)
+
         PlasmaCommands(this)
 
         PEnchantments.values().forEach(::register)
@@ -149,6 +153,7 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
     override fun register(artifact: PArtifact) {
         if (artifacts.contains(artifact)) throw IllegalArgumentException("Artifact already registered!")
         Companion.artifacts.add(artifact)
+        Bukkit.addRecipe(artifact.recipe)
     }
 
     override fun unregister(enchantment: PEnchantment) {
