@@ -18,6 +18,9 @@ language: en
 # Configuration for Enchantments
 enchantments:
 
+  # A List of Enchantments that are disabled
+  disabled-enchants: []
+
   # Natural Enchantment Spawning via World Events Configuration
   spawn:
 
@@ -35,8 +38,8 @@ enchantments:
     # The Maximum Enchantment Level for a naturally spawned enchanted book - Global Default
     max-level: 2
 
-    # When spawning an Enchantment Book, the chance will be multiplied by this number and the luck level for the player.
-    luck-modifier: 1.05
+    # The percentage increase per luck level of a player for naturally spawned enchanted books
+    luck-modifier: 0.02
 
     # Enchanted Books received through killing a mob
     drops:
@@ -57,9 +60,12 @@ enchantments:
       max-level: default
 
       chance:
+        # The percentage increase of each looting level to add to the chance of a raw artifact spawning
+        looting-modifier: 0.01
+
         # Chance of a Mob dropping a random Enchanted Book by default
         # Example: 0.1 = 10%
-        global: 0.3
+        global: 0.05
 
         # Additional Enchantment Chance Configuration
         # Example:
@@ -134,8 +140,8 @@ enchantments:
         # Example: 0.1 = 10%
         global: 0.04
 
-        # For each level of the Luck of the Sea enchantment, the chance will be multiplied by this number
-        luck-of-the-sea-modifier: 1.05
+        # The percentage increase for the chance per luck of the sea enchantment level of a player
+        luck-of-the-sea-modifier: 0.03
 
     # Enchanted Books received through Mining Blocks
     mining:
@@ -156,8 +162,11 @@ enchantments:
       max-level: default
 
       chance:
+        # The percentage increase of each fortune level to add to the chance of a raw artifact spawning
+        fortune-modifier: 0.01
+
         # Chance of a block dropping an enchanted book by default
-        global: 0.01
+        global: 0.005
 
         # Add Additional Blocks Here (case insensitive)
         # Example:
@@ -240,10 +249,16 @@ artifacts:
   # A List of Artifacts that are disabled
   disabled-artifacts: []
 
+
   # Raw Artifact Spawning Configuration
   spawn:
+    # The percentage increase of each luck level to add to the chance of a raw artifact spawning
+    luck-modifier: 0.02
+
     # The Chance of a raw artifact dropping from a killed mob
     killing:
+      # The percentage increase of each looting level to add to the chance of a raw artifact spawning
+      looting-modifier: 0.01
 
       # The default chance of a raw artifact dropping from a mob
       # Example: 0.25 = 25%
@@ -256,6 +271,9 @@ artifacts:
 
     # The Chance of a raw artifact dropping from a block
     mining:
+      # The percentage increase of each fortune level to add to the chance of a raw artifact spawning
+      fortune-modifier: 0.02
+
       # The default chance of a raw artifact dropping from a block
       # Example: 0.25 = 25%
       global-chance: 0.03

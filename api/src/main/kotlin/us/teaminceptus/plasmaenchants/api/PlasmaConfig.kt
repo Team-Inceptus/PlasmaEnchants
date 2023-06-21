@@ -128,13 +128,14 @@ interface PlasmaConfig {
 
             // Enchantment Configuration
             .putSection("enchantments")
+            .put("enchantments.disabled-enchants", FileConfiguration::isList, listOf<String>())
 
             .putSection("enchantments.spawn")
             .put("enchantments.spawn.blacklisted-enchants", FileConfiguration::isList, listOf<String>())
             .put("enchantments.spawn.whitelisted-enchants", FileConfiguration::isList, listOf<String>())
             .put("enchantments.spawn.min-level", FileConfiguration::isInt, 1)
             .put("enchantments.spawn.max-level", FileConfiguration::isInt, 2)
-            .put("enchantments.spawn.luck-modifier", isNumber, 1.05)
+            .put("enchantments.spawn.luck-modifier", isNumber, 0.02)
 
             .putSection("enchantments.spawn.drops")
             .put("enchantments.spawn.drops.blacklisted-mobs", FileConfiguration::isList, listOf<String>(),
@@ -153,7 +154,8 @@ interface PlasmaConfig {
             )
 
             .putSection("enchantments.spawn.drops.chance")
-            .put("enchantments.spawn.drops.chance.global", isNumber, 0.3)
+            .put("enchantments.spawn.drops.chance.global", isNumber, 0.05)
+            .put("enchantments.spawn.drops.chance.looting-modifier", isNumber, 0.01)
             .put("enchantments.spawn.drops.chance.config", FileConfiguration::isList, listOf<Map<String, Any>>(),
                 { value -> value.all { map -> map.keyNotNull("bukkit") { enchant -> Enchantment.values().map { it.key.key.lowercase() }.contains(enchant.toString().lowercase()) } &&
                             map.keyNotNull("plasma") { it.isEnchantment() } &&
@@ -201,7 +203,7 @@ interface PlasmaConfig {
             )
             .putSection("enchantments.spawn.fishing.chance")
             .put("enchantments.spawn.fishing.chance.global", isNumber, 0.04)
-            .put("enchantments.spawn.fishing.chance.luck-of-the-sea-modifier", isNumber, 1.05)
+            .put("enchantments.spawn.fishing.chance.luck-of-the-sea-modifier", isNumber, 0.03)
 
             .putSection("enchantments.spawn.mining")
             .put("enchantments.spawn.mining.blacklisted-blocks", FileConfiguration::isList, listOf<String>(),
@@ -219,7 +221,8 @@ interface PlasmaConfig {
                 { value -> value.isChildLevel() }
             )
             .putSection("enchantments.spawn.mining.chance")
-            .put("enchantments.spawn.mining.chance.global", isNumber, 0.01)
+            .put("enchantments.spawn.mining.chance.global", isNumber, 0.005)
+            .put("enchantments.spawn.mining.chance.fortune-modifier", isNumber, 0.01)
             .put("enchantments.spawn.mining.chance.config", FileConfiguration::isList, listOf<Map<String, Any>>(),
                 { value -> value.all { map -> map.keyNotNull("block") { block -> Material.matchMaterial(block.toString().uppercase()) != null } &&
                         map.keyNotNull("chance") { it.isNumber() } &&
@@ -277,10 +280,13 @@ interface PlasmaConfig {
             )
 
             .putSection("artifacts.spawn")
+            .put("artifacts.spawn.luck-modifier", isNumber, 0.02)
             .putSection("artifacts.spawn.killing")
+            .put("artifacts.spawn.killing.looting-modifier", isNumber, 0.01)
             .put("artifacts.spawn.killing.global-chance", isNumber, 0.05)
 
             .putSection("artifacts.spawn.mining")
+            .put("artifacts.spawn.mining.fortune-modifier", isNumber, 0.02)
             .put("artifacts.spawn.mining.global-chance", isNumber, 0.03)
             .build()
 
@@ -355,19 +361,23 @@ interface PlasmaConfig {
         return get("plugin.prefix") + get(key)
     }
 
-    /**
-     * Fetches the language set in the configuration.
-     * @return Language Configured
-     */
     var language: String
+        /**
+         * Fetches the language set in the configuration.
+         * @return Language Configured
+         */
         get() = "language"[configuration, String::class.java, "en"]
+        /**
+         * Sets the language in the configuration.
+         * @param value Language Key
+         */
         set(value) { "language"[configuration, configFile] = value }
 
-    /**
-     * Fetches the locale set in the configuration.
-     * @return Locale Configured
-     */
     val locale: Locale
+        /**
+         * Fetches the locale set in the configuration.
+         * @return Locale Configured
+         */
         get() = when (language) {
             "en" -> Locale.ENGLISH
             "fr" -> Locale.FRENCH
@@ -379,62 +389,115 @@ interface PlasmaConfig {
 
     // Enchantment Configuration
 
-    /**
-     * Fetches a list of enchantments that should not spawn naturally.
-     * @return List of Enchantments
-     */
+    var disabledEnchantments: List<PEnchantment>
+        /**
+         * Fetches a list of enchantments that are disabled.
+         * @return List of Enchantments
+         */
+        get() = "enchantments.disabled-enchants"[configuration, List::class.java, listOf<String>()].mapNotNull { registry.getEnchantment(it.toString()) }
+        /**
+         * Sets the list of enchantments that are disabled.
+         * @param value List of Enchantments
+         */
+        set(value) { "enchantments.disabled-enchants"[configuration, configFile] = value.map { it.key.key } }
+
     var blacklistedSpawnEnchantments: List<PEnchantment>
+        /**
+         * Fetches a list of enchantments that should not spawn naturally.
+         * @return List of Enchantments
+         */
         get() = "enchantments.spawn.blacklisted-enchants"[configuration, List::class.java, listOf<String>()].mapNotNull { registry.getEnchantment(it.toString()) }
+        /**
+         * Sets the list of enchantments that should not spawn naturally.
+         * @param value List of Enchantments
+         */
         set(value) { "enchantments.spawn.blacklisted-enchants"[configuration, configFile] = value.map { it.key.key } }
 
-    /**
-     * Fetches a list of enchantments that only spawn naturally.
-     * @return List of Enchantments
-     */
     var whitelistedSpawnEnchantments: List<PEnchantment>
+        /**
+         * Fetches a list of enchantments that only spawn naturally.
+         * @return List of Enchantments
+         */
         get() = "enchantments.spawn.whitelisted-enchants"[configuration, List::class.java, listOf<String>()].mapNotNull { registry.getEnchantment(it.toString()) }
+        /**
+         * Sets the list of enchantments that only spawn naturally.
+         * @param value List of Whitelisted Enchantments
+         */
         set(value) { "enchantments.spawn.whitelisted-enchants"[configuration, configFile] = value.map { it.key.key } }
 
-    /**
-     * Fetches the minimum level for a naturally occuring enchantment.
-     * @return Minimum Level
-     */
-    var enchantmenSpawnMinLevel: Int
+    var enchantmentSpawnMinLevel: Int
+        /**
+         * Fetches the minimum level for a naturally occuring enchantment.
+         * @return Minimum Level
+         */
         get() = "enchantments.spawn.min-level"[configuration, Int::class.java, 1]
+        /**
+         * Sets the minimum level for a naturally occuring enchantment.
+         * @param value Minimum Level
+         */
         set(value) { "enchantments.spawn.min-level"[configuration, configFile] = value }
 
-    /**
-     * Fetches the maximum level for a naturally occuring enchantment.
-     * @return Maximum Level
-     */
     var enchantmentSpawnMaxLevel: Int
+        /**
+         * Fetches the maximum level for a naturally occuring enchantment.
+         * @return Maximum Level
+         */
         get() = "enchantments.spawn.max-level"[configuration, Int::class.java, 2]
+        /**
+         * Sets the maximum level for a naturally occuring enchantment.
+         * @param value Maximum Level
+         */
         set(value) { "enchantments.spawn.max-level"[configuration, configFile] = value }
 
-    /**
-     * Fetches the luck modifier for naturally occuring enchantments.
-     * @return Spawn Luck Modifier
-     */
     var enchantmentSpawnLuckModifier: Double
-        get() = "enchantments.spawn.luck-modifier"[configuration, Double::class.java, 1.05]
+        /**
+         * Fetches the luck modifier for naturally occuring enchantments.
+         * @return Spawn Luck Modifier
+         */
+        get() = "enchantments.spawn.luck-modifier"[configuration, Double::class.java, 0.02]
+        /**
+         * Sets the luck modifier for naturally occuring enchantments.
+         * @param value Spawn Luck Modifier
+         */
         set(value) { "enchantments.spawn.luck-modifier"[configuration, configFile] = value }
+
+
+    var enchantmentSpawnGlobalKillingChance: Double
+        /**
+         * Fetches the global chance for an enchantment to spawn when an entity is killed.
+         * @return Global Chance
+         */
+        get() = "enchantments.spawn.drops.chance.global"[configuration, Double::class.java, 0.05]
+        /**
+         * Sets the global chance for an enchantment to spawn when an entity is killed.
+         * @param value Global Chance
+         */
+        set(value) { "enchantments.spawn.drops.chance.global"[configuration, configFile] = value }
 
     // Artifact Configuration
 
-    /**
-     * Fetches a list of artifacts that are disabled.
-     * @return List of Artifacts
-     */
     var disabledArtifacts: List<PArtifact>
+        /**
+         * Fetches a list of artifacts that are disabled.
+         * @return List of Artifacts
+         */
         get() = "artifacts.disabled-artifacts"[configuration, List::class.java, listOf<String>()].mapNotNull { registry.getArtifact(it.toString()) }
+        /**
+         * Sets the list of artifacts that are disabled.
+         * @param value List of Disabled Artifacts
+         */
         set(value) { "artifacts.disabled-artifacts"[configuration, configFile] = value.map { it.key.key } }
 
-    /**
-     * Fetches the global chance for an artifact to spawn when an entity is killed.
-     * @return Global Killing Drop Chance
-     */
     var artifactSpawnGlobalKillChance: Double
+        /**
+         * Fetches the global chance for an artifact to spawn when an entity is killed.
+         * @return Global Killing Drop Chance
+         */
         get() = "artifacts.spawn.killing.global-chance"[configuration, Double::class.java, 0.05]
+        /**
+         * Sets the global chance for an artifact to spawn when an entity is killed.
+         * @param value Global Killing Drop Chance
+         */
         set(value) { "artifacts.spawn.killing.global-chance"[configuration, configFile] = value }
 
     /**
@@ -458,12 +521,16 @@ interface PlasmaConfig {
         "artifacts.spawn.killing.${type.name}"[configuration, configFile] = value
     }
 
-    /**
-     * Fetches the global chance for an artifact to spawn when a block is mined.
-     * @return Global Mining Drop Chance
-     */
     var artifactSpawnGlobalMiningChance: Double
+        /**
+         * Fetches the global chance for an artifact to spawn when a block is mined.
+         * @return Global Mining Drop Chance
+         */
         get() = "artifacts.spawn.mining.global-chance"[configuration, Double::class.java, 0.03]
+        /**
+         * Sets the global chance for an artifact to spawn when a block is mined.
+         * @param value Global Mining Drop Chance
+         */
         set(value) { "artifacts.spawn.mining.global-chance"[configuration, configFile] = value }
 
     /**
@@ -481,10 +548,34 @@ interface PlasmaConfig {
     /**
      * Sets the chance for a specific material for a raw artifact to spawn when the block is mined.
      * @param material The material to fetch
-     * @return Mining Drop Chance for Material
+     * @param value The new Mining Drop Chance for Material
      */
     fun setArtifactSpawnGlobalMiningChance(material: Material, value: Double?) {
         "artifacts.spawn.mining.${material.name}"[configuration, configFile] = value
     }
+
+    var artifactSpawnLuckModifier: Double
+        /**
+         * Fetches the luck modifier for spawning a [PArtifact.RAW_ARTIFACT].
+         * @return Spawn Luck Modifier
+         */
+        get() = "artifacts.spawn.luck-modifier"[configuration, Double::class.java, 0.02]
+        /**
+         * Sets the luck modifier for spawning a [PArtifact.RAW_ARTIFACT].
+         * @param value Spawn Luck Modifier
+         */
+        set(value) { "artifacts.spawn.luck-modifier"[configuration, configFile] = value }
+
+    var artifactSpawnLootingModifier: Double
+        /**
+         * Fetches the looting modifier for spawning a [PArtifact.RAW_ARTIFACT] when killing an entity.
+         * @return Spawn Looting Modifier
+         */
+        get() = "artifacts.spawn.killing.looting-modifier"[configuration, Double::class.java, 0.01]
+        /**
+         * Sets the looting modifier for spawning a [PArtifact.RAW_ARTIFACT] when killing an entity.
+         * @param value Spawn Looting Modifier
+         */
+        set(value) { "artifacts.spawn.killing.looting-modifier"[configuration, configFile] = value }
 
 }
