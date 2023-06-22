@@ -4,6 +4,7 @@ import org.bukkit.NamespacedKey
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
 
+@Suppress("deprecation")
 interface PlasmaRegistry {
 
     /**
@@ -26,7 +27,10 @@ interface PlasmaRegistry {
      * @param key String key of PEnchantment
      * @return [PEnchantment] with key, or null if not found
      */
-    fun getEnchantment(key: String): PEnchantment? = enchantments.firstOrNull { it.key.key == key }
+    fun getEnchantment(key: String): PEnchantment? {
+        if (key.contains(":")) return getEnchantment(NamespacedKey(key.split(":")[0], key.split(":")[1]))
+        return enchantments.firstOrNull { it.key.key.equals(key, ignoreCase = true) }
+    }
 
     /**
      * Fetches all of the registered PEnchantments.
