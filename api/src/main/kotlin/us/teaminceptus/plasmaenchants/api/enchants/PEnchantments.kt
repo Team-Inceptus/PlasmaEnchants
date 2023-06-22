@@ -666,9 +666,6 @@ enum class PEnchantments(
     override val displayName
         get() = this.name.split("_").joinToString(" ") { it -> it.lowercase().replaceFirstChar { it.uppercase() } }
 
-    override val description
-        get() = PlasmaConfig.config.get("enchant.${displayName.lowercase()}.desc") ?: "No description provided."
-
     override val type
         get() = info.type
 

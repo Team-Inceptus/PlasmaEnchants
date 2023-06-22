@@ -22,12 +22,6 @@ interface PEnchantment : BiConsumer<Event, Int>, Keyed {
     val displayName: String
 
     /**
-     * Fetches the description of this PEnchantment.
-     * @return Description of Enchantment
-     */
-    val description: String
-
-    /**
      * Fetches the maximum level of this PEnchantment.
      * @return Maximum Level
      */
