@@ -21,6 +21,12 @@ enchantments:
   # A List of Enchantments that are disabled
   disabled-enchants: []
 
+  # Whether to ignore level restrictions when adding enchantments to items
+  ignore-level-restriction: false
+
+  # Whether to ignore enchantments conflicting with other enchantments when adding enchantments to items
+  ignore-conflict-restriction: false
+
   # Natural Enchantment Spawning via World Events Configuration
   spawn:
 
@@ -39,7 +45,7 @@ enchantments:
     max-level: 2
 
     # The percentage increase per luck level of a player for naturally spawned enchanted books
-    luck-modifier: 0.02
+    luck-modifier: 0.05
 
     # Enchanted Books received through killing a mob
     drops:
@@ -153,6 +159,9 @@ enchantments:
       # This overrides/supercedes blacklisted blocks; If not empty, only these blocks can drop enchanted books
       whitelisted-blocks: []
 
+      # If true, blocks will not drop enchanted books when using silk touch
+      ignore-silk-touch: true
+
       # The Minimum Enchantment Level for an enchanted book dropped
       # Set to 'default' to use the global default
       min-level: default
@@ -177,12 +186,15 @@ enchantments:
         #   max-level: default
         #   whitelisted-enchants:
         #     - DEFENDER
+        #     - MyCustomPlugin:MyCustomEnchant
         #   blacklisted-enchants:
         #     - boss_collector
         config: []
 
   # Villager Trading for Enchantments Configuration
   trades:
+    # Whether Wandering Traders can trade for artifacts
+    includes-wandering-traders: true
 
     # A List of Villager Professions which can have trades for Enchanted Books
     # Available Professions: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Villager.Profession.html
@@ -202,6 +214,43 @@ enchantments:
 
     # The maximum villager trade level for creating a trade for an Enchanted Book
     max-villager-level: 5
+
+    # Whether Villagers can buy enchanted books, trading them for emeralds
+    # If true, the price will be set to the emerald price shown below multiplied by its level
+    buy-books: false
+
+    # The maximum number of times a villager can trade for an enchanted book
+    max-uses: 20
+
+    # Configuration for emerald prices for enchantment books
+    # These numbers, depending on their type listed below, are multiplied by the generated enchantment level to set their emerald price
+    emerald-price:
+      # The Base Emerald Price for every other enchantment
+      normal: 15
+
+      # The Base Emerald Price for attacking enchantments
+      # Set to 'default' to use normal
+      attacking: default
+
+      # The Base Emerald Price for defending enchantments
+      # Set to 'default' to use normal
+      defending: default
+
+      # The Base Emerald Price for mining enchantments
+      # Set to 'default' to use normal
+      mining: default
+
+      # The Base Emerald Price for passive enchantments
+      # Set to 'default' to use normal
+      passive: default
+
+      # The Base Emerald Price for ranged enchantments
+      # Set to 'default' to use normal
+      ranged: default
+
+      # The Base Emerald Price for collector enchantments
+      # Set to 'default' to use normal
+      collector: default
 
     # Enchantment Trade Configuration
     enchants:
@@ -249,11 +298,10 @@ artifacts:
   # A List of Artifacts that are disabled
   disabled-artifacts: []
 
-
   # Raw Artifact Spawning Configuration
   spawn:
     # The percentage increase of each luck level to add to the chance of a raw artifact spawning
-    luck-modifier: 0.02
+    luck-modifier: 0.05
 
     # The Chance of a raw artifact dropping from a killed mob
     killing:
@@ -268,6 +316,25 @@ artifacts:
       # Example:
       #
       # zombie: 0.1
+
+    # The Chance of a raw artifact being spawned in a Loot Table
+    loot:
+      # The default chance of a raw artifact spawning in a loot table
+      global-chance: 0.25
+
+      # Additional Artifact Drop Chances
+      # Example:
+      #
+      # buried_treasure: 1.0
+      # DESERT_PYRAMID: 0.75
+
+    # The Chance of a raw artifact spawning from fishing
+    fishing:
+      # The percentage increase of each luck of the sea level to add to the chance of a raw artifact spawning
+      luck-of-the-sea-modifier: 0.01
+
+      # The default chance of a raw artifact spawning from fishing
+      global-chance: 0.07
 
     # The Chance of a raw artifact dropping from a block
     mining:
@@ -285,3 +352,61 @@ artifacts:
       # Dirt: 0
       # STONE: 0.01
       # grass_block: 0.005
+
+  # Configuration for Villagers Trading for both Raw and Craftable Artifacts
+  trades:
+    # Whether Wandering Traders can trade for artifacts
+    includes-wandering-traders: true
+
+    # A List of Villager Professions which can have trades for Artifacts
+    # Available Professions: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Villager.Profession.html
+    professions:
+      - CLERIC
+
+    # Whether Villagers can trade for craftable artifacts
+    craftable-artifacts:
+
+      enabled: true
+
+      # A List of Villager Professions which can have trades for Craftable Artifacts
+      # If Empty will default to the global professions list
+      professions: []
+
+      # A List of Artifacts which can't spawn in trades
+      blacklisted-artifacts: []
+
+      # A List of Artifacts which can only spawn in trades
+      # If not empty, this overrides blacklisted artifacts
+      whitelisted-artifacts: []
+
+      chance:
+        # The chance of a villager trade being replaced with a Craftable Artifact trade
+        # Set to 'default' for the default trade chance
+        # Other Example: 0.1 = 10%
+        global: default
+
+        # Additional Artifact Trade Chances
+        # Example:
+        #
+        # LAVA: 0.05
+        # red_sand: 0.2
+
+    # The minium villager trade level for creating a trade for an Artifact
+    min-villager-level: 1
+
+    # The maximum villager trade level for creating a trade for an Artifact
+    max-villager-level: 5
+
+    # Whether villagers can purchase raw artifacts for emeralds
+    buy-artifacts:
+      enabled: true
+      # The base emerald price for buying an artifact
+      # This will randomly vary by +2 and -2 from this number
+      price: 8
+
+    # The maximum number of times a villager can trade for an artifact
+    max-uses: 10
+
+    # The chance of any villager trade being replaced with an Artifact trade
+    # Example: 0.25 = 25%
+    chance: 0.25
