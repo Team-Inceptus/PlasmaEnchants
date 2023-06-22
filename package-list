@@ -5,6 +5,8 @@ $dokka.location:us.teaminceptus.plasmaenchants.api/PType.Companion///PointingToD
 $dokka.location:us.teaminceptus.plasmaenchants.api/PlasmaConfig.Companion///PointingToDeclaration/us/teaminceptus/plasmaenchants/api/PlasmaConfig.Companion.html
 us.teaminceptus.plasmaenchants.api
 us.teaminceptus.plasmaenchants.api.artifacts
+us.teaminceptus.plasmaenchants.api.config
 us.teaminceptus.plasmaenchants.api.enchants
 us.teaminceptus.plasmaenchants.api.player
+us.teaminceptus.plasmaenchants.api.util
 

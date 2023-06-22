@@ -177,6 +177,12 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                         </tr>
                                         
                                         <tr class="altColor">
+                                            <td class="colFirst"><code>private final static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt;</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#plasmaEnchants>plasmaEnchants</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="rowColor">
                                             <td class="colFirst"><code>private  static <a href=artifacts/PArtifact.html>PArtifact</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#artifact>artifact</a></code></th>
                                             <td class="colLast"></td>
@@ -272,27 +278,27 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                         </tr>
                                         
                                         <tr id="i2" class="altColor">
+                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#getPlasmaEnchants()>getPlasmaEnchants</a>() </code>
+                                            </th>
+                                            <td class="colLast">Fetches the <a href=enchants/PEnchantment.html>PEnchantment</a>s on this item.</td>
+                                        </tr>
+                                        
+                                        <tr id="i3" class="rowColor">
                                             <td class="colFirst"><code><a href=artifacts/PArtifact.html>PArtifact</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#getArtifact()>getArtifact</a>() </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Gets the <a href=artifacts/PArtifact.html>PArtifact</a> on this item.</td>
                                         </tr>
                                         
-                                        <tr id="i3" class="rowColor">
+                                        <tr id="i4" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#setArtifact(us.teaminceptus.plasmaenchants.api.artifacts.PArtifact)>setArtifact</a>(<a href=artifacts/PArtifact.html>PArtifact</a> artifact) </code>
                                             </th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr id="i4" class="altColor">
-                                            <td class="colFirst"><code>final static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt;</code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#getPlasmaEnchants(org.bukkit.inventory.meta.ItemMeta)>getPlasmaEnchants</a>(ItemMeta $self) </code>
-                                            </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Sets the <a href=artifacts/PArtifact.html>PArtifact</a> on this item.</td>
                                         </tr>
                                         
                                         <tr id="i5" class="rowColor">
@@ -300,7 +306,7 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#hasEnchant(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment)>hasEnchant</a>(ItemMeta $self, <a href=enchants/PEnchantment.html>PEnchantment</a> enchant) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Whether or not this item has a <a href=enchants/PEnchantment.html>PEnchantment</a>.</td>
                                         </tr>
                                         
                                         <tr id="i6" class="altColor">
@@ -308,7 +314,7 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#hasPlasmaEnchants(org.bukkit.inventory.meta.ItemMeta)>hasPlasmaEnchants</a>(ItemMeta $self) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Whether or not this item has any PEnchantments.</td>
                                         </tr>
                                         
                                         <tr id="i7" class="rowColor">
@@ -316,7 +322,7 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#clearPlasmaEnchants(org.bukkit.inventory.meta.ItemMeta)>clearPlasmaEnchants</a>(ItemMeta $self) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Clears all PEnchantments from this item.</td>
                                         </tr>
                                         
                                         <tr id="i8" class="altColor">
@@ -324,7 +330,7 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#getEnchantLevel(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment)>getEnchantLevel</a>(ItemMeta $self, <a href=enchants/PEnchantment.html>PEnchantment</a> enchant) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Fetches the level of a <a href=enchants/PEnchantment.html>PEnchantment</a> on this item.</td>
                                         </tr>
                                         
                                         <tr id="i9" class="rowColor">
@@ -332,15 +338,15 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#hasConflictingEnchant(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment)>hasConflictingEnchant</a>(ItemMeta $self, <a href=enchants/PEnchantment.html>PEnchantment</a> enchant) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Whether or not this item has a conflicting <a href=enchants/PEnchantment.html>PEnchantment</a>.</td>
                                         </tr>
                                         
                                         <tr id="i10" class="altColor">
                                             <td class="colFirst"><code>final static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#addEnchant(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment,java.lang.Integer)>addEnchant</a>(ItemMeta $self, <a href=enchants/PEnchantment.html>PEnchantment</a> enchant, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> level) </code>
+                                            <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#addEnchant(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment,java.lang.Integer,java.lang.Boolean)>addEnchant</a>(ItemMeta $self, <a href=enchants/PEnchantment.html>PEnchantment</a> enchant, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> level, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> ignoreLevelRestriction) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Adds a <a href=enchants/PEnchantment.html>PEnchantment</a> to this item.</td>
                                         </tr>
                                         
                                         <tr id="i11" class="rowColor">
@@ -348,7 +354,7 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#removeEnchant(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment)>removeEnchant</a>(ItemMeta $self, <a href=enchants/PEnchantment.html>PEnchantment</a> enchant) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Removes a <a href=enchants/PEnchantment.html>PEnchantment</a> from this item.</td>
                                         </tr>
                                         
                                         <tr id="i12" class="altColor">
@@ -356,7 +362,7 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#combinePlasmaEnchants(org.bukkit.inventory.meta.ItemMeta,org.bukkit.inventory.meta.ItemMeta)>combinePlasmaEnchants</a>(ItemMeta $self, ItemMeta other) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Combines the <a href=enchants/PEnchantment.html>PEnchantment</a>s on this item with another ItemMeta.</td>
                                         </tr>
                                         
                                         <tr id="i13" class="rowColor">
@@ -364,7 +370,7 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#hasArtifact(org.bukkit.inventory.meta.ItemMeta)>hasArtifact</a>(ItemMeta $self) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Whether or not this item has an <a href=artifacts/PArtifact.html>PArtifact</a>.</td>
                                         </tr>
                                         
                                         <tr id="i14" class="altColor">
@@ -372,7 +378,7 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ExtensionsKt.html#removeArtifact(org.bukkit.inventory.meta.ItemMeta)>removeArtifact</a>(ItemMeta $self) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Removes the <a href=artifacts/PArtifact.html>PArtifact</a> from this item.</td>
                                         </tr>
                                         
                                         <tr id="i15" class="rowColor">
@@ -457,6 +463,21 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                     </li>
                                 </ul>
                                 
+                                <a id="getPlasmaEnchants()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getPlasmaEnchants</h4>
+                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt; <a href=ExtensionsKt.html#getPlasmaEnchants()>getPlasmaEnchants</a>()</pre>
+                                        <div class="block"><p>Fetches the <a href=enchants/PEnchantment.html>PEnchantment</a>s on this item.</p></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
                                 <a id="getArtifact()">
                                     <!--   -->
                                 </a>
@@ -466,7 +487,7 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                     <li class="blockList">
                                         <h4>getArtifact</h4>
                                         <pre class="methodSignature"> <a href=artifacts/PArtifact.html>PArtifact</a> <a href=ExtensionsKt.html#getArtifact()>getArtifact</a>()</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>Gets the <a href=artifacts/PArtifact.html>PArtifact</a> on this item.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -481,22 +502,16 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                     <li class="blockList">
                                         <h4>setArtifact</h4>
                                         <pre class="methodSignature"> void <a href=ExtensionsKt.html#setArtifact(us.teaminceptus.plasmaenchants.api.artifacts.PArtifact)>setArtifact</a>(<a href=artifacts/PArtifact.html>PArtifact</a> artifact)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>Sets the <a href=artifacts/PArtifact.html>PArtifact</a> on this item.</p></div>
                                         
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="getPlasmaEnchants(org.bukkit.inventory.meta.ItemMeta)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getPlasmaEnchants</h4>
-                                        <pre class="methodSignature"> final static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=enchants/PEnchantment.html>PEnchantment</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt; <a href=ExtensionsKt.html#getPlasmaEnchants(org.bukkit.inventory.meta.ItemMeta)>getPlasmaEnchants</a>(ItemMeta $self)</pre>
-                                        <div class="block"></div>
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>artifact</code> - <a href=artifacts/PArtifact.html>PArtifact</a> on this item, null to remove</dd>
+                                            
+                                            
+                                        </dl>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -511,7 +526,18 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                     <li class="blockList">
                                         <h4>hasEnchant</h4>
                                         <pre class="methodSignature"> final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> <a href=ExtensionsKt.html#hasEnchant(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment)>hasEnchant</a>(ItemMeta $self, <a href=enchants/PEnchantment.html>PEnchantment</a> enchant)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>Whether or not this item has a <a href=enchants/PEnchantment.html>PEnchantment</a>.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            
+                                            
+                                            <dd><code>enchant</code> - <a href=enchants/PEnchantment.html>PEnchantment</a> to check for</dd>
+                                            
+                                            
+                                        </dl>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -526,7 +552,7 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                     <li class="blockList">
                                         <h4>hasPlasmaEnchants</h4>
                                         <pre class="methodSignature"> final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> <a href=ExtensionsKt.html#hasPlasmaEnchants(org.bukkit.inventory.meta.ItemMeta)>hasPlasmaEnchants</a>(ItemMeta $self)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>Whether or not this item has any PEnchantments.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -541,7 +567,7 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                     <li class="blockList">
                                         <h4>clearPlasmaEnchants</h4>
                                         <pre class="methodSignature"> final static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ExtensionsKt.html#clearPlasmaEnchants(org.bukkit.inventory.meta.ItemMeta)>clearPlasmaEnchants</a>(ItemMeta $self)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>Clears all PEnchantments from this item.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -556,7 +582,18 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                     <li class="blockList">
                                         <h4>getEnchantLevel</h4>
                                         <pre class="methodSignature"> final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> <a href=ExtensionsKt.html#getEnchantLevel(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment)>getEnchantLevel</a>(ItemMeta $self, <a href=enchants/PEnchantment.html>PEnchantment</a> enchant)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>Fetches the level of a <a href=enchants/PEnchantment.html>PEnchantment</a> on this item.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            
+                                            
+                                            <dd><code>enchant</code> - <a href=enchants/PEnchantment.html>PEnchantment</a> to check for</dd>
+                                            
+                                            
+                                        </dl>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -571,13 +608,24 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                     <li class="blockList">
                                         <h4>hasConflictingEnchant</h4>
                                         <pre class="methodSignature"> final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> <a href=ExtensionsKt.html#hasConflictingEnchant(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment)>hasConflictingEnchant</a>(ItemMeta $self, <a href=enchants/PEnchantment.html>PEnchantment</a> enchant)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>Whether or not this item has a conflicting <a href=enchants/PEnchantment.html>PEnchantment</a>.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            
+                                            
+                                            <dd><code>enchant</code> - <a href=enchants/PEnchantment.html>PEnchantment</a> to check for</dd>
+                                            
+                                            
+                                        </dl>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="addEnchant(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment,java.lang.Integer)">
+                                <a id="addEnchant(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment,java.lang.Integer,java.lang.Boolean)">
                                     <!--   -->
                                 </a>
                                 <ul class=
@@ -585,8 +633,25 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                           >
                                     <li class="blockList">
                                         <h4>addEnchant</h4>
-                                        <pre class="methodSignature"> final static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ExtensionsKt.html#addEnchant(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment,java.lang.Integer)>addEnchant</a>(ItemMeta $self, <a href=enchants/PEnchantment.html>PEnchantment</a> enchant, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> level)</pre>
-                                        <div class="block"></div>
+                                        <pre class="methodSignature"> final static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ExtensionsKt.html#addEnchant(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment,java.lang.Integer,java.lang.Boolean)>addEnchant</a>(ItemMeta $self, <a href=enchants/PEnchantment.html>PEnchantment</a> enchant, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> level, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> ignoreLevelRestriction)</pre>
+                                        <div class="block"><p>Adds a <a href=enchants/PEnchantment.html>PEnchantment</a> to this item.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            
+                                            
+                                            <dd><code>enchant</code> - <a href=enchants/PEnchantment.html>PEnchantment</a> to add</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>level</code> - Level of Enchantment</dd>
+                                            
+                                            
+                                            
+                                            
+                                        </dl>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -601,7 +666,18 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                     <li class="blockList">
                                         <h4>removeEnchant</h4>
                                         <pre class="methodSignature"> final static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ExtensionsKt.html#removeEnchant(org.bukkit.inventory.meta.ItemMeta,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment)>removeEnchant</a>(ItemMeta $self, <a href=enchants/PEnchantment.html>PEnchantment</a> enchant)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>Removes a <a href=enchants/PEnchantment.html>PEnchantment</a> from this item. This will silently fail if the item does not have the enchantment.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            
+                                            
+                                            <dd><code>enchant</code> - <a href=enchants/PEnchantment.html>PEnchantment</a> to remove</dd>
+                                            
+                                            
+                                        </dl>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -616,7 +692,18 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                     <li class="blockList">
                                         <h4>combinePlasmaEnchants</h4>
                                         <pre class="methodSignature"> final static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ExtensionsKt.html#combinePlasmaEnchants(org.bukkit.inventory.meta.ItemMeta,org.bukkit.inventory.meta.ItemMeta)>combinePlasmaEnchants</a>(ItemMeta $self, ItemMeta other)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>Combines the <a href=enchants/PEnchantment.html>PEnchantment</a>s on this item with another ItemMeta.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            
+                                            
+                                            <dd><code>other</code> - ItemMeta to combine with</dd>
+                                            
+                                            
+                                        </dl>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -631,7 +718,7 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                     <li class="blockList">
                                         <h4>hasArtifact</h4>
                                         <pre class="methodSignature"> final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> <a href=ExtensionsKt.html#hasArtifact(org.bukkit.inventory.meta.ItemMeta)>hasArtifact</a>(ItemMeta $self)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>Whether or not this item has an <a href=artifacts/PArtifact.html>PArtifact</a>.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -646,7 +733,7 @@ public final class <span class="typeNameLabel"><a href=ExtensionsKt.html>Extensi
                                     <li class="blockList">
                                         <h4>removeArtifact</h4>
                                         <pre class="methodSignature"> final static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ExtensionsKt.html#removeArtifact(org.bukkit.inventory.meta.ItemMeta)>removeArtifact</a>(ItemMeta $self)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>Removes the <a href=artifacts/PArtifact.html>PArtifact</a> from this item. This will silently fail if the item does not have an artifact.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>

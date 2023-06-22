@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>PArtifact 1.0.0-SNAPSHOT API </title>
+    <title>EnchantmentTradesChanceConfiguration 1.0.0-SNAPSHOT API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
@@ -40,7 +40,7 @@ var pathtoroot = "../../../../../";
     
     <li><a href="package-summary.html">Package</a></li>
     
-    <li>Class</li>
+    <li class="navBarCell1Rev">Class</li>
     
     <li><a href="package-tree.html">Tree</a></li>
     
@@ -88,8 +88,8 @@ var pathtoroot = "../../../../../";
 
 <main role="main">
     <div class="header">
-        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">us.teaminceptus.plasmaenchants.api.artifacts</a></div>
-        <h2 title="Interface PArtifact" class="title">Interface PArtifact</h2>
+        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">us.teaminceptus.plasmaenchants.api.config</a></div>
+        <h2 title="Class EnchantmentTradesChanceConfiguration" class="title">Class EnchantmentTradesChanceConfiguration</h2>
     </div>
     <div class="contentContainer">
         <!-- <ul class="inheritance">
@@ -108,24 +108,16 @@ var pathtoroot = "../../../../../";
                         <dt>All Implemented Interfaces:</dt>
                         <dd>
                             
-                            <code>java.util.function.Consumer</code>
-                            
-                            ,
-                            
-                            
-                            <code>org.bukkit.Keyed</code>
-                            
-                            
                         </dd>
                     </dl>
                     
                     <hr>
                     <pre class="wrap-overflow">
 
-public interface <span class="typeNameLabel"><a href=PArtifact.html>PArtifact</a></span>
- implements Keyed, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Event&gt;
+public final class <span class="typeNameLabel"><a href=EnchantmentTradesChanceConfiguration.html>EnchantmentTradesChanceConfiguration</a></span>
+
                     </pre>
-                    <div class="block"><p>Represents an artifact that can be applied to an item.</p></div>
+                    <div class="block"><p>Represents a configuration for replacing a bukkit enchantment book trade with a PlasmaEnchants enchantment book trade.</p></div>
                 </li>
             </ul>
         </div>
@@ -147,13 +139,6 @@ public interface <span class="typeNameLabel"><a href=PArtifact.html>PArtifact</a
                                             <th class="colFirst" scope="col">Modifier and Type</th>
                                             <th class="colSecond" scope="col">Class</th>
                                             <th class="colLast" scope="col">Description</th>
-                                        </tr>
-                                        
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>public class</code></td>
-                                            <th class="colSecond" scope="row"><code><a href="PArtifact.Companion.html">PArtifact.Companion</a></span></code>
-                                            </th>
-                                            <td class="colLast"></td>
                                         </tr>
                                         
                                     </table>
@@ -179,6 +164,42 @@ public interface <span class="typeNameLabel"><a href=PArtifact.html>PArtifact</a
                                             <th class="colLast" scope="col">Description</th>
                                         </tr>
                                         
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>private final Enchantment</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=EnchantmentTradesChanceConfiguration.html#bukkit>bukkit</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>private final <a href=../enchants/PEnchantment.html>PEnchantment</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=EnchantmentTradesChanceConfiguration.html#plasma>plasma</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=EnchantmentTradesChanceConfiguration.html#minBukkitLevel>minBukkitLevel</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=EnchantmentTradesChanceConfiguration.html#maxBukkitLevel>maxBukkitLevel</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=EnchantmentTradesChanceConfiguration.html#minPlasmaLevel>minPlasmaLevel</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=EnchantmentTradesChanceConfiguration.html#maxPlasmaLevel>maxPlasmaLevel</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
                                     </table>
                                 </div>
                             </li>
@@ -202,6 +223,12 @@ public interface <span class="typeNameLabel"><a href=PArtifact.html>PArtifact</a
                                             <th class="colLast" scope="col">Description</th>
                                         </tr>
 
+                                        
+                                            <tr class="altColor">
+                                                <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
+                                                        href="#EnchantmentTradesChanceConfiguration(org.bukkit.enchantments.Enchantment,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Integer)">EnchantmentTradesChanceConfiguration</a></span>(Enchantment bukkit, <a href=../enchants/PEnchantment.html>PEnchantment</a> plasma, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> minBukkitLevel, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> maxBukkitLevel, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> minPlasmaLevel, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> maxPlasmaLevel)</code></th>
+                                                <td class="colLast"></td>
+                                            </tr>
                                         
 
                                         </tbody>
@@ -253,85 +280,51 @@ public interface <span class="typeNameLabel"><a href=PArtifact.html>PArtifact</a
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            <td class="colFirst"><code>final Enchantment</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifact.html#asString()>asString</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=EnchantmentTradesChanceConfiguration.html#getBukkit()>getBukkit</a>() </code>
                                             </th>
-                                            <td class="colLast">Fetches the String representation of this artifact.</td>
+                                            <td class="colLast">The Bukkit Enchantment to replace.</td>
                                         </tr>
                                         
                                         <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code>abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            <td class="colFirst"><code>final <a href=../enchants/PEnchantment.html>PEnchantment</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifact.html#getDisplayName()>getDisplayName</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=EnchantmentTradesChanceConfiguration.html#getPlasma()>getPlasma</a>() </code>
                                             </th>
-                                            <td class="colLast">Fetches the human-readable name of this artifact.</td>
+                                            <td class="colLast">The PlasmaEnchants Enchantment to replace it with.</td>
                                         </tr>
                                         
                                         <tr id="i2" class="altColor">
-                                            <td class="colFirst"><code>abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifact.html#getDescription()>getDescription</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=EnchantmentTradesChanceConfiguration.html#getMinBukkitLevel()>getMinBukkitLevel</a>() </code>
                                             </th>
-                                            <td class="colLast">Fetches the human-readable description of this artifact.</td>
+                                            <td class="colLast">The minimum level of the Bukkit Enchantment in order to replace.</td>
                                         </tr>
                                         
                                         <tr id="i3" class="rowColor">
-                                            <td class="colFirst"><code>abstract <a href=../PTarget.html>PTarget</a></code>
+                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifact.html#getTarget()>getTarget</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=EnchantmentTradesChanceConfiguration.html#getMaxBukkitLevel()>getMaxBukkitLevel</a>() </code>
                                             </th>
-                                            <td class="colLast">Fetches the Target Type of this artifact.</td>
+                                            <td class="colLast">The maximum level of the Bukkit Enchantment in order to replace.</td>
                                         </tr>
                                         
                                         <tr id="i4" class="altColor">
-                                            <td class="colFirst"><code>abstract <a href=../PType.html>PType</a>&lt;?&gt;</code>
+                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifact.html#getType()>getType</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=EnchantmentTradesChanceConfiguration.html#getMinPlasmaLevel()>getMinPlasmaLevel</a>() </code>
                                             </th>
-                                            <td class="colLast">Fetches the Type of this artifact.</td>
+                                            <td class="colLast">The minimum level of the PlasmaEnchants Enchantment replaced.</td>
                                         </tr>
                                         
                                         <tr id="i5" class="rowColor">
-                                            <td class="colFirst"><code>abstract ChatColor</code>
+                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifact.html#getColor()>getColor</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=EnchantmentTradesChanceConfiguration.html#getMaxPlasmaLevel()>getMaxPlasmaLevel</a>() </code>
                                             </th>
-                                            <td class="colLast">Fetches the color of this artifact.</td>
-                                        </tr>
-                                        
-                                        <tr id="i6" class="altColor">
-                                            <td class="colFirst"><code>abstract ItemStack</code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifact.html#getRingItem()>getRingItem</a>() </code>
-                                            </th>
-                                            <td class="colLast">&lt;p&gt;Fetches the ring item used in the crafting of this Artifact.&lt;/p&gt;
-&lt;p&gt;When crafting an artifact, this item (and its count) will surround [PArtifact.RAW_ARTIFACT] to produce this artifact in item form.&lt;/p&gt;
-</td>
-                                        </tr>
-                                        
-                                        <tr id="i7" class="rowColor">
-                                            <td class="colFirst"><code>abstract ShapedRecipe</code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifact.html#getRecipe()>getRecipe</a>() </code>
-                                            </th>
-                                            <td class="colLast">Fetches a ShapedRecipe instance clone for this artifact.</td>
-                                        </tr>
-                                        
-                                        <tr id="i8" class="altColor">
-                                            <td class="colFirst"><code>abstract ItemStack</code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifact.html#getItem()>getItem</a>() </code>
-                                            </th>
-                                            <td class="colLast">Fetches the ItemStack representation of this artifact.</td>
-                                        </tr>
-                                        
-                                        <tr id="i9" class="rowColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#isDisabled>isDisabled</a>() </code>
-                                            </th>
-                                            <td class="colLast">Fetches whether this artifact is disabled.</td>
+                                            <td class="colLast">The maximum level of the PlasmaEnchants Enchantment replaced.</td>
                                         </tr>
                                         
                                         </tbody>
@@ -339,18 +332,6 @@ public interface <span class="typeNameLabel"><a href=PArtifact.html>PArtifact</a
                                 </div>
                                 <ul class="blockList">
                                 
-                                    <li class="blockList"><a id="methods.inherited.from.class.org.bukkit.Keyed">
-                                            <!--   -->
-                                        </a>
-                                            <h3>Methods inherited from class&nbsp;org.bukkit.Keyed</h3>
-                                            <code>getKey</code></li>
-                                 
-                                    <li class="blockList"><a id="methods.inherited.from.class.java.util.function.Consumer">
-                                            <!--   -->
-                                        </a>
-                                            <h3>Methods inherited from class&nbsp;java.util.function.Consumer</h3>
-                                            <code>accept, andThen</code></li>
-                                 
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
                                     </a>
@@ -377,6 +358,16 @@ public interface <span class="typeNameLabel"><a href=PArtifact.html>PArtifact</a
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
+                                <a name="EnchantmentTradesChanceConfiguration(org.bukkit.enchantments.Enchantment,us.teaminceptus.plasmaenchants.api.enchants.PEnchantment,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Integer)"></a>
+                                <ul class="blockList">
+                                    <li class="blockList">
+                                        <h4>EnchantmentTradesChanceConfiguration</h4>
+                                        <pre>EnchantmentTradesChanceConfiguration(Enchantment bukkit, <a href=../enchants/PEnchantment.html>PEnchantment</a> plasma, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> minBukkitLevel, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> maxBukkitLevel, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> minPlasmaLevel, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> maxPlasmaLevel)</pre>
+                                        <div class="block"></div>
+                                        
+                                    </li>
+                                </ul>
+                                
                             </li>
                         </ul>
                     </section>
@@ -390,153 +381,91 @@ public interface <span class="typeNameLabel"><a href=PArtifact.html>PArtifact</a
                             </a>
                                 <h3>Method Detail</h3>
                                 
-                                <a id="asString()">
+                                <a id="getBukkit()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>asString</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=PArtifact.html#asString()>asString</a>()</pre>
-                                        <div class="block"><p>Fetches the String representation of this artifact.</p></div>
+                                        <h4>getBukkit</h4>
+                                        <pre class="methodSignature"> final Enchantment <a href=EnchantmentTradesChanceConfiguration.html#getBukkit()>getBukkit</a>()</pre>
+                                        <div class="block"><p>The Bukkit Enchantment to replace.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="getDisplayName()">
+                                <a id="getPlasma()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>getDisplayName</h4>
-                                        <pre class="methodSignature"> abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=PArtifact.html#getDisplayName()>getDisplayName</a>()</pre>
-                                        <div class="block"><p>Fetches the human-readable name of this artifact.</p></div>
+                                        <h4>getPlasma</h4>
+                                        <pre class="methodSignature"> final <a href=../enchants/PEnchantment.html>PEnchantment</a> <a href=EnchantmentTradesChanceConfiguration.html#getPlasma()>getPlasma</a>()</pre>
+                                        <div class="block"><p>The PlasmaEnchants Enchantment to replace it with. The Level will be the same as the Bukkit Enchantment, coerced in <a href=EnchantmentTradesChanceConfiguration.html#minPlasmaLevel>minPlasmaLevel</a> and <a href=EnchantmentTradesChanceConfiguration.html#maxPlasmaLevel>maxPlasmaLevel</a>.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="getDescription()">
+                                <a id="getMinBukkitLevel()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>getDescription</h4>
-                                        <pre class="methodSignature"> abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=PArtifact.html#getDescription()>getDescription</a>()</pre>
-                                        <div class="block"><p>Fetches the human-readable description of this artifact.</p></div>
+                                        <h4>getMinBukkitLevel</h4>
+                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> <a href=EnchantmentTradesChanceConfiguration.html#getMinBukkitLevel()>getMinBukkitLevel</a>()</pre>
+                                        <div class="block"><p>The minimum level of the Bukkit Enchantment in order to replace.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="getTarget()">
+                                <a id="getMaxBukkitLevel()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>getTarget</h4>
-                                        <pre class="methodSignature"> abstract <a href=../PTarget.html>PTarget</a> <a href=PArtifact.html#getTarget()>getTarget</a>()</pre>
-                                        <div class="block"><p>Fetches the Target Type of this artifact.</p></div>
+                                        <h4>getMaxBukkitLevel</h4>
+                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> <a href=EnchantmentTradesChanceConfiguration.html#getMaxBukkitLevel()>getMaxBukkitLevel</a>()</pre>
+                                        <div class="block"><p>The maximum level of the Bukkit Enchantment in order to replace.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="getType()">
+                                <a id="getMinPlasmaLevel()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>getType</h4>
-                                        <pre class="methodSignature"> abstract <a href=../PType.html>PType</a>&lt;?&gt; <a href=PArtifact.html#getType()>getType</a>()</pre>
-                                        <div class="block"><p>Fetches the Type of this artifact.</p></div>
+                                        <h4>getMinPlasmaLevel</h4>
+                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> <a href=EnchantmentTradesChanceConfiguration.html#getMinPlasmaLevel()>getMinPlasmaLevel</a>()</pre>
+                                        <div class="block"><p>The minimum level of the PlasmaEnchants Enchantment replaced.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="getColor()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getColor</h4>
-                                        <pre class="methodSignature"> abstract ChatColor <a href=PArtifact.html#getColor()>getColor</a>()</pre>
-                                        <div class="block"><p>Fetches the color of this artifact.</p></div>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="getRingItem()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getRingItem</h4>
-                                        <pre class="methodSignature"> abstract ItemStack <a href=PArtifact.html#getRingItem()>getRingItem</a>()</pre>
-                                        <div class="block">&lt;p&gt;Fetches the ring item used in the crafting of this Artifact.&lt;/p&gt;
-&lt;p&gt;When crafting an artifact, this item (and its count) will surround [PArtifact.RAW_ARTIFACT] to produce this artifact in item form.&lt;/p&gt;
-</div>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="getRecipe()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getRecipe</h4>
-                                        <pre class="methodSignature"> abstract ShapedRecipe <a href=PArtifact.html#getRecipe()>getRecipe</a>()</pre>
-                                        <div class="block"><p>Fetches a ShapedRecipe instance clone for this artifact.</p></div>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="getItem()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getItem</h4>
-                                        <pre class="methodSignature"> abstract ItemStack <a href=PArtifact.html#getItem()>getItem</a>()</pre>
-                                        <div class="block"><p>Fetches the ItemStack representation of this artifact.</p></div>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="isDisabled()">
+                                <a id="getMaxPlasmaLevel()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockListLast"
                                           >
                                     <li class="blockList">
-                                        <h4>isDisabled</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> <a href=PArtifacts.html#isDisabled>isDisabled</a>()</pre>
-                                        <div class="block"><p>Fetches whether this artifact is disabled.</p></div>
+                                        <h4>getMaxPlasmaLevel</h4>
+                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> <a href=EnchantmentTradesChanceConfiguration.html#getMaxPlasmaLevel()>getMaxPlasmaLevel</a>()</pre>
+                                        <div class="block"><p>The maximum level of the PlasmaEnchants Enchantment replaced.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -567,7 +496,7 @@ public interface <span class="typeNameLabel"><a href=PArtifact.html>PArtifact</a
     
     <li><a href="package-summary.html">Package</a></li>
     
-    <li>Class</li>
+    <li class="navBarCell1Rev">Class</li>
     
     <li><a href="package-tree.html">Tree</a></li>
     
