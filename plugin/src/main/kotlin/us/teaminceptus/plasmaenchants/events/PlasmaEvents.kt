@@ -11,15 +11,10 @@ import org.bukkit.event.block.BlockDamageEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityShootBowEvent
-import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.PrepareAnvilEvent
-import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.inventory.CraftingInventory
 import org.bukkit.inventory.GrindstoneInventory
-import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.RecipeChoice.ExactChoice
 import org.bukkit.inventory.meta.ItemMeta
 import us.teaminceptus.plasmaenchants.PlasmaEnchants
 import us.teaminceptus.plasmaenchants.api.*
@@ -143,7 +138,5 @@ internal class PlasmaEvents(plugin: PlasmaEnchants) : Listener {
             }
         }
     }
-
-    // Artifact Crafting
 
 }
