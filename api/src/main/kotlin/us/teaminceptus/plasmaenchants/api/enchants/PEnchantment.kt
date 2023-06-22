@@ -53,12 +53,14 @@ interface PEnchantment : BiConsumer<Event, Int>, Keyed {
     val conflicts: List<PEnchantment>
 
     /**
-     * Whether or not this PEnchantment conflicts with another PEnchantment.
+     * Whether or not this PEnchantment conflicts with another PEnchantment. This will return false if [PlasmaConfig.isIgnoreEnchantmentConflictRestriction] is true.
      * @param enchantment PEnchantment to check for conflicts with.
      * @return true if conflicts with enchantment, false otherwise
      */
     fun conflictsWith(enchantment: PEnchantment?): Boolean {
         if (enchantment == null) return false
+        if (PlasmaConfig.config.isIgnoreEnchantmentConflictRestriction) return false
+
         return conflicts.contains(enchantment) || enchantment.conflicts.contains(this)
     }
 

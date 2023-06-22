@@ -19,6 +19,9 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
         lateinit var handler: BukkitCommandHandler
 
         @JvmStatic
+        lateinit var plugin: PlasmaEnchants
+
+        @JvmStatic
         private fun hasHandler(): Boolean = ::handler.isInitialized
 
         @JvmStatic
@@ -38,6 +41,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
         run {
             if (hasHandler()) return@run
 
+            Companion.plugin = plugin
             handler = BukkitCommandHandler.create(plugin)
 
             handler
@@ -75,7 +79,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
             if (!enchantment.target.isValid(item.type))
                 return p.sendMessage(getFailure("error.argument.item.held"))
 
-            if (enchantment.maxLevel < level)
+            if (enchantment.maxLevel < level && !plugin.isIgnoreEnchantmentLevelRestriction)
                 return p.sendMessage(getFailure("error.argument.level"))
 
             val meta = item.itemMeta!!
@@ -86,7 +90,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
             if (meta.hasConflictingEnchant(enchantment))
                 return p.sendMessage(getFailure("error.enchant.conflict"))
 
-            meta.addEnchant(enchantment, level)
+            meta.addEnchant(enchantment, level, plugin.isIgnoreEnchantmentLevelRestriction)
             item.itemMeta = meta
 
             p.sendMessage(format(getSuccess("success.enchant.add"), "${ChatColor.GOLD}${enchantment.displayName} ${level.toRoman()}${ChatColor.GREEN}"))
