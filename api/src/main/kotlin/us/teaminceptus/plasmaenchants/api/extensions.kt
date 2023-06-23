@@ -53,9 +53,8 @@ fun ItemMeta.hasPlasmaEnchants(): Boolean = plasmaEnchants.isNotEmpty()
 
 /**
  * Clears all PEnchantments from this item.
- * @return true if item had any Plasma Enchantments, false otherwise
  */
-fun ItemMeta.clearPlasmaEnchants() { persistentDataContainer[enchantKey, NAMESPACEDKEY_INT_MAP] = mutableMapOf() }
+fun ItemMeta.clearPlasmaEnchants() = plasmaEnchants.keys.forEach(::removeEnchant)
 
 /**
  * Fetches the level of a [PEnchantment] on this item.
@@ -79,7 +78,7 @@ fun ItemMeta.hasConflictingEnchant(enchant: PEnchantment): Boolean = plasmaEncha
  */
 @Throws(IllegalArgumentException::class)
 fun ItemMeta.addEnchant(enchant: PEnchantment, level: Int, ignoreLevelRestriction: Boolean = false) {
-    if (hasEnchant(enchant)) throw IllegalArgumentException("Item already has enchantment ${enchant.key}")
+    if (hasEnchant(enchant)) removeEnchant(enchant)
     if (hasConflictingEnchant(enchant)) throw IllegalArgumentException("Item has conflicting enchantment with ${enchant.key}")
     
     val level0 = if (ignoreLevelRestriction) level.coerceIn(1, enchant.maxLevel) else level.coerceAtLeast(1)
@@ -119,29 +118,24 @@ fun ItemMeta.removeEnchant(enchant: PEnchantment) {
  * @throws IllegalArgumentException if other meta has conflicting enchantments
  */
 @Throws(IllegalArgumentException::class)
-fun ItemMeta.combinePlasmaEnchants(other: ItemMeta) {
+fun ItemMeta.combinePlasmaEnchants(other: ItemMeta, ignoreLevelRestriction: Boolean = false) {
     val others = other.plasmaEnchants.filter { !hasEnchant(it.key) }
     if (others.isEmpty()) return
+    if (plasmaEnchants.isEmpty() && others.isEmpty()) return
     if (others.any { hasConflictingEnchant(it.key) }) throw IllegalArgumentException("Item has conflicting enchantments while merging: ${others.keys.first { hasConflictingEnchant(it) }.key} }}")
 
     val nLore = mutableListOf<String>()
     nLore.addAll(lore ?: mutableListOf())
 
     val map = HashMap(plasmaEnchants.map { it.key.key to it.value }.toMap())
-    others.keys.forEach {
-        val key = it.key
-        if (map.containsKey(key)) {
-            val old = map[key]!!
-            val amount = old + others[it]!!
-            map[key] = amount
 
-            nLore.remove(it.toString(old))
-            nLore.add(it.toString(amount))
-        }
-        else {
-            map[key] = others[it]!!
-            nLore.add(it.toString(others[it]!!))
-        }
+    others.forEach { (enchant, level) ->
+        val oldLevel = map[enchant.key] ?: 0
+        val newLevel = (oldLevel + level).coerceAtMost(if (ignoreLevelRestriction) Integer.MAX_VALUE else enchant.maxLevel)
+        map[enchant.key] = newLevel
+
+        if (oldLevel != 0) nLore.remove(enchant.toString(oldLevel))
+        nLore.add(enchant.toString(newLevel))
     }
 
     persistentDataContainer[enchantKey, NAMESPACEDKEY_INT_MAP] = map
@@ -163,12 +157,17 @@ inline var ItemMeta.artifact: PArtifact?
      */
     set(value) {
         if (value == null) return removeArtifact()
+        val previous = artifact != null
 
-        persistentDataContainer.set(artifactsKey, NAMESPACED_KEY, value.key)
+        persistentDataContainer[artifactsKey, NAMESPACED_KEY] = value.key
 
         val nLore = mutableListOf<String>()
         nLore.addAll(lore ?: mutableListOf())
-        nLore.add(0, value.asString())
+
+        if (previous)
+            nLore[0] = value.asString()
+        else
+            nLore.add(0, value.asString())
         lore = nLore
     }
 
@@ -182,6 +181,7 @@ fun ItemMeta.hasArtifact(): Boolean = persistentDataContainer.has(artifactsKey, 
  * Removes the [PArtifact] from this item. This will silently fail if the item does not have an artifact.
  */
 fun ItemMeta.removeArtifact() {
+    if (artifact == null) return
     persistentDataContainer.remove(artifactsKey)
 
     val nLore = mutableListOf<String>()
