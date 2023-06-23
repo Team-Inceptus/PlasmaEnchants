@@ -40,7 +40,7 @@ class EnchantmentChanceConfiguration<T : Enum<T>> {
             data["table"] != null -> LootTables.valueOf(data["table"].toString().uppercase()) as T
             data["block"] != null -> Material.valueOf(data["block"].toString().uppercase()) as T
 
-            else -> throw IllegalArgumentException("Invalid first for EnchantmentChanceConfiguration")
+            else -> throw IllegalArgumentException("Invalid first for EnchantmentChanceConfiguration: $data")
         }
         this.typeClass = type::class.java
 
