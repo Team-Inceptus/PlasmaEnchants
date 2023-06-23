@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerFishEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.BlockInventoryHolder
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.MerchantInventory
 import org.bukkit.inventory.MerchantRecipe
 import org.bukkit.loot.LootTables
 import org.bukkit.loot.Lootable
@@ -20,6 +21,7 @@ import us.teaminceptus.plasmaenchants.PlasmaEnchants
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
 import us.teaminceptus.plasmaenchants.api.config.EnchantmentChanceConfiguration
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
+import us.teaminceptus.plasmaenchants.api.hasArtifact
 import us.teaminceptus.plasmaenchants.r
 
 class SpawnEvents(private val plugin: PlasmaEnchants) : Listener {
@@ -154,11 +156,20 @@ class SpawnEvents(private val plugin: PlasmaEnchants) : Listener {
             return recipe
         } else {
             recipe = MerchantRecipe(
-                artifact!!.item,
+                artifact?.item ?: PArtifact.RAW_ARTIFACT,
                 0, plugin.artifactTradesMaxUses, true, 0, 0.0F
             )
 
-            recipe.addIngredient(ItemStack(Material.EMERALD, plugin.artifactTradesBuyPrice + r.nextInt(-2, 3)))
+            var price: Int = plugin.artifactTradesBuyPrice
+            if (artifact != null) price *= artifact.priceMultiplier
+
+            val amount = (price + r.nextInt(-2, 3)).coerceAtMost(128)
+
+            if (amount > 64) {
+                recipe.addIngredient(ItemStack(Material.EMERALD, 64))
+                recipe.addIngredient(ItemStack(Material.EMERALD, amount - 64))
+            } else
+                recipe.addIngredient(ItemStack(Material.EMERALD, amount))
         }
 
         return recipe
@@ -179,12 +190,15 @@ class SpawnEvents(private val plugin: PlasmaEnchants) : Listener {
 
         if (entity.health - event.finalDamage > 0) return
 
-        val artifactChance = entity.type.baseEnchantChance + (luckAmp * plugin.artifactSpawnLuckModifier) + (lootingAmp * plugin.artifactSpawnKillingLootingModifier)
+        val artifactChance = plugin.artifactSpawnGlobalKillChance + (luckAmp * plugin.artifactSpawnLuckModifier) + (lootingAmp * plugin.artifactSpawnKillingLootingModifier)
         if (r.nextDouble() < artifactChance)
             entity.world.dropItemNaturally(entity.location, PArtifact.RAW_ARTIFACT)
 
         if (isAllowed(entity.type, plugin.enchantmentSpawnKillingBlacklistedMobs, plugin.enchantmentSpawnKillingWhitelistedMobs)) {
-            val enchantmentChance = entity.type.baseEnchantChance + (luckAmp * plugin.enchantmentSpawnLuckModifier) + (lootingAmp * plugin.enchantmentSpawnKillingLootingModifier)
+            val configuration = plugin.enchantmentSpawnKillingChanceConfiguration.firstOrNull { it.type == entity.type }
+            val enchantmentChance =
+                configuration?.chance ?: (entity.type.baseEnchantChance + (luckAmp * plugin.enchantmentSpawnLuckModifier) + (lootingAmp * plugin.enchantmentSpawnKillingLootingModifier))
+
             if (r.nextDouble() < enchantmentChance)
                 entity.world.dropItemNaturally(
                     entity.location,
@@ -216,12 +230,13 @@ class SpawnEvents(private val plugin: PlasmaEnchants) : Listener {
         val tableI = lootable.lootTable!!
         val table = LootTables.values().firstOrNull { it.key == tableI.key } ?: return
 
-        val artifactChance = table.baseEnchantChance + (luckAmp * plugin.artifactSpawnLuckModifier)
+        val artifactChance = plugin.artifactSpawnGlobalLootChance + (luckAmp * plugin.artifactSpawnLuckModifier)
         if (r.nextDouble() < artifactChance)
             inv.setItem(randomSlot, PArtifact.RAW_ARTIFACT)
 
         if (isAllowed(table, plugin.enchantmentSpawnLootBlacklistedLootTables, plugin.enchantmentSpawnLootWhitelistedLootTables)) {
-            val enchantChance = table.baseEnchantChance + (luckAmp * plugin.enchantmentSpawnLuckModifier)
+            val configuration = plugin.enchantmentSpawnLootChanceConfiguration.firstOrNull { it.type == table }
+            val enchantChance = configuration?.chance ?: (table.baseEnchantChance + (luckAmp * plugin.enchantmentSpawnLuckModifier))
             if (r.nextDouble() < enchantChance) {
                 inv.setItem(randomSlot, generateEnchantmentBook(
                     plugin.enchantmentSpawnLootMinLevel, plugin.enchantmentSpawnLootMaxLevel, false,
@@ -271,14 +286,17 @@ class SpawnEvents(private val plugin: PlasmaEnchants) : Listener {
         val luckAmp = (p.getPotionEffect(PotionEffectType.LUCK)?.amplifier ?: -1) + 1
         val fortuneAmp = p.inventory.itemInMainHand.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)
 
-        val artifactChance = block.type.baseEnchantChance + (luckAmp * plugin.artifactSpawnLuckModifier) + (fortuneAmp * plugin.artifactSpawnMiningFortuneModifier)
+        val artifactChance = plugin.artifactSpawnGlobalMiningChance + (luckAmp * plugin.artifactSpawnLuckModifier) + (fortuneAmp * plugin.artifactSpawnMiningFortuneModifier)
         if (r.nextDouble() < artifactChance)
             block.world.dropItemNaturally(block.location, PArtifact.RAW_ARTIFACT)
 
         if (isAllowed(block.type, plugin.enchantmentSpawnMiningBlacklistedBlocks, plugin.enchantmentSpawnMiningWhitelistedBlocks) &&
             !(plugin.isEnchantmentSpawnMiningIgnoreSilkTouch && p.inventory.itemInMainHand.containsEnchantment(Enchantment.SILK_TOUCH))) {
 
-            val enchantChance = block.type.baseEnchantChance + (luckAmp * plugin.enchantmentSpawnLuckModifier) + (fortuneAmp * plugin.enchantmentSpawnMiningFortuneModifier)
+            val configuration = plugin.enchantmentSpawnMiningChanceConfiguration.firstOrNull { it.type == block.type }
+            val enchantChance =
+                configuration?.chance ?: (block.type.baseEnchantChance + (luckAmp * plugin.enchantmentSpawnLuckModifier) + (fortuneAmp * plugin.enchantmentSpawnMiningFortuneModifier))
+
             if (r.nextDouble() < enchantChance)
                 block.world.dropItemNaturally(
                     block.location,
@@ -291,7 +309,11 @@ class SpawnEvents(private val plugin: PlasmaEnchants) : Listener {
     }
 
     private fun replaceArtifactTrade(entity: AbstractVillager, event: VillagerAcquireTradeEvent) {
-        val artifact = if (!plugin.isArtifactTradesCraftableEnabled || r.nextDouble() < 0.25) null else getRandomMerchantArtifact()
+        val artifact = if (plugin.isArtifactTradesCraftableEnabled || r.nextDouble() < 0.25) getRandomMerchantArtifact() else null
+        if (entity.recipes.any { recipe ->
+            recipe.result.itemMeta?.hasArtifact() == true || PArtifact.RAW_ARTIFACT.isSimilar(recipe.result) ||
+                    recipe.ingredients.any { it != null && PArtifact.RAW_ARTIFACT.isSimilar(it) || it.itemMeta?.hasArtifact() == true }
+        }) return
 
         if (entity is Villager) {
             if (!plugin.artifactTradesProfessions.contains(entity.profession)) return
