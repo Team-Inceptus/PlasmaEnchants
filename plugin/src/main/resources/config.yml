@@ -15,6 +15,9 @@
 # - it (Italian / Italiano)
 language: en
 
+# Custom Maximum Anvil Experience Points to spend on an anvil when merging items with artifacts and enchantments
+max-anvil-cost: 100
+
 # Configuration for Enchantments
 enchantments:
 
@@ -364,6 +367,7 @@ artifacts:
       - CLERIC
 
     # Whether Villagers can trade for craftable artifacts
+    # Their price is determined by their rarity, detemrined by their color
     craftable-artifacts:
 
       enabled: true
@@ -400,7 +404,7 @@ artifacts:
     # Whether villagers can purchase raw artifacts for emeralds
     buy-artifacts:
       enabled: true
-      # The base emerald price for buying an artifact
+      # The base emerald price for buying and selling an artifact
       # This will randomly vary by +2 and -2 from this number
       price: 8
 
