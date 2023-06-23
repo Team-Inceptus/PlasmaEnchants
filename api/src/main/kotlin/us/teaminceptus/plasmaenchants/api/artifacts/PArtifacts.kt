@@ -15,23 +15,21 @@ import org.bukkit.inventory.ShapedRecipe
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import us.teaminceptus.plasmaenchants.api.PTarget
+import us.teaminceptus.plasmaenchants.api.*
 import us.teaminceptus.plasmaenchants.api.PTarget.*
-import us.teaminceptus.plasmaenchants.api.PType
 import us.teaminceptus.plasmaenchants.api.PType.Companion.ATTACKING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.BLOCK_BREAK
 import us.teaminceptus.plasmaenchants.api.PType.Companion.DEFENDING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.PASSIVE
 import us.teaminceptus.plasmaenchants.api.PType.Companion.SHOOT_BOW
-import us.teaminceptus.plasmaenchants.api.PlasmaConfig
-import us.teaminceptus.plasmaenchants.api.artifactsKey
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
+import us.teaminceptus.plasmaenchants.api.util.NAMESPACED_KEY
 
 /**
  * Represents a PlasmaEnchants Artifact.
  * <p>The difference between Artifacts and Enchantments is that Enchantments can be combined, whereas items can only have one artifact. Artifacts can be removed via a Gridstone just like a [PEnchantment].</p>
  */
-@Suppress("unchecked_cast")
+@Suppress("unchecked_cast", "deprecation")
 enum class PArtifacts(
     override val target: PTarget,
     private val info: Action<*>,
@@ -70,7 +68,7 @@ enum class PArtifacts(
 
             if (target is Wither || target is WitherSkeleton)
                 event.damage *= 3.0
-        }, ItemStack(Material.NETHER_STAR, 6), Material.WITHER_ROSE
+        }, ItemStack(Material.NETHER_STAR, 6), Material.WITHER_ROSE, ChatColor.LIGHT_PURPLE
     ),
 
     MEAT(
@@ -90,7 +88,7 @@ enum class PArtifacts(
     LAVA(
         CHESTPLATES, Action(DEFENDING) { event ->
             event.damager.fireTicks += 120
-        }, ItemStack(Material.OBSIDIAN, 24), Material.LAVA_BUCKET
+        }, ItemStack(Material.OBSIDIAN, 24), Material.LAVA_BUCKET, ChatColor.LIGHT_PURPLE
     ),
 
     KELP(
@@ -105,13 +103,13 @@ enum class PArtifacts(
             val player = event.damager as Player
 
             event.damage *= 1 + (player.level * 0.03).coerceAtMost(2.5)
-        }, ItemStack(Material.EXPERIENCE_BOTTLE, 12), Material.EXPERIENCE_BOTTLE
+        }, ItemStack(Material.EXPERIENCE_BOTTLE, 12), Material.EXPERIENCE_BOTTLE, ChatColor.GOLD
     ),
 
     PHANTOM(
         HELMETS, Action(DEFENDING) { event ->
             if (event.damager is Phantom || event.cause == DamageCause.FLY_INTO_WALL) event.isCancelled = true
-        }, ItemStack(Material.PHANTOM_MEMBRANE, 8), Material.PHANTOM_MEMBRANE
+        }, ItemStack(Material.PHANTOM_MEMBRANE, 8), Material.PHANTOM_MEMBRANE, ChatColor.GOLD
     ),
 
     FEATHER(
@@ -147,14 +145,14 @@ enum class PArtifacts(
         PICKAXES, Action(BLOCK_BREAK) { event ->
             if (event.block.type.name.contains("GOLD_ORE") && event.isDropItems)
                 event.block.getDrops(event.player.inventory.itemInMainHand).forEach { event.player.world.dropItemNaturally(event.block.location, it) }
-        }, ItemStack(Material.GOLD_INGOT, 16), Material.GOLD_INGOT
+        }, ItemStack(Material.GOLD_INGOT, 16), Material.GOLD_INGOT, ChatColor.AQUA
     ),
 
     DIAMOND(
         PICKAXES, Action(BLOCK_BREAK) { event ->
             if (event.block.type.name.contains("DIAMOND_ORE") && event.isDropItems)
                 event.block.getDrops(event.player.inventory.itemInMainHand).forEach { event.player.world.dropItemNaturally(event.block.location, it) }
-        }, ItemStack(Material.DIAMOND, 16), Material.DIAMOND
+        }, ItemStack(Material.DIAMOND, 16), Material.DIAMOND, ChatColor.AQUA
     ),
 
     ;
@@ -181,8 +179,8 @@ enum class PArtifacts(
             val recipe = ShapedRecipe(NamespacedKey(PlasmaConfig.plugin, name.lowercase()), item)
 
             recipe.shape("RRR", "RAR", "RRR")
-            recipe.setIngredient('R', ExactAmountChoice(ringItem))
-            recipe.setIngredient('A', ExactAmountChoice(PArtifact.RAW_ARTIFACT))
+            recipe.setIngredient('R', RecipeChoice.ExactChoice(ringItem))
+            recipe.setIngredient('A', RecipeChoice.ExactChoice(PArtifact.RAW_ARTIFACT))
             recipe.group = "PlasmaEnchants Artifact"
 
             return recipe
@@ -191,16 +189,26 @@ enum class PArtifacts(
     override val item: ItemStack
         get() = base.clone().apply {
             itemMeta = itemMeta!!.apply {
-                setDisplayName("$color$${asString()}")
+                setDisplayName("$color${asString()}")
 
                 addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true)
                 addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS)
 
-                persistentDataContainer[artifactsKey, PersistentDataType.STRING] = key.key
+                persistentDataContainer[artifactsKey, NAMESPACED_KEY] = key
             }
         }
 
     override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.plugin, "${name.lowercase()}_artifact")
+
+    override val priceMultiplier: Int
+        get() {
+            return when (color) {
+                ChatColor.AQUA -> 5
+                ChatColor.GOLD -> 7
+                ChatColor.LIGHT_PURPLE -> 10
+                else -> 3
+            }
+        }
 
     override fun toString(): String = asString()
 
@@ -215,12 +223,6 @@ enum class PArtifacts(
                     action(event as T)
             }
         }
-    }
-
-    @Suppress("deprecation")
-    private class ExactAmountChoice(stack: ItemStack): RecipeChoice.ExactChoice(stack) {
-        override fun test(recipe: ItemStack): Boolean =
-            recipe.amount == this.itemStack.amount && super.test(recipe)
     }
 
 

@@ -22,27 +22,32 @@ import java.util.function.Consumer
 interface PArtifact : Keyed, Consumer<Event> {
 
     companion object {
+
         /**
          * Represents the raw artifact used for crafting into other Artifacts.
          */
         @JvmStatic
-        val RAW_ARTIFACT = ItemStack(Material.PLAYER_HEAD).apply {
-            val meta = itemMeta as SkullMeta
+        val RAW_ARTIFACT: ItemStack
 
-            meta.setDisplayName("${ChatColor.YELLOW}${PlasmaConfig.config.get("artifact.raw")}")
+        init {
+            val raw = ItemStack(Material.PLAYER_HEAD)
+            val meta = raw.itemMeta as SkullMeta
+            meta.setDisplayName("${ChatColor.YELLOW}${PlasmaConfig.config.get("constants.raw_artifact")}")
 
             val p = Properties()
             p.load(PlasmaConfig.plugin.javaClass.getResourceAsStream("/util/heads.properties"))
 
-            val profile = GameProfile(UUID.randomUUID(), null)
+            val profile = GameProfile(UUID.nameUUIDFromBytes("plasmaenchants:raw_artifact".toByteArray()), null)
             profile.properties.put("textures", Property("textures", p.getProperty("raw_artifact")))
 
             val setP = meta.javaClass.getDeclaredMethod("setProfile", GameProfile::class.java)
             setP.isAccessible = true
             setP.invoke(meta, profile)
 
-            itemMeta = meta
+            raw.itemMeta = meta
+            RAW_ARTIFACT = raw
         }
+
     }
 
     /**
@@ -93,6 +98,12 @@ interface PArtifact : Keyed, Consumer<Event> {
      * @return ItemStack Representation
      */
     val item: ItemStack
+
+    /**
+     * Fetches the trading price multiplier for this artifact, determined by its rarity.
+     * @return Price Multiplier
+     */
+    val priceMultiplier: Int
 
     /**
      * Fetches the String representation of this artifact.

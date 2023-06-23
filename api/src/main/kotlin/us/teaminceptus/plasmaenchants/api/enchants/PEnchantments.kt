@@ -678,8 +678,7 @@ enum class PEnchantments(
 
     override fun generateBook(level: Int): ItemStack = ItemStack(Material.ENCHANTED_BOOK).apply {
             itemMeta = itemMeta!!.apply {
-                lore = Collections.singletonList("${ChatColor.GRAY}${this@PEnchantments.displayName} ${level.toRoman()}")
-                addEnchant(this@PEnchantments, level)
+                addEnchant(this@PEnchantments, level.coerceAtMost(if (PlasmaConfig.config.isIgnoreEnchantmentLevelRestriction) Integer.MAX_VALUE else maxLevel))
             }
         }
 
