@@ -8,12 +8,11 @@ plugins {
 
     java
     `java-library`
-    `maven-publish`
     jacoco
 }
 
 val pGroup = "us.teaminceptus.plasmaenchants"
-val pVersion = "1.0.0-SNAPSHOT"
+val pVersion = "1.0.0"
 val pAuthor = "Team-Inceptus"
 
 val jvmVersion: JavaVersion = JavaVersion.VERSION_11
@@ -29,10 +28,7 @@ sonarqube {
 allprojects {
     apply<JavaPlugin>()
     apply<JavaLibraryPlugin>()
-    apply<JacocoPlugin>()
     apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "org.sonarqube")
-    apply(plugin = "com.github.johnrengelman.shadow")
 
     group = pGroup
     version = pVersion
@@ -51,6 +47,13 @@ allprojects {
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
         maven("https://hub.jeff-media.com/nexus/repository/jeff-media-public/")
     }
+
+}
+
+subprojects {
+    apply<JacocoPlugin>()
+    apply(plugin = "org.sonarqube")
+    apply(plugin = "com.github.johnrengelman.shadow")
 
     dependencies {
         val kotlin = compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.8.22")
@@ -105,10 +108,10 @@ allprojects {
 
         jar.configure {
             enabled = false
-            dependsOn("shadowJar")
+            dependsOn(shadowJar)
         }
 
-        withType<ShadowJar> {
+        shadowJar {
             manifest {
                 attributes["Implementation-Title"] = project.name
                 attributes["Implementation-Version"] = project.version
@@ -117,8 +120,14 @@ allprojects {
 
             relocate("revxrsal.commands", "us.teaminceptus.shaded.lamp")
             relocate("org.bstats", "us.teaminceptus.shaded.bstats")
+            relocate("com.jeff_media.updatechecker", "us.teaminceptus.shaded.updatechecker")
 
+            archiveFileName.set("${project.name}-${project.version}.jar")
             archiveClassifier.set("")
         }
+    }
+
+    artifacts {
+        add("default", tasks.shadowJar)
     }
 }

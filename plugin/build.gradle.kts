@@ -1,7 +1,11 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 val lampVersion = "3.1.5"
 
 dependencies {
     api(project(":plasmaenchants-api"))
+
+    compileOnly("com.mojang:authlib:1.5.25")
 
     implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("com.jeff_media:SpigotUpdateChecker:3.0.3")
@@ -14,16 +18,7 @@ tasks {
         kotlinOptions.javaParameters = true
     }
 
-    kotlinSourcesJar {
-        archiveClassifier.set("sources")
-    }
-
     processResources {
         expand(project.properties)
-    }
-
-    shadowJar {
-        dependsOn(kotlinSourcesJar)
-        archiveClassifier.set("")
     }
 }

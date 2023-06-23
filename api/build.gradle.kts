@@ -1,6 +1,9 @@
 plugins {
     id("org.jetbrains.dokka") version "1.8.20"
+    `maven-publish`
 }
+
+apply(plugin = "maven-publish")
 
 dependencies {
     compileOnly("com.mojang:authlib:1.5.25")
@@ -31,4 +34,43 @@ tasks {
 
 artifacts {
     add("archives", tasks["javadocJar"])
+}
+
+
+publishing {
+    val github = "Team-Inceptus/PlasmaEnchants"
+
+    publications {
+        create<MavenPublication>("maven") {
+            pom {
+                description.set(project.description)
+                licenses {
+                    license {
+                        name.set("Apache-2.0")
+                        url.set("https://github.com/$github/blob/master/LICENSE")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://$github.git")
+                    developerConnection.set("scm:git:ssh://$github.git")
+                    url.set("https://github.com/$github")
+                }
+            }
+
+            from(components["java"])
+        }
+    }
+
+    repositories {
+        maven {
+            credentials {
+                username = System.getenv("JENKINS_USERNAME")
+                password = System.getenv("JENKINS_PASSWORD")
+            }
+
+            val releases = "https://repo.codemc.io/repository/maven-releases/"
+            val snapshots = "https://repo.codemc.io/repository/maven-snapshots/"
+            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshots else releases)
+        }
+    }
 }
