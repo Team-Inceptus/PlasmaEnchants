@@ -23,6 +23,10 @@ permissions:
     default: op
     description: Gives access to all PlasmaEnchants admin commands
 
+  plasmaenchants.admin.reload:
+    default: op
+    description: Gives access to reload the config
+
   plasmaenchants.admin.manage_enchants:
     default: op
     description: Gives access to add and remove enchantments from items
@@ -31,7 +35,15 @@ permissions:
     default: op
     description: Gives access to add and remove artifacts from items
 
+  plasmaenchants.admin.items:
+    default: op
+    description: Gives access to receive PlasmaEnchants-related items
+
   # User
   plasmaenchants.user:
     default: true
     description: Gives access to all PlasmaEnchants user commands
+
+  plasmaenchants.user.info:
+    default: true
+    description: Gives access to view plugin information

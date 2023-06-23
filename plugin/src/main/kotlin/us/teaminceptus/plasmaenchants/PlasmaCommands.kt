@@ -1,8 +1,15 @@
 package us.teaminceptus.plasmaenchants
 
-import org.bukkit.ChatColor
+import com.mojang.authlib.GameProfile
+import com.mojang.authlib.properties.Property
+import org.bukkit.*
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.SkullMeta
+import org.bukkit.persistence.PersistentDataType
 import revxrsal.commands.annotation.*
+import revxrsal.commands.annotation.Optional
 import revxrsal.commands.autocomplete.SuggestionProvider
 import revxrsal.commands.bukkit.BukkitCommandHandler
 import revxrsal.commands.bukkit.annotation.CommandPermission
@@ -12,6 +19,7 @@ import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
 import java.lang.String.format
 import java.util.*
 
+@Suppress("deprecation")
 internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
 
     companion object {
@@ -19,7 +27,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
         lateinit var handler: BukkitCommandHandler
 
         @JvmStatic
-        lateinit var plugin: PlasmaEnchants
+        val plugin: PlasmaEnchants = PlasmaConfig.plugin as PlasmaEnchants
 
         @JvmStatic
         private fun hasHandler(): Boolean = ::handler.isInitialized
@@ -35,27 +43,79 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
 
         @JvmStatic
         private fun getFailure(key: String): String = "${get("plugin.prefix")}${ChatColor.RED}${get(key)}"
+
+        @JvmStatic
+        val cancelKey = NamespacedKey(plugin, "cancel")
+
+        @JvmStatic
+        val urlKey = NamespacedKey(plugin, "url")
+
+        @JvmStatic
+        private val GUI_BACKGROUND: ItemStack = ItemStack(Material.GRAY_STAINED_GLASS_PANE).apply {
+            itemMeta = itemMeta!!.apply {
+                setDisplayName(" ")
+
+                persistentDataContainer[cancelKey, PersistentDataType.BYTE] = 1.toByte()
+            }
+        }
+
+        @JvmStatic
+        private fun getHead(head: String): ItemStack {
+            val item = ItemStack(Material.PLAYER_HEAD)
+            val meta = item.itemMeta as SkullMeta
+
+            val p = Properties()
+            p.load(PlasmaConfig.plugin.javaClass.getResourceAsStream("/util/heads.properties"))
+
+            val profile = GameProfile(UUID.randomUUID(), null)
+            profile.properties.put("textures", Property("textures", p.getProperty(head)))
+
+            val setP = meta.javaClass.getDeclaredMethod("setProfile", GameProfile::class.java)
+            setP.isAccessible = true
+            setP.invoke(meta, profile)
+
+            item.itemMeta = meta
+            return item
+        }
+
+        @JvmStatic
+        private fun reloadConfig(sender: CommandSender) {
+            try {
+                PlasmaEnchants.passiveTask.cancel()
+                PlasmaEnchants.passiveTask.runTaskTimer(plugin, 0, 1)
+            } catch (ignored: IllegalStateException) {}
+
+            plugin.reloadConfig()
+            PlasmaConfig.loadConfig()
+
+            sender.sendMessage(getSuccess("command.reloaded"))
+            if (sender is Player)
+                sender.playSound(sender.location, Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 1F)
+        }
     }
 
     init {
         run {
             if (hasHandler()) return@run
 
-            Companion.plugin = plugin
             handler = BukkitCommandHandler.create(plugin)
 
             handler
                 .registerValueResolver(PEnchantment::class.java) resolver@{ ctx ->
                     val name = ctx.popForParameter()
-                    return@resolver plugin.enchantments.first { it.key.key.equals(name, ignoreCase = true) }
+                    return@resolver plugin.getEnchantment(name)
                 }.registerValueResolver(PArtifact::class.java) resolver@{ ctx ->
                     val name = ctx.popForParameter()
-                    return@resolver plugin.artifacts.first { it.key.key.equals(name, ignoreCase = true) }
+                    return@resolver plugin.getArtifact(name)
                 }
 
             handler.autoCompleter
-                .registerParameterSuggestions(PEnchantment::class.java, SuggestionProvider.map(plugin::enchantments) { enchant -> enchant.key.key })
-                .registerParameterSuggestions(PArtifact::class.java, SuggestionProvider.map(plugin::artifacts) { artifact -> artifact.key.key })
+                .registerParameterSuggestions(PEnchantment::class.java, SuggestionProvider.map(plugin::enchantments) { enchant ->
+                    if (enchant.key.namespace == plugin.name.lowercase()) enchant.key.key else enchant.key.toString()
+                })
+                .registerParameterSuggestions(PArtifact::class.java, SuggestionProvider.map(plugin::artifacts) { artifact ->
+                    if (artifact.key.namespace == plugin.name.lowercase()) artifact.key.key else artifact.key.toString()
+                })
 
             handler.register(this, PlasmaEnchantsCommands())
 
@@ -66,10 +126,65 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
         }
     }
 
+    @Command("plasmareload", "preload", "plasmar")
+    @Description("Reloads the plugin")
+    @CommandPermission("plasmaenchants.admin.reload")
+    fun reload(sender: CommandSender) {
+        reloadConfig(sender)
+    }
+
     @Command("plasmaenchants", "penchants")
     @Description("The main command for managing PlasmaEnchants Features")
     @Usage("/plasmaenchants <...>")
     private class PlasmaEnchantsCommands {
+
+        @Subcommand("reload")
+        @CommandPermission("plasmaenchants.admin.reload")
+        fun reload(sender: CommandSender) {
+            reloadConfig(sender)
+        }
+
+        @Subcommand("info")
+        @CommandPermission("plasmaenchants.user.info")
+        fun pluginInfo(p: Player) {
+            val inv = Bukkit.createInventory(null, 27, get("plugin.prefix"))
+
+            for (i in 0..8) inv.setItem(i, GUI_BACKGROUND)
+            for (i in inv.size - 9 until inv.size) inv.setItem(i, GUI_BACKGROUND)
+            inv.setItem(9, GUI_BACKGROUND)
+            inv.setItem(17, GUI_BACKGROUND)
+
+            inv.addItem(ItemStack(Material.PLAYER_HEAD).apply {
+                itemMeta = (itemMeta as SkullMeta).apply {
+                    setDisplayName("${ChatColor.GREEN}GamerCoder")
+
+                    owner = "GamerCoder"
+                    lore = listOf("${ChatColor.GRAY}${get("constants.author")}")
+                    persistentDataContainer[cancelKey, PersistentDataType.BYTE] = 1.toByte()
+                }
+            })
+
+            inv.addItem(getHead("discord").apply {
+                itemMeta = (itemMeta as SkullMeta).apply {
+                    setDisplayName("${ChatColor.BLUE}Discord")
+
+                    persistentDataContainer[cancelKey, PersistentDataType.BYTE] = 1.toByte()
+                    persistentDataContainer[urlKey, PersistentDataType.STRING] = "https://discord.gg/WVFNWEvuqX"
+                }
+            })
+
+            inv.addItem(getHead("github").apply {
+                itemMeta = (itemMeta as SkullMeta).apply {
+                    setDisplayName("${ChatColor.DARK_GRAY}GitHub")
+
+                    persistentDataContainer[cancelKey, PersistentDataType.BYTE] = 1.toByte()
+                    persistentDataContainer[urlKey, PersistentDataType.STRING] = "https://github.com/Team-Inceptus/PlasmaEnchants"
+                }
+            })
+
+            p.openInventory(inv)
+            p.playSound(p.location, Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 2F)
+        }
 
         @Subcommand("enchant add", "enchantment add", "enchants add", "enchantments add")
         @CommandPermission("plasmaenchants.admin.manage_enchants")
@@ -130,7 +245,6 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
             p.sendMessage(getSuccess("success.enchant.clear"))
         }
 
-
         @Subcommand("artifact set", "artifacts set")
         @CommandPermission("plasmaenchants.admin.manage_artifacts")
         fun setArtifact(p: Player, artifact: PArtifact) {
@@ -160,6 +274,23 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
             item.itemMeta = meta
 
             p.sendMessage(getSuccess("success.artifact.remove"))
+        }
+
+        @Subcommand("item book")
+        @CommandPermission("plasmaenchants.admin.items")
+        fun giveBook(p: Player, enchantment: PEnchantment, level: Int) {
+            if (enchantment.maxLevel < level && !plugin.isIgnoreEnchantmentLevelRestriction)
+                return p.sendMessage(getFailure("error.argument.level"))
+
+            p.inventory.addItem(enchantment.generateBook(level))
+            p.playSound(p.location, Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 2F)
+        }
+
+        @Subcommand("item artifact")
+        @CommandPermission("plasmaenchants.admin.items")
+        fun giveArtifact(p: Player, @Optional artifact: PArtifact?) {
+            p.inventory.addItem(artifact?.item ?: PArtifact.RAW_ARTIFACT)
+            p.playSound(p.location, Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 2F)
         }
 
     }
