@@ -32,17 +32,19 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
 
     companion object {
         @JvmStatic
-        private val passiveTask = object : BukkitRunnable() {
+        internal val passiveTask = object : BukkitRunnable() {
             override fun run() {
                 Bukkit.getOnlinePlayers().forEach {
                     val items = listOfNotNull(
                         it.inventory.armorContents.toList(),
                         listOf(it.inventory.itemInMainHand),
                         listOf(it.inventory.itemInOffHand)
-                    ).flatten()
+                    ).flatten().filterNotNull()
 
-                    items.forEach { item ->
-                        val meta = item.itemMeta!!
+                    if (items.isEmpty()) return@forEach
+
+                    for (item in items) {
+                        val meta = item.itemMeta ?: continue
 
                         meta.plasmaEnchants.filter { entry -> entry.key.type == PType.PASSIVE }.forEach { entry -> entry.key.accept(PlayerTickEvent(it), entry.value) }
                         if (meta.hasArtifact() && meta.artifact!!.type == PType.PASSIVE) meta.artifact!!.accept(PlayerTickEvent(it))
@@ -73,13 +75,13 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
     }
 
     private fun loadClasses() {
+        PEnchantments.values().forEach(::register)
+        PArtifacts.values().forEach(::register)
+
         PlasmaEvents(this)
         SpawnEvents(this)
 
         PlasmaCommands(this)
-
-        PEnchantments.values().forEach(::register)
-        PArtifacts.values().forEach(::register)
     }
 
     override fun onEnable() {
@@ -87,7 +89,7 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
 
         loadClasses()
         PlasmaConfig.loadConfig()
-        logger.info("Loaded Classes...")
+        logger.info("Loaded Classes & Configuration...")
 
         passiveTask.runTaskTimer(this, 0, 1)
         logger.info("Loaded Tasks...")
@@ -114,8 +116,10 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
         Companion.artifacts.clear()
         Companion.enchantments.clear()
         logger.info("Unloaded Classes...")
-        
-        passiveTask.cancel()
+
+        try {
+            passiveTask.cancel()
+        } catch (ignored: IllegalStateException) {}
         logger.info("Stopped Tasks...")
 
         logger.info("Done!")
