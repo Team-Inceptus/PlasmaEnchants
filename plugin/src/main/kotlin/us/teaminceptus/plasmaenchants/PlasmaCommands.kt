@@ -147,7 +147,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
         @Subcommand("info")
         @CommandPermission("plasmaenchants.user.info")
         fun pluginInfo(p: Player) {
-            val inv = Bukkit.createInventory(null, 27, get("plugin.prefix"))
+            val inv = Bukkit.createInventory(null, 27, "${get("plugin.prefix").replace("[\\[\\]]".toRegex(), "")}${ChatColor.DARK_PURPLE}v${plugin.description.version}")
 
             for (i in 0..8) inv.setItem(i, GUI_BACKGROUND)
             for (i in inv.size - 9 until inv.size) inv.setItem(i, GUI_BACKGROUND)
@@ -181,6 +181,21 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
                     persistentDataContainer[urlKey, PersistentDataType.STRING] = "https://github.com/Team-Inceptus/PlasmaEnchants"
                 }
             })
+
+            inv.addItem(ItemStack(Material.MAP).apply {
+                itemMeta = itemMeta!!.apply {
+                    setDisplayName("${ChatColor.GOLD}${get("constants.statistics")}")
+                    lore = listOf(
+                        String.format(get("constants.enchants"), "${ChatColor.AQUA}${String.format(plugin.locale, "${plugin.enchantments.size}", "%,d")}"),
+                        String.format(get("constants.artifacts"), "${ChatColor.GREEN}${String.format(plugin.locale, "${plugin.artifacts.size}", "%,d")}")
+                    )
+
+                    persistentDataContainer[cancelKey, PersistentDataType.BYTE] = 1.toByte()
+                }
+            })
+
+            while (inv.firstEmpty() != -1)
+                inv.setItem(inv.firstEmpty(), GUI_BACKGROUND)
 
             p.openInventory(inv)
             p.playSound(p.location, Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 2F)
