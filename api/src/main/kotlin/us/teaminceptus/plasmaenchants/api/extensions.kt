@@ -3,6 +3,7 @@ package us.teaminceptus.plasmaenchants.api
 import com.google.common.collect.ImmutableMap
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.persistence.PersistentDataType
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
 import us.teaminceptus.plasmaenchants.api.util.NAMESPACED_KEY
@@ -20,6 +21,12 @@ val enchantKey
  */
 val artifactsKey
     get() = NamespacedKey(PlasmaConfig.plugin, "artifacts")
+
+/**
+ * The NamespacedKey in the PDC in [ItemMeta] for identifying a [PArtifact.item].
+ */
+val artifactItemKey
+    get() = NamespacedKey(PlasmaConfig.plugin, "artifact-item")
 
 // Enchantments
 
@@ -113,13 +120,13 @@ fun ItemMeta.removeEnchant(enchant: PEnchantment) {
 }
 
 /**
- * Combines the [PEnchantment]s on this item with another [ItemMeta].
+ * Combines the [PEnchantment]s on this item with another [ItemMeta]. This will not check [PTarget.isValid].
  * @param other [ItemMeta] to combine with
  * @throws IllegalArgumentException if other meta has conflicting enchantments
  */
 @Throws(IllegalArgumentException::class)
 fun ItemMeta.combinePlasmaEnchants(other: ItemMeta, ignoreLevelRestriction: Boolean = false) {
-    val others = other.plasmaEnchants.filter { !hasEnchant(it.key) }
+    val others = other.plasmaEnchants
     if (others.isEmpty()) return
     if (plasmaEnchants.isEmpty() && others.isEmpty()) return
     if (others.any { hasConflictingEnchant(it.key) }) throw IllegalArgumentException("Item has conflicting enchantments while merging: ${others.keys.first { hasConflictingEnchant(it) }.key} }}")
@@ -131,12 +138,19 @@ fun ItemMeta.combinePlasmaEnchants(other: ItemMeta, ignoreLevelRestriction: Bool
 
     others.forEach { (enchant, level) ->
         val oldLevel = map[enchant.key] ?: 0
-        val newLevel = (oldLevel + level).coerceAtMost(if (ignoreLevelRestriction) Integer.MAX_VALUE else enchant.maxLevel)
+        val newLevel = (when {
+            oldLevel < level -> level
+            oldLevel == level -> level + 1
+            else -> oldLevel
+        }).coerceAtMost(if (ignoreLevelRestriction) Integer.MAX_VALUE else enchant.maxLevel)
+
         map[enchant.key] = newLevel
 
         if (oldLevel != 0) nLore.remove(enchant.toString(oldLevel))
         nLore.add(enchant.toString(newLevel))
     }
+
+    if (map == plasmaEnchants.map { it.key.key to it.value }.toMap()) return
 
     persistentDataContainer[enchantKey, NAMESPACEDKEY_INT_MAP] = map
     lore = nLore
@@ -170,6 +184,14 @@ inline var ItemMeta.artifact: PArtifact?
             nLore.add(0, value.asString())
         lore = nLore
     }
+
+/**
+ * Whether or not this item is an [PArtifact] item that can be combined with its target tool to give it its artifact.
+ * This will return true on [PArtifact.item] items.
+ * @return true if item is artifact item, false otherwise
+ */
+inline val ItemMeta.isArtifactItem: Boolean
+    get() = artifact != null && persistentDataContainer[artifactItemKey, PersistentDataType.BYTE] == 1.toByte()
 
 /**
  * Whether or not this item has an [PArtifact].

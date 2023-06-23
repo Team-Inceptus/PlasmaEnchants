@@ -195,6 +195,7 @@ enum class PArtifacts(
                 addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS)
 
                 persistentDataContainer[artifactsKey, NAMESPACED_KEY] = key
+                persistentDataContainer[artifactItemKey, PersistentDataType.BYTE] = 1.toByte()
             }
         }
 
