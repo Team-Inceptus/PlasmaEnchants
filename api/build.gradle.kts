@@ -36,7 +36,6 @@ artifacts {
     add("archives", tasks["javadocJar"])
 }
 
-
 publishing {
     val github = "Team-Inceptus/PlasmaEnchants"
 
@@ -56,6 +55,9 @@ publishing {
                     url.set("https://github.com/$github")
                 }
             }
+
+            artifact(tasks["javadocJar"])
+            artifact(tasks.kotlinSourcesJar)
 
             from(components["java"])
         }

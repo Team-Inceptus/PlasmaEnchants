@@ -107,8 +107,8 @@ subprojects {
         }
 
         jar.configure {
-            enabled = false
             dependsOn(shadowJar)
+            archiveClassifier.set("dev")
         }
 
         shadowJar {
@@ -128,6 +128,6 @@ subprojects {
     }
 
     artifacts {
-        add("default", tasks.shadowJar)
+        add("default", tasks.getByName<ShadowJar>("shadowJar"))
     }
 }
