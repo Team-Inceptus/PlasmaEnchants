@@ -24,6 +24,7 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.PrepareAnvilEvent
 import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.AnvilInventory
 import org.bukkit.inventory.CraftingInventory
 import org.bukkit.inventory.GrindstoneInventory
@@ -404,6 +405,14 @@ internal class PlasmaEvents(private val plugin: PlasmaEnchants) : Listener {
         val item = event.itemInHand
 
         if (item.isSimilar(PArtifact.RAW_ARTIFACT) || item.itemMeta?.hasArtifact() == true)
+            event.isCancelled = true
+    }
+
+    @EventHandler
+    fun eat(event: PlayerItemConsumeEvent) {
+        val item = event.item
+
+        if (item.itemMeta?.isArtifactItem == true)
             event.isCancelled = true
     }
 

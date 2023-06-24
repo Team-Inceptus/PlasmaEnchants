@@ -87,6 +87,11 @@ enum class PTarget {
     TOOLS(SWORDS, AXES, PICKAXES, SHOVELS, HOES),
 
     /**
+     * Represents Shears
+     */
+    SHEARS(Material.SHEARS),
+
+    /**
      * Represents all Helmets
      */
     HELMETS(
@@ -157,7 +162,7 @@ enum class PTarget {
     /**
      * Target that applies to all materials.
      */
-    ALL(TOOLS, ARMOR, RANGED)
+    ALL(TOOLS, ARMOR, RANGED, SHEARS)
 
     ;
 

@@ -24,6 +24,9 @@ import us.teaminceptus.plasmaenchants.api.PType.Companion.PASSIVE
 import us.teaminceptus.plasmaenchants.api.PType.Companion.SHOOT_BOW
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
 import us.teaminceptus.plasmaenchants.api.util.NAMESPACED_KEY
+import java.security.SecureRandom
+
+private val r = SecureRandom()
 
 /**
  * Represents a PlasmaEnchants Artifact.
@@ -83,6 +86,15 @@ enum class PArtifacts(
         }, ItemStack(Material.BEEF, 32), Material.COOKED_BEEF
     ),
 
+    STORM(
+        MELEE_WEAPONS, Action(ATTACKING) { event ->
+            val target = event.entity as? LivingEntity ?: return@Action
+
+            target.world.strikeLightning(target.location)
+            target.damage(r.nextInt(-10, 10) + 15.0)
+        }, ItemStack(Material.CREEPER_HEAD), Material.NETHER_STAR, ChatColor.LIGHT_PURPLE
+    ),
+
     // Armor Artifacts
 
     LAVA(
@@ -121,8 +133,26 @@ enum class PArtifacts(
 
     SEA(
         LEGGINGS, Action(DEFENDING) { event ->
-            if (event.cause == DamageCause.DROWNING || event.damager is Guardian) event.isCancelled = true
-        }, ItemStack(Material.HEART_OF_THE_SEA), Material.HEART_OF_THE_SEA
+            if (event.cause == DamageCause.DROWNING || event.damager is Guardian || event.damager is Dolphin) event.isCancelled = true
+        }, ItemStack(Material.HEART_OF_THE_SEA, 2), Material.HEART_OF_THE_SEA
+    ),
+
+    ANVIL(
+        CHESTPLATES, Action(DEFENDING) { event ->
+            if (event.cause != DamageCause.ENTITY_ATTACK && event.cause != DamageCause.ENTITY_SWEEP_ATTACK) return@Action
+
+            if (r.nextDouble() < 0.1)
+                event.isCancelled = true
+        }, ItemStack(Material.ANVIL, 48), Material.ANVIL, ChatColor.LIGHT_PURPLE
+    ),
+
+    SQUID(
+        HELMETS, Action(DEFENDING) { event ->
+            val entity = event.damager as? LivingEntity ?: return@Action
+
+            if (r.nextDouble() < 0.25)
+                entity.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, true))
+        }, ItemStack(Material.INK_SAC, 48), Material.INK_SAC
     ),
 
     // Ranged Artifacts
@@ -155,6 +185,19 @@ enum class PArtifacts(
                 event.block.getDrops(event.player.inventory.itemInMainHand).forEach { event.player.world.dropItemNaturally(event.block.location, it) }
         }, ItemStack(Material.DIAMOND, 16), Material.DIAMOND, ChatColor.AQUA
     ),
+
+    APPLE(
+        SHEARS, Action(BLOCK_BREAK) { event ->
+            val type = event.block.type
+            val drop: Material = when {
+                type.name.endsWith("_LEAVES") -> Material.APPLE
+                type == Material.GRASS || type == Material.TALL_GRASS || type == Material.FERN || type == Material.FERN -> Material.WHEAT_SEEDS
+                else -> return@Action
+            }
+
+            event.block.world.dropItemNaturally(event.block.location, ItemStack(drop))
+        }, ItemStack(Material.APPLE, 32), Material.APPLE
+    )
 
     ;
 
