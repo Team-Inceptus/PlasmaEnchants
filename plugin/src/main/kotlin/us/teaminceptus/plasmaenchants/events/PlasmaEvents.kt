@@ -6,6 +6,8 @@ import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.entity.Projectile
+import org.bukkit.entity.Tameable
 import org.bukkit.event.*
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDamageEvent
@@ -28,6 +30,7 @@ import org.bukkit.inventory.GrindstoneInventory
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
+import org.bukkit.inventory.meta.EnchantmentStorageMeta
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.RegisteredListener
@@ -37,6 +40,8 @@ import us.teaminceptus.plasmaenchants.PlasmaCommands.Companion.urlKey
 import us.teaminceptus.plasmaenchants.PlasmaEnchants
 import us.teaminceptus.plasmaenchants.api.*
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
+import us.teaminceptus.plasmaenchants.api.util.NAMESPACEDKEY_INT_MAP
+import us.teaminceptus.plasmaenchants.api.util.NAMESPACED_KEY
 import us.teaminceptus.plasmaenchants.util.PlasmaUtil
 
 internal class PlasmaEvents(private val plugin: PlasmaEnchants) : Listener {
@@ -67,7 +72,17 @@ internal class PlasmaEvents(private val plugin: PlasmaEnchants) : Listener {
     }
 
     @EventHandler
-    fun onAttack(event: EntityDamageByEntityEvent) = execute(event.damager as? Player, event, PType.ATTACKING)
+    fun onAttack(event: EntityDamageByEntityEvent) {
+        @Suppress("IMPLICIT_CAST_TO_ANY")
+        val attacker = when (event.damager) {
+            is Player -> event.damager as Player
+            is Projectile -> (event.damager as Projectile).shooter
+            is Tameable -> (event.damager as Tameable).owner
+            else -> null
+        } as? Player
+
+        execute(attacker, event, PType.ATTACKING)
+    }
 
     @EventHandler
     fun onDefend(event: EntityDamageByEntityEvent) = execute(event.entity as? Player, event, PType.DEFENDING)
@@ -80,9 +95,6 @@ internal class PlasmaEvents(private val plugin: PlasmaEnchants) : Listener {
 
     @EventHandler
     fun onBlockDamage(event: BlockDamageEvent) = execute(event.player, event, PType.MINING)
-
-    @EventHandler
-    fun onInteract(event: PlayerInteractEvent) = execute(event.player, event, PType.INTERACT)
 
     @EventHandler
     fun onBowShoot(event: EntityShootBowEvent) = execute(event.entity as? Player, event, PType.SHOOT_BOW)
@@ -140,6 +152,38 @@ internal class PlasmaEvents(private val plugin: PlasmaEnchants) : Listener {
         }
     }
 
+    private fun combineVanillaEnchants(meta: ItemMeta, sMeta: ItemMeta) {
+        for ((enchant, level) in sMeta.enchants)
+            if (meta.hasEnchant(enchant)) {
+                val oldLevel = meta.getEnchantLevel(enchant)
+                val newLevel = (when {
+                    oldLevel < level -> level
+                    oldLevel == level -> level + 1
+                    else -> oldLevel
+                }).coerceAtMost(enchant.maxLevel)
+
+                meta.addEnchant(enchant, newLevel, false)
+            }
+            else
+                meta.addEnchant(enchant, level, false)
+
+
+        if (sMeta is EnchantmentStorageMeta)
+            for ((enchant, level) in sMeta.storedEnchants)
+                if (meta.hasEnchant(enchant)) {
+                    val oldLevel = meta.getEnchantLevel(enchant)
+                    val newLevel = (when {
+                        oldLevel < level -> level
+                        oldLevel == level -> level + 1
+                        else -> oldLevel
+                    }).coerceAtMost(enchant.maxLevel)
+
+                    meta.addEnchant(enchant, newLevel, false)
+                }
+                else
+                    meta.addEnchant(enchant, level, false)
+    }
+
     @EventHandler
     fun anvil(event: PrepareAnvilEvent) {
         val inv = event.inventory
@@ -150,27 +194,58 @@ internal class PlasmaEvents(private val plugin: PlasmaEnchants) : Listener {
         val fMeta = first.itemMeta ?: return
         val sMeta = second.itemMeta ?: return
 
+        val fArtifact = fMeta.hasArtifact()
+        val sArtifact = sMeta.hasArtifact()
+        val both = fArtifact && sArtifact
+
+        if (!fArtifact && !sArtifact && fMeta.plasmaEnchants.isEmpty() && sMeta.plasmaEnchants.isEmpty())
+            return
+
         if (sMeta.plasmaEnchants.keys.any { fMeta.hasConflictingEnchant(it) }) {
+            event.result = null
+            return
+        }
+
+        if (fMeta.isArtifactItem) {
+            event.result = null
+            return
+        }
+
+        if (first.type != second.type && !sMeta.isArtifactItem && second.type != Material.ENCHANTED_BOOK) {
             event.result = null
             return
         }
 
         inv.maximumRepairCost = plugin.maxAnvilCost
 
-        val fArtifact = fMeta.hasArtifact()
-        val sArtifact = sMeta.hasArtifact()
-
         return when {
-            fArtifact && sArtifact && (fMeta.artifact != sMeta.artifact) -> {
+            (both && (fMeta.artifact != sMeta.artifact)) -> {
+                event.result = null
+            }
+            (both && (fMeta.artifact == sMeta.artifact && sMeta.isArtifactItem)) -> {
                 event.result = null
             }
             !fArtifact && sArtifact -> {
                 val clone = first.clone()
-                val meta = clone.itemMeta!!
+                if (sMeta.plasmaEnchants.any { !it.key.target.isValid(clone.type)}) {
+                    event.result = null
+                    return
+                }
 
+                val meta = clone.itemMeta!!
                 val artifact = sMeta.artifact!!
+                if (!artifact.target.isValid(clone.type)) {
+                    event.result = null
+                    return
+                }
+
                 meta.artifact = artifact
                 meta.combinePlasmaEnchants(sMeta, plugin.isIgnoreEnchantmentLevelRestriction)
+                if (!sMeta.isArtifactItem)
+                    combineVanillaEnchants(meta, sMeta)
+
+                if (inv.renameText != null)
+                    meta.setDisplayName(inv.renameText)
 
                 clone.itemMeta = meta
 
@@ -179,10 +254,26 @@ internal class PlasmaEvents(private val plugin: PlasmaEnchants) : Listener {
             }
             else -> {
                 val clone = first.clone()
-                val meta = clone.itemMeta!!
+                if (sMeta.plasmaEnchants.any { !it.key.target.isValid(clone.type)}) {
+                    event.result = null
+                    return
+                }
 
+                val meta = clone.itemMeta!!
                 meta.combinePlasmaEnchants(sMeta, plugin.isIgnoreEnchantmentLevelRestriction)
+
+                if (!sMeta.isArtifactItem)
+                    combineVanillaEnchants(meta, sMeta)
+
+                if (inv.renameText != null)
+                    meta.setDisplayName(inv.renameText)
+
                 clone.itemMeta = meta
+
+                if (clone == first && meta.artifact == sMeta.artifact) {
+                    event.result = null
+                    return
+                }
 
                 event.result = clone
                 inv.repairCost += (fMeta.plasmaEnchants.size + 1) * 5
@@ -192,9 +283,28 @@ internal class PlasmaEvents(private val plugin: PlasmaEnchants) : Listener {
 
     @EventHandler
     fun craft(event: PrepareItemCraftEvent) {
-        if (event.isRepair) return
-
         val inv = event.inventory
+
+        // Remove PlasmaEnchants Data from the result item
+        if (event.isRepair) {
+            val item = inv.result ?: return
+            val meta = item.itemMeta ?: return
+
+            if (meta.isArtifactItem) {
+                inv.result = null
+                return
+            }
+
+            if (meta.persistentDataContainer.has(artifactsKey, NAMESPACED_KEY))
+                meta.persistentDataContainer.remove(artifactsKey)
+
+            if (meta.persistentDataContainer.has(enchantKey, NAMESPACEDKEY_INT_MAP))
+                meta.persistentDataContainer.remove(enchantKey)
+
+            item.itemMeta = meta
+            return
+        }
+
         val artifact = event.recipe?.result?.itemMeta?.artifact ?: return
         val amount = artifact.ringItem.amount
 
@@ -207,6 +317,8 @@ internal class PlasmaEvents(private val plugin: PlasmaEnchants) : Listener {
                 return
             }
         }
+
+
     }
 
     @EventHandler

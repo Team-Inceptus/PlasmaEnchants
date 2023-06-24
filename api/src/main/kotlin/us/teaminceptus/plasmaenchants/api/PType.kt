@@ -57,11 +57,6 @@ class PType<T : Event> private constructor(
         @JvmStatic
         val PASSIVE: PType<PlayerEvent> = PType(PlayerEvent::class.java, ChatColor.GREEN)
         /**
-         * Represents the type of Enchantment that will activate when interacting. Only one enchantment of this type can be applied to an item.
-         */
-        @JvmStatic
-        val INTERACT: PType<PlayerInteractEvent> = PType(PlayerInteractEvent::class.java, ChatColor.GOLD)
-        /**
          * Represents the type of Enchantment that will activate when shooting a bow or crossbow-.
          */
         @JvmStatic
