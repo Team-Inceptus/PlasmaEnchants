@@ -34,10 +34,12 @@ import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.getSquareR
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.isOre
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.matchType
 import us.teaminceptus.plasmaenchants.api.util.NAMESPACEDKEY_INT_MAP
+import java.security.SecureRandom
 import java.util.*
 import java.util.function.Predicate
 import kotlin.math.absoluteValue
 
+private val r = SecureRandom()
 
 /**
  * Represents all of the Default PlasmaEnchants Enchantments.
@@ -221,7 +223,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     UNDEAD_COLLECTOR(
         MELEE_WEAPONS, 3, Action(ATTACKING) { event, level ->
@@ -244,7 +246,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     AQUATIC_COLLECTOR(
         SWORDS, 3, Action(ATTACKING) { event, level ->
@@ -268,7 +270,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     NETHER_COLLECTOR(
         MELEE_WEAPONS, 3, Action(ATTACKING) { event, level ->
@@ -293,7 +295,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     ORE_COLLECTOR(
         AXES, 4, Action(ATTACKING) { event, level ->
@@ -325,7 +327,7 @@ enum class PEnchantments(
 
             val count = mined.toString().length
             event.damage *= 1 + (level * 0.05 * count)
-        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     END_COLLECTOR(
         MELEE_WEAPONS, 4, Action(ATTACKING) { event, level ->
@@ -340,7 +342,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.07 * count)
-        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     BOSS_COLLECTOR(
         MELEE_WEAPONS, 5, Action(ATTACKING) { event, level ->
@@ -355,7 +357,7 @@ enum class PEnchantments(
 
             val count = kills.toString().length
             event.damage *= 1 + (level * 0.1 * count)
-        }, { it != PLAYER_COLLECTOR && it.displayName.endsWith("COLLECTOR") }),
+        }, { it != PLAYER_COLLECTOR && it.name.endsWith("COLLECTOR") }),
 
     // Defending Enchantments
 
@@ -579,8 +581,25 @@ enum class PEnchantments(
         AXES, 1, Action(BLOCK_BREAK) { event, _ ->
             if (!Tag.LOGS.isTagged(event.block.type)) return@Action
 
-            val leaves = Material.matchMaterial(event.block.type.name.split("_")[0] + "_LEAVES") ?: Material.OAK_LEAVES
-            getConnected(event.block) { it.type == event.block.type || it.type == leaves }.forEach { it.breakNaturally(event.player.inventory.itemInMainHand) }
+            var i = 0
+            getConnected(event.block) { it.type == event.block.type }.forEach {
+                if (i >= 100) return@forEach
+                if (event.player.gameMode != GameMode.CREATIVE)
+                    event.player.inventory.itemInMainHand.apply {
+                        val damageable = itemMeta as? Damageable ?: return@forEach
+
+                        if (itemMeta?.hasEnchant(Enchantment.DURABILITY) == true) {
+                            if (r.nextInt((itemMeta?.getEnchantLevel(Enchantment.DURABILITY) ?: 0) + 1) == 1)
+                                damageable.damage += 1
+                        }
+                        else
+                            damageable.damage += 1
+                        itemMeta = damageable as ItemMeta
+                    }
+
+                it.breakNaturally(event.player.inventory.itemInMainHand)
+                i++
+            }
         }),
 
     // Passive Enchantments
@@ -609,7 +628,7 @@ enum class PEnchantments(
 
             object : BukkitRunnable() {
                 override fun run() {
-                    if (projectile.isDead || count >= (level * 10)) {
+                    if (projectile.isDead || projectile.isOnGround || count >= (level * 10)) {
                         cancel()
                         return
                     }
@@ -619,7 +638,7 @@ enum class PEnchantments(
                     duplicated.velocity = projectile.velocity
                     count++
                 }
-            }.runTaskTimer(PlasmaConfig.plugin, 0, 100 / level.toLong())
+            }.runTaskTimer(PlasmaConfig.plugin, 100 / level.toLong(), 100 / level.toLong())
         }
     ),
 
@@ -635,7 +654,7 @@ enum class PEnchantments(
             if (event.entity !is LivingEntity) return@Action
             if (event.damager !is Projectile) return@Action
 
-            event.entity.world.createExplosion(event.damager.location, (level + 1).toFloat())
+            event.entity.world.createExplosion(event.damager.location, (level + 1).toFloat(), false, false, event.damager)
         }),
 
     WEIGHT(
@@ -664,7 +683,9 @@ enum class PEnchantments(
     ) : this(target, maxLevel, info, listOf(conflicts))
 
     override val displayName
-        get() = this.name.split("_").joinToString(" ") { it -> it.lowercase().replaceFirstChar { it.uppercase() } }
+        get() = this.name.split("_").joinToString(" ") {
+            it -> if (it.lowercase() == "of") it.lowercase() else it.lowercase().replaceFirstChar { it.uppercase() }
+        }
 
     override val type
         get() = info.type
