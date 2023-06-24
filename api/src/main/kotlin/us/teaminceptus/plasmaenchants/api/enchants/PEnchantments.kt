@@ -33,7 +33,6 @@ import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.getConnect
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.getSquareRotation
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.isOre
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantments.Util.matchType
-import us.teaminceptus.plasmaenchants.api.util.NAMESPACEDKEY_INT_MAP
 import java.security.SecureRandom
 import java.util.*
 import java.util.function.Predicate
@@ -654,7 +653,7 @@ enum class PEnchantments(
             if (event.entity !is LivingEntity) return@Action
             if (event.damager !is Projectile) return@Action
 
-            event.entity.world.createExplosion(event.damager.location, (level + 1).toFloat(), false, false, event.damager)
+            event.entity.world.createExplosion(event.entity.location, level.toFloat(), false, true, (event.damager as Projectile).shooter as? Entity)
         }),
 
     WEIGHT(
@@ -662,7 +661,12 @@ enum class PEnchantments(
             if (event.entity !is LivingEntity) return@Action
             if (event.damager !is Projectile) return@Action
 
-            event.entity.velocity.add(event.damager.location.direction.multiply(level * 1.25))
+            val entity = event.entity as LivingEntity
+
+            val vel = event.damager.velocity
+            vel.multiply(level * 1.05 / ((entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE)?.value ?: 0.0) + 1))
+
+            entity.velocity = vel
         }),
 
 
