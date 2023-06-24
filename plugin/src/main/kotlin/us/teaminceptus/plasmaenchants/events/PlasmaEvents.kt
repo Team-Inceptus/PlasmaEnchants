@@ -32,6 +32,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
 import org.bukkit.inventory.meta.EnchantmentStorageMeta
 import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.RegisteredListener
 import org.bukkit.scheduler.BukkitRunnable
@@ -50,13 +51,13 @@ internal class PlasmaEvents(private val plugin: PlasmaEnchants) : Listener {
         plugin.server.pluginManager.registerEvents(this, plugin)
     }
 
-    private fun execute(player: Player?, event: Event, type: PType<*>) {
+    private fun execute(player: Player?, event: Event, type: PType<*>, bow: ItemStack? = null) {
         if (player == null) return
         if (event is Cancellable && event.isCancelled) return
 
         val items = listOf(
             player.inventory.armorContents.toList(),
-            listOf(player.inventory.itemInMainHand),
+            listOf(bow ?: player.inventory.itemInMainHand),
             listOf(player.inventory.itemInOffHand)
         ).flatten().filterNotNull()
 
@@ -73,15 +74,23 @@ internal class PlasmaEvents(private val plugin: PlasmaEnchants) : Listener {
 
     @EventHandler
     fun onAttack(event: EntityDamageByEntityEvent) {
+        var bow: ItemStack? = null
+
         @Suppress("IMPLICIT_CAST_TO_ANY")
         val attacker = when (event.damager) {
             is Player -> event.damager as Player
-            is Projectile -> (event.damager as Projectile).shooter
+            is Projectile -> {
+                val proj = (event.damager as Projectile)
+                if (proj.hasMetadata("bow"))
+                    bow = proj.getMetadata("bow").firstOrNull { it.owningPlugin == plugin }?.value() as? ItemStack
+
+                proj.shooter
+            }
             is Tameable -> (event.damager as Tameable).owner
             else -> null
         } as? Player
 
-        execute(attacker, event, PType.ATTACKING)
+        execute(attacker, event, PType.ATTACKING, bow)
     }
 
     @EventHandler
@@ -97,7 +106,13 @@ internal class PlasmaEvents(private val plugin: PlasmaEnchants) : Listener {
     fun onBlockDamage(event: BlockDamageEvent) = execute(event.player, event, PType.MINING)
 
     @EventHandler
-    fun onBowShoot(event: EntityShootBowEvent) = execute(event.entity as? Player, event, PType.SHOOT_BOW)
+    fun onBowShoot(event: EntityShootBowEvent) {
+        // Attach Bow to Projectile
+        val proj = event.projectile
+        proj.setMetadata("bow", FixedMetadataValue(plugin, event.bow))
+
+        execute(event.entity as? Player, event, PType.SHOOT_BOW)
+    }
 
     // Vanilla Functionality Events
 
