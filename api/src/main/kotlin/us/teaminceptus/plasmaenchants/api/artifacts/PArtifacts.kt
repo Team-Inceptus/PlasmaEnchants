@@ -93,7 +93,8 @@ enum class PArtifacts(
 
     KELP(
         BOOTS, Action(PASSIVE) { event ->
-            event.player.addPotionEffect(PotionEffect(PotionEffectType.DOLPHINS_GRACE, 20, 2, true))
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.DOLPHINS_GRACE, 3, 2, true))
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.WATER_BREATHING, 3, 0, true))
         }, ItemStack(Material.KELP, 64), Material.KELP
     ),
 
