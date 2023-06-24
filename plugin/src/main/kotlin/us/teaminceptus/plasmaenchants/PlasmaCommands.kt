@@ -293,7 +293,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
 
         @Subcommand("item book")
         @CommandPermission("plasmaenchants.admin.items")
-        fun giveBook(p: Player, enchantment: PEnchantment, level: Int) {
+        fun giveBook(p: Player, enchantment: PEnchantment, @Default("1") level: Int) {
             if (enchantment.maxLevel < level && !plugin.isIgnoreEnchantmentLevelRestriction)
                 return p.sendMessage(getFailure("error.argument.level"))
 
