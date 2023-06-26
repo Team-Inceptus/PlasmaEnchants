@@ -207,6 +207,12 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                         </tr>
                                         
                                         <tr class="rowColor">
+                                            <td class="colFirst"><code>private final <a href=PType.html>PType</a>&lt;PlayerInteractEvent&gt;</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=PType.Companion.html#INTERACT>INTERACT</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
                                             <td class="colFirst"><code>public final static <a href=PType.Companion.html>PType.Companion</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=PType.Companion.html#INSTANCE>INSTANCE</a></code></th>
                                             <td class="colLast"></td>
@@ -290,7 +296,7 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=PType.Companion.html#getATTACKING()>getATTACKING</a>() </code>
                                             </th>
-                                            <td class="colLast">Represents the type of Enchantment that will activate when attacking.</td>
+                                            <td class="colLast">Represents the type of Enchantment/Artifact that will activate when attacking.</td>
                                         </tr>
                                         
                                         <tr id="i1" class="rowColor">
@@ -298,7 +304,7 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=PType.Companion.html#getDEFENDING()>getDEFENDING</a>() </code>
                                             </th>
-                                            <td class="colLast">Represents the type of Enchantment that will activate when defending or taking damage.</td>
+                                            <td class="colLast">Represents the type of Enchantment/Artifact that will activate when defending or taking damage.</td>
                                         </tr>
                                         
                                         <tr id="i2" class="altColor">
@@ -306,7 +312,7 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=PType.Companion.html#getDAMAGE()>getDAMAGE</a>() </code>
                                             </th>
-                                            <td class="colLast">Represents the type of Enchantment that will activate when taking general damage.</td>
+                                            <td class="colLast">Represents the type of Enchantment/Artifact that will activate when taking general damage.</td>
                                         </tr>
                                         
                                         <tr id="i3" class="rowColor">
@@ -314,7 +320,7 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=PType.Companion.html#getBLOCK_BREAK()>getBLOCK_BREAK</a>() </code>
                                             </th>
-                                            <td class="colLast">Represents the type of Enchantment that will activate when breaking blocks.</td>
+                                            <td class="colLast">Represents the type of Enchantment/Artifact that will activate when breaking blocks.</td>
                                         </tr>
                                         
                                         <tr id="i4" class="altColor">
@@ -322,7 +328,7 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=PType.Companion.html#getMINING()>getMINING</a>() </code>
                                             </th>
-                                            <td class="colLast">Represents the type of Enchantment that will activate when mining blocks.</td>
+                                            <td class="colLast">Represents the type of Enchantment/Artifact that will activate when mining blocks.</td>
                                         </tr>
                                         
                                         <tr id="i5" class="rowColor">
@@ -330,7 +336,7 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=PType.Companion.html#getPASSIVE()>getPASSIVE</a>() </code>
                                             </th>
-                                            <td class="colLast">Represents the type of Enchantment that runs its action every tick.</td>
+                                            <td class="colLast">Represents the type of Enchantment/Artifact that runs its action every tick.</td>
                                         </tr>
                                         
                                         <tr id="i6" class="altColor">
@@ -338,7 +344,15 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=PType.Companion.html#getSHOOT_BOW()>getSHOOT_BOW</a>() </code>
                                             </th>
-                                            <td class="colLast">Represents the type of Enchantment that will activate when shooting a bow or crossbow-.</td>
+                                            <td class="colLast">Represents the type of Enchantment/Artifact that will activate when shooting a bow or crossbow-.</td>
+                                        </tr>
+                                        
+                                        <tr id="i7" class="rowColor">
+                                            <td class="colFirst"><code>final <a href=PType.html>PType</a>&lt;PlayerInteractEvent&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PType.Companion.html#getINTERACT()>getINTERACT</a>() </code>
+                                            </th>
+                                            <td class="colLast">Represents the type of Artifact that will activate when interacting.</td>
                                         </tr>
                                         
                                         </tbody>
@@ -394,7 +408,7 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                     <li class="blockList">
                                         <h4>getATTACKING</h4>
                                         <pre class="methodSignature"> final <a href=PType.html>PType</a>&lt;EntityDamageByEntityEvent&gt; <a href=PType.Companion.html#getATTACKING()>getATTACKING</a>()</pre>
-                                        <div class="block"><p>Represents the type of Enchantment that will activate when attacking.</p></div>
+                                        <div class="block"><p>Represents the type of Enchantment/Artifact that will activate when attacking.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -409,7 +423,7 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                     <li class="blockList">
                                         <h4>getDEFENDING</h4>
                                         <pre class="methodSignature"> final <a href=PType.html>PType</a>&lt;EntityDamageByEntityEvent&gt; <a href=PType.Companion.html#getDEFENDING()>getDEFENDING</a>()</pre>
-                                        <div class="block"><p>Represents the type of Enchantment that will activate when defending or taking damage.</p></div>
+                                        <div class="block"><p>Represents the type of Enchantment/Artifact that will activate when defending or taking damage.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -424,7 +438,7 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                     <li class="blockList">
                                         <h4>getDAMAGE</h4>
                                         <pre class="methodSignature"> final <a href=PType.html>PType</a>&lt;EntityDamageEvent&gt; <a href=PType.Companion.html#getDAMAGE()>getDAMAGE</a>()</pre>
-                                        <div class="block"><p>Represents the type of Enchantment that will activate when taking general damage.</p></div>
+                                        <div class="block"><p>Represents the type of Enchantment/Artifact that will activate when taking general damage.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -439,7 +453,7 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                     <li class="blockList">
                                         <h4>getBLOCK_BREAK</h4>
                                         <pre class="methodSignature"> final <a href=PType.html>PType</a>&lt;BlockBreakEvent&gt; <a href=PType.Companion.html#getBLOCK_BREAK()>getBLOCK_BREAK</a>()</pre>
-                                        <div class="block"><p>Represents the type of Enchantment that will activate when breaking blocks.</p></div>
+                                        <div class="block"><p>Represents the type of Enchantment/Artifact that will activate when breaking blocks.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -454,7 +468,7 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                     <li class="blockList">
                                         <h4>getMINING</h4>
                                         <pre class="methodSignature"> final <a href=PType.html>PType</a>&lt;BlockDamageEvent&gt; <a href=PType.Companion.html#getMINING()>getMINING</a>()</pre>
-                                        <div class="block"><p>Represents the type of Enchantment that will activate when mining blocks.</p></div>
+                                        <div class="block"><p>Represents the type of Enchantment/Artifact that will activate when mining blocks.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -469,7 +483,7 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                     <li class="blockList">
                                         <h4>getPASSIVE</h4>
                                         <pre class="methodSignature"> final <a href=PType.html>PType</a>&lt;PlayerEvent&gt; <a href=PType.Companion.html#getPASSIVE()>getPASSIVE</a>()</pre>
-                                        <div class="block"><p>Represents the type of Enchantment that runs its action every tick.</p></div>
+                                        <div class="block"><p>Represents the type of Enchantment/Artifact that runs its action every tick.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -479,12 +493,27 @@ public class <span class="typeNameLabel"><a href=PType.Companion.html>PType.Comp
                                     <!--   -->
                                 </a>
                                 <ul class=
-                                              "blockListLast"
+                                              "blockList"
                                           >
                                     <li class="blockList">
                                         <h4>getSHOOT_BOW</h4>
                                         <pre class="methodSignature"> final <a href=PType.html>PType</a>&lt;EntityShootBowEvent&gt; <a href=PType.Companion.html#getSHOOT_BOW()>getSHOOT_BOW</a>()</pre>
-                                        <div class="block"><p>Represents the type of Enchantment that will activate when shooting a bow or crossbow-.</p></div>
+                                        <div class="block"><p>Represents the type of Enchantment/Artifact that will activate when shooting a bow or crossbow-.</p></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getINTERACT()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getINTERACT</h4>
+                                        <pre class="methodSignature"> final <a href=PType.html>PType</a>&lt;PlayerInteractEvent&gt; <a href=PType.Companion.html#getINTERACT()>getINTERACT</a>()</pre>
+                                        <div class="block"><p>Represents the type of Artifact that will activate when interacting.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
