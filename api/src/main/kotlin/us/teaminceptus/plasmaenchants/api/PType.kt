@@ -27,40 +27,45 @@ class PType<T : Event> private constructor(
 ) {
     companion object {
         /**
-         * Represents the type of Enchantment that will activate when attacking.
+         * Represents the type of Enchantment/Artifact that will activate when attacking.
          */
         @JvmStatic
         val ATTACKING: PType<EntityDamageByEntityEvent> = PType(EntityDamageByEntityEvent::class.java)
         /**
-         * Represents the type of Enchantment that will activate when defending or taking damage.
+         * Represents the type of Enchantment/Artifact that will activate when defending or taking damage.
          */
         @JvmStatic
         val DEFENDING: PType<EntityDamageByEntityEvent> = PType(EntityDamageByEntityEvent::class.java)
         /**
-         * Represents the type of Enchantment that will activate when taking general damage.
+         * Represents the type of Enchantment/Artifact that will activate when taking general damage.
          */
         @JvmStatic
         val DAMAGE: PType<EntityDamageEvent> = PType(EntityDamageEvent::class.java)
         /**
-         * Represents the type of Enchantment that will activate when breaking blocks.
+         * Represents the type of Enchantment/Artifact that will activate when breaking blocks.
          */
         @JvmStatic
         val BLOCK_BREAK: PType<BlockBreakEvent> = PType(BlockBreakEvent::class.java, ChatColor.BLUE)
         /**
-         * Represents the type of Enchantment that will activate when mining blocks.
+         * Represents the type of Enchantment/Artifact that will activate when mining blocks.
          */
         @JvmStatic
         val MINING: PType<BlockDamageEvent> = PType(BlockDamageEvent::class.java)
         /**
-         * Represents the type of Enchantment that runs its action every tick.
+         * Represents the type of Enchantment/Artifact that runs its action every tick.
          */
         @JvmStatic
         val PASSIVE: PType<PlayerEvent> = PType(PlayerEvent::class.java, ChatColor.GREEN)
         /**
-         * Represents the type of Enchantment that will activate when shooting a bow or crossbow-.
+         * Represents the type of Enchantment/Artifact that will activate when shooting a bow or crossbow-.
          */
         @JvmStatic
         val SHOOT_BOW: PType<EntityShootBowEvent> = PType(EntityShootBowEvent::class.java)
+        /**
+         * Represents the type of Artifact that will activate when interacting.
+         */
+        @JvmStatic
+        val INTERACT: PType<PlayerInteractEvent> = PType(PlayerInteractEvent::class.java)
     }
 
     /**

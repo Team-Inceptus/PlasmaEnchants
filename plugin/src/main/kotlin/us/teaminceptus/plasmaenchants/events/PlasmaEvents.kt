@@ -115,6 +115,9 @@ internal class PlasmaEvents(private val plugin: PlasmaEnchants) : Listener {
         execute(event.entity as? Player, event, PType.SHOOT_BOW)
     }
 
+    @EventHandler
+    fun onInteract(event: PlayerInteractEvent) = execute(event.player, event, PType.INTERACT)
+
     // Vanilla Functionality Events
 
     @EventHandler
