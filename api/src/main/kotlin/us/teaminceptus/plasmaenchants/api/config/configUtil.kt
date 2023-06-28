@@ -46,7 +46,7 @@ internal val CONFIG_MAP = ImmutableMap.builder<String, ConfigData>()
     )
 
     .putSection("enchantments.spawn.drops.chance")
-    .put("enchantments.spawn.drops.chance.global", isNumber, 0.05)
+    .put("enchantments.spawn.drops.chance.global", isNumber, 0.007)
     .put("enchantments.spawn.drops.chance.looting-modifier", isNumber, 0.01)
     .put("enchantments.spawn.drops.chance.config", FileConfiguration::isList, listOf<Map<String, Any>>(),
         { value -> value.all { map -> map.keyNotNull("bukkit") { enchant -> Enchantment.values().map { it.key.key.lowercase() }.contains(enchant.toString().lowercase()) } &&
@@ -114,7 +114,7 @@ internal val CONFIG_MAP = ImmutableMap.builder<String, ConfigData>()
     )
     .put("enchantments.spawn.mining.ignore-silk-touch", FileConfiguration::isBoolean, true)
     .putSection("enchantments.spawn.mining.chance")
-    .put("enchantments.spawn.mining.chance.global", isNumber, 0.005)
+    .put("enchantments.spawn.mining.chance.global", isNumber, 0.0005)
     .put("enchantments.spawn.mining.chance.fortune-modifier", isNumber, 0.01)
     .put("enchantments.spawn.mining.chance.config", FileConfiguration::isList, listOf<Map<String, Any>>(),
         { value -> value.all { map -> map.keyNotNull("block") { block -> Material.matchMaterial(block.toString().uppercase()) != null } &&
@@ -211,7 +211,7 @@ internal val CONFIG_MAP = ImmutableMap.builder<String, ConfigData>()
 
     .putSection("artifacts.spawn.mining")
     .put("artifacts.spawn.mining.fortune-modifier", isNumber, 0.02)
-    .put("artifacts.spawn.mining.global-chance", isNumber, 0.03)
+    .put("artifacts.spawn.mining.global-chance", isNumber, 0.0003)
 
     .putSection("artifacts.trades")
     .put("artifacts.trades.include-wandering-traders", FileConfiguration::isBoolean, true)

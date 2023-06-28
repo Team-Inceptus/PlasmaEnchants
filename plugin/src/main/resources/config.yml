@@ -74,7 +74,7 @@ enchantments:
 
         # Chance of a Mob dropping a random Enchanted Book by default
         # Example: 0.1 = 10%
-        global: 0.05
+        global: 0.007
 
         # Additional Enchantment Chance Configuration
         # Example:
@@ -178,7 +178,7 @@ enchantments:
         fortune-modifier: 0.01
 
         # Chance of a block dropping an enchanted book by default
-        global: 0.005
+        global: 0.0005
 
         # Add Additional Blocks Here (case insensitive)
         # Example:
@@ -313,7 +313,7 @@ artifacts:
 
       # The default chance of a raw artifact dropping from a mob
       # Example: 0.25 = 25%
-      global-chance: 0.05
+      global-chance: 0.005
 
       # Additional Artifact Drop Chances
       # Example:
@@ -346,7 +346,7 @@ artifacts:
 
       # The default chance of a raw artifact dropping from a block
       # Example: 0.25 = 25%
-      global-chance: 0.03
+      global-chance: 0.0003
 
       # Additional Artifact Drop Chances
       # Examples:
