@@ -1,12 +1,12 @@
 package us.teaminceptus.plasmaenchants.api.artifacts
 
-import org.bukkit.ChatColor
-import org.bukkit.Material
-import org.bukkit.NamespacedKey
+import org.bukkit.*
 import org.bukkit.block.Biome
+import org.bukkit.block.data.Ageable
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.*
 import org.bukkit.event.Event
+import org.bukkit.event.block.Action.*
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
@@ -19,7 +19,10 @@ import us.teaminceptus.plasmaenchants.api.*
 import us.teaminceptus.plasmaenchants.api.PTarget.*
 import us.teaminceptus.plasmaenchants.api.PType.Companion.ATTACKING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.BLOCK_BREAK
+import us.teaminceptus.plasmaenchants.api.PType.Companion.DAMAGE
 import us.teaminceptus.plasmaenchants.api.PType.Companion.DEFENDING
+import us.teaminceptus.plasmaenchants.api.PType.Companion.INTERACT
+import us.teaminceptus.plasmaenchants.api.PType.Companion.MINING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.PASSIVE
 import us.teaminceptus.plasmaenchants.api.PType.Companion.SHOOT_BOW
 import us.teaminceptus.plasmaenchants.api.enchants.PEnchantment
@@ -29,15 +32,15 @@ import java.security.SecureRandom
 private val r = SecureRandom()
 
 /**
- * Represents a PlasmaEnchants Artifact.
+ * Represents a PlasmaEnchants Artifact. Artifacts available in later versions are not available here.
  * <p>The difference between Artifacts and Enchantments is that Enchantments can be combined, whereas items can only have one artifact. Artifacts can be removed via a Gridstone just like a [PEnchantment].</p>
  */
-@Suppress("unchecked_cast", "deprecation")
+@Suppress("unchecked_cast")
 enum class PArtifacts(
     override val target: PTarget,
     private val info: Action<*>,
     override val ringItem: ItemStack,
-    private val base: ItemStack,
+    override val itemType: Material,
     override val color: ChatColor = ChatColor.YELLOW
 ) : PArtifact {
 
@@ -95,12 +98,40 @@ enum class PArtifacts(
         }, ItemStack(Material.CREEPER_HEAD), Material.NETHER_STAR, ChatColor.LIGHT_PURPLE
     ),
 
+    STEEL(
+        AXES, Action(PASSIVE) { event ->
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.INCREASE_DAMAGE, 3, 3, true))
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 3, 0, true))
+        }, ItemStack(Material.IRON_BLOCK, 48), Material.ANVIL, ChatColor.GOLD
+    ),
+
+    SHULKER(
+        SWORDS, Action(INTERACT) { event ->
+            val bullet = event.player.world.spawn(event.player.eyeLocation, ShulkerBullet::class.java)
+            bullet.target = event.player.getNearbyEntities(10.0, 10.0, 10.0).randomOrNull() as? LivingEntity
+        }, ItemStack(Material.SHULKER_SHELL, 48), Material.SHULKER_SHELL, ChatColor.GOLD
+    ),
+
+    END(
+        MELEE_WEAPONS, Action(ATTACKING) { event ->
+            val p = event.damager as? Player ?: return@Action
+
+            if (event.entity is Enderman || event.entity is Endermite || event.entity is EnderDragon) {
+                event.damage *= 5.0
+                return@Action
+            }
+
+            if (p.world.environment == World.Environment.THE_END)
+                event.damage *= 2.0
+        }, ItemStack(Material.CHORUS_FRUIT, 64), Material.END_STONE, ChatColor.LIGHT_PURPLE
+    ),
+
     // Armor Artifacts
 
     LAVA(
         CHESTPLATES, Action(DEFENDING) { event ->
             event.damager.fireTicks += 120
-        }, ItemStack(Material.OBSIDIAN, 24), Material.LAVA_BUCKET, ChatColor.LIGHT_PURPLE
+        }, ItemStack(Material.OBSIDIAN, 60), Material.LAVA_BUCKET, ChatColor.LIGHT_PURPLE
     ),
 
     KELP(
@@ -155,12 +186,110 @@ enum class PArtifacts(
         }, ItemStack(Material.INK_SAC, 48), Material.INK_SAC
     ),
 
+    ZOMBIE(
+         ARMOR, Action(DEFENDING) { event ->
+            val entity = event.damager as? LivingEntity ?: return@Action
+
+            if (r.nextDouble() < 0.25)
+                entity.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 20 * r.nextInt(1, 3), r.nextInt(0, 1), true))
+        }, ItemStack(Material.ROTTEN_FLESH, 64), Material.ZOMBIE_HEAD, ChatColor.AQUA
+    ),
+
+    BONE(
+        CHESTPLATES, Action(DEFENDING) { event ->
+            val entity = event.damager as? Projectile ?: return@Action
+            if (r.nextDouble() < 0.25) {
+                event.isCancelled = true
+                entity.velocity = entity.velocity.multiply(-0.75)
+            }
+        }, ItemStack(Material.BONE, 64), Material.BONE_MEAL, ChatColor.GOLD
+    ),
+
+    PRISMARINE(
+        CHESTPLATES, Action(PASSIVE) { event ->
+            val p = event.player
+            val start = p.location
+            val step = 0.1
+
+            p.getNearbyEntities(2.5, 2.5, 2.5)
+                .filterIsInstance<Monster>()
+                .minByOrNull { it.location.distanceSquared(p.location) }
+                .apply {
+                    if (this == null) return@Action
+
+                    val line = this.location.subtract(p.location.toVector()).toVector()
+                    var d = 0.0
+                    while (d < line.length()) {
+                        line.multiply(d)
+                        start.add(line)
+                        start.world!!.spawnParticle(Particle.WATER_BUBBLE, start, 2, 0.0, 0.0, 0.0, 0.0)
+                        start.subtract(line)
+                        line.normalize()
+                        d += step
+                    }
+
+                    if (r.nextDouble() < 0.01)
+                        this.damage(1.0, p)
+
+                }
+
+        }, ItemStack(Material.PRISMARINE_SHARD, 64), Material.PRISMARINE_SHARD
+    ),
+
+    WART(
+        ARMOR, Action(DEFENDING) { event ->
+            val p = event.entity as? Player ?: return@Action
+            if (p.world.environment != World.Environment.NETHER) return@Action
+
+            event.damage /= 2
+        }, ItemStack(Material.NETHER_WART_BLOCK, 48), Material.NETHER_WART, ChatColor.GOLD
+    ),
+
+    POISON(
+        ARMOR, Action(PASSIVE) { event ->
+            event.player.getNearbyEntities(2.5, 2.5, 2.5)
+                .minByOrNull { it.location.distanceSquared(event.player.location) }
+                .apply {
+                    if (this !is LivingEntity) return@Action
+
+                    addPotionEffect(PotionEffect(PotionEffectType.POISON, 3, 0, true))
+                }
+        }, ItemStack(Material.SPIDER_EYE, 64), Material.POISONOUS_POTATO, ChatColor.AQUA
+    ),
+
+    DEATH(
+        ARMOR, Action(PASSIVE) { event ->
+            event.player.getNearbyEntities(3.5, 3.5, 3.5)
+                .minByOrNull { it.location.distanceSquared(event.player.location) }
+                .apply {
+                    if (this !is LivingEntity) return@Action
+
+                    addPotionEffect(PotionEffect(PotionEffectType.POISON, 3, 1, true))
+                }
+        }, ItemStack(Material.WITHER_ROSE, 48), Material.WITHER_SKELETON_SKULL, ChatColor.LIGHT_PURPLE
+    ),
+
     // Ranged Artifacts
 
     FLINT(
-        CROSSBOW, Action(SHOOT_BOW) { event ->
-            event.projectile.velocity.multiply(1.2)
+        RANGED, Action(SHOOT_BOW) { event ->
+            event.projectile.velocity.multiply(1.35)
         }, ItemStack(Material.FLINT, 64), Material.FLINT
+    ),
+
+    FIREWORK(
+        BOW, Action(ATTACKING) { event ->
+            event.entity.world.createExplosion(event.entity.location, 3F, true, false, event.damager)
+        }, ItemStack(Material.FIREWORK_STAR, 64), Material.FIREWORK_STAR
+    ),
+
+    BLAZE(
+        BOW, Action(INTERACT) { event ->
+            if (event.action != LEFT_CLICK_AIR && event.action != LEFT_CLICK_BLOCK) return@Action
+
+            val loc = event.player.eyeLocation
+            event.player.world.spawn(loc, SmallFireball::class.java)
+        }, ItemStack(Material.BLAZE_ROD, 64), Material.BLAZE_POWDER, ChatColor.GOLD
     ),
 
     // Tool Artifacts
@@ -197,63 +326,29 @@ enum class PArtifacts(
 
             event.block.world.dropItemNaturally(event.block.location, ItemStack(drop))
         }, ItemStack(Material.APPLE, 32), Material.APPLE
-    )
+    ),
+
+    TNT(
+        PICKAXES, Action(BLOCK_BREAK) { event ->
+            if (r.nextDouble() < 0.25)
+                event.block.world.createExplosion(event.block.location, 2F, false, true, event.player)
+        }, ItemStack(Material.TNT, 64), Material.TNT, ChatColor.GOLD
+    ),
+
+    FARMING(
+        HOES, Action(MINING) { event ->
+            val material = event.block.type
+            if (event.block.blockData is Ageable || material == Material.HAY_BLOCK || material == Material.PUMPKIN || material == Material.MELON)
+                event.instaBreak = true
+        }, ItemStack(Material.HAY_BLOCK, 64), Material.HAY_BLOCK, ChatColor.AQUA
+    ),
 
     ;
-
-    constructor(
-        target: PTarget,
-        info: Action<*>,
-        ringItem: ItemStack,
-        base: Material,
-        color: ChatColor = ChatColor.YELLOW
-    ) : this (target, info, ringItem, ItemStack(base), color)
-
-    override val displayName
-        get() = this.name.split("_").joinToString(" ") { it -> it.lowercase().replaceFirstChar { it.uppercase() } }
-
-    override val description
-        get() = PlasmaConfig.config.get("artifact.${displayName.lowercase()}.desc") ?: "No description provided."
 
     override val type
         get() = info.type
 
-    override val recipe: ShapedRecipe
-        get() {
-            val recipe = ShapedRecipe(NamespacedKey(PlasmaConfig.plugin, name.lowercase()), item)
-
-            recipe.shape("RRR", "RAR", "RRR")
-            recipe.setIngredient('R', RecipeChoice.ExactChoice(ringItem))
-            recipe.setIngredient('A', RecipeChoice.ExactChoice(PArtifact.RAW_ARTIFACT))
-            recipe.group = "PlasmaEnchants Artifact"
-
-            return recipe
-        }
-
-    override val item: ItemStack
-        get() = base.clone().apply {
-            itemMeta = itemMeta!!.apply {
-                setDisplayName("$color${asString()}")
-
-                addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true)
-                addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS)
-
-                persistentDataContainer[artifactsKey, NAMESPACED_KEY] = key
-                persistentDataContainer[artifactItemKey, PersistentDataType.BYTE] = 1.toByte()
-            }
-        }
-
     override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.plugin, "${name.lowercase()}_artifact")
-
-    override val priceMultiplier: Int
-        get() {
-            return when (color) {
-                ChatColor.AQUA -> 5
-                ChatColor.GOLD -> 7
-                ChatColor.LIGHT_PURPLE -> 10
-                else -> 3
-            }
-        }
 
     override fun toString(): String = asString()
 

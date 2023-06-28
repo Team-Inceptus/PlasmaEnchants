@@ -5,14 +5,14 @@ import com.mojang.authlib.properties.Property
 import org.bukkit.ChatColor
 import org.bukkit.Keyed
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.event.Event
-import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.Recipe
-import org.bukkit.inventory.ShapedRecipe
+import org.bukkit.inventory.*
 import org.bukkit.inventory.meta.SkullMeta
-import us.teaminceptus.plasmaenchants.api.PTarget
-import us.teaminceptus.plasmaenchants.api.PType
-import us.teaminceptus.plasmaenchants.api.PlasmaConfig
+import org.bukkit.persistence.PersistentDataType
+import us.teaminceptus.plasmaenchants.api.*
+import us.teaminceptus.plasmaenchants.api.util.NAMESPACED_KEY
 import java.util.*
 import java.util.function.Consumer
 
@@ -54,13 +54,8 @@ interface PArtifact : Keyed, Consumer<Event> {
      * Fetches the human-readable name of this artifact.
      * @return Name of artifact
      */
-    val displayName: String
-
-    /**
-     * Fetches the human-readable description of this artifact.
-     * @return Description of artifact
-     */
-    val description: String
+    val displayName
+        get() = key.key.substringBeforeLast('_').uppercase().split("_").joinToString(" ") { it -> it.lowercase().replaceFirstChar { it.uppercase() } }
 
     /**
      * Fetches the Target Type of this artifact.
@@ -91,25 +86,61 @@ interface PArtifact : Keyed, Consumer<Event> {
      * Fetches a ShapedRecipe instance clone for this artifact.
      * @return ShapedRecipe
      */
+    @Suppress("deprecation")
     val recipe: ShapedRecipe
+        get() {
+            val recipe = ShapedRecipe(NamespacedKey(PlasmaConfig.plugin, key.key.lowercase()), item)
+
+            recipe.shape("RRR", "RAR", "RRR")
+            recipe.setIngredient('R', RecipeChoice.ExactChoice(ringItem))
+            recipe.setIngredient('A', RecipeChoice.ExactChoice(RAW_ARTIFACT))
+            recipe.group = "PlasmaEnchants Artifact"
+
+            return recipe
+        }
+
+    /**
+     * Fetches the Material type of this artifact.
+     * @return Material Type
+     */
+    val itemType: Material
 
     /**
      * Fetches the ItemStack representation of this artifact.
      * @return ItemStack Representation
      */
     val item: ItemStack
+        get() = ItemStack(itemType).clone().apply {
+            itemMeta = itemMeta!!.apply {
+                setDisplayName("$color${asString()}")
+
+                addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true)
+                addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS)
+
+                persistentDataContainer[artifactsKey, NAMESPACED_KEY] = key
+                persistentDataContainer[artifactItemKey, PersistentDataType.BYTE] = 1.toByte()
+            }
+        }
 
     /**
      * Fetches the trading price multiplier for this artifact, determined by its rarity.
      * @return Price Multiplier
      */
     val priceMultiplier: Int
+        get() {
+            return when (color) {
+                ChatColor.AQUA -> 5
+                ChatColor.GOLD -> 7
+                ChatColor.LIGHT_PURPLE -> 10
+                else -> 3
+            }
+        }
 
     /**
      * Fetches the String representation of this artifact.
      * @return String Representation
      */
-    fun asString(): String = String.format(PlasmaConfig.config.locale, PlasmaConfig.config.get("constants.artifact") ?: "%s Artifact", "${color}${displayName}")
+    fun asString(): String = String.format(PlasmaConfig.config.locale, PlasmaConfig.config.get("constants.artifact") ?: "%s Artifact", "$color$displayName")
 
     val isDisabled: Boolean
         /**
