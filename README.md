@@ -38,3 +38,9 @@ Coming Soon...
 
 ---
 ## 📷 Screenshots
+
+![Screenshot1](https://media.discordapp.net/attachments/894254760075603980/1123748682391621762/2023-06-28_13.38.15.png)
+![Screenshot2](https://media.discordapp.net/attachments/894254760075603980/1123748682714587136/2023-06-28_13.39.03.png)
+![Screenshot3](https://media.discordapp.net/attachments/894254760075603980/1123748683012374668/2023-06-28_13.39.37.png)
+![Screenshot4](https://media.discordapp.net/attachments/894254760075603980/1123748683310174299/2023-06-28_18.52.19.png)
+![Screenshot5](https://media.discordapp.net/attachments/894254760075603980/1123748683679277076/2023-06-28_18.53.11.png)
