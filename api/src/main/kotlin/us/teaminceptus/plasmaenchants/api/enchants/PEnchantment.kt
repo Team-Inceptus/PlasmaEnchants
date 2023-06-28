@@ -4,10 +4,7 @@ import org.bukkit.Keyed
 import org.bukkit.Material
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
-import us.teaminceptus.plasmaenchants.api.PTarget
-import us.teaminceptus.plasmaenchants.api.PType
-import us.teaminceptus.plasmaenchants.api.PlasmaConfig
-import us.teaminceptus.plasmaenchants.api.toRoman
+import us.teaminceptus.plasmaenchants.api.*
 import java.util.function.BiConsumer
 
 /**
@@ -19,7 +16,10 @@ interface PEnchantment : BiConsumer<Event, Int>, Keyed {
      * Fetches the display name of this PEnchantment.
      * @return Name of Enchantment
      */
-    val displayName: String
+    val displayName
+        get() = key.key.uppercase().split("_").joinToString(" ") {
+                it -> if (it.lowercase() == "of") it.lowercase() else it.lowercase().replaceFirstChar { it.uppercase() }
+        }
 
     /**
      * Fetches the maximum level of this PEnchantment.
@@ -63,14 +63,24 @@ interface PEnchantment : BiConsumer<Event, Int>, Keyed {
      * @param level Level of Enchantment
      * @return String Representation of Enchantment
      */
-    fun toString(level: Int): String = "${type.color}$displayName ${level.toRoman()}"
+    fun toString(level: Int): String {
+        var str = "${type.color}$displayName"
+        if (maxLevel != 1)
+            str += " ${level.toRoman()}"
+
+        return str
+    }
 
     /**
      * Generates an [Material.ENCHANTED_BOOK] book for this PEnchantment.
      * @param level Level of Enchantment
      * @return Enchanted Book
      */
-    fun generateBook(level: Int): ItemStack
+    fun generateBook(level: Int): ItemStack = ItemStack(Material.ENCHANTED_BOOK).apply {
+        itemMeta = itemMeta!!.apply {
+            addEnchant(this@PEnchantment, level.coerceAtMost(if (PlasmaConfig.config.isIgnoreEnchantmentLevelRestriction) Integer.MAX_VALUE else maxLevel))
+        }
+    }
 
     val isDisabled: Boolean
         /**

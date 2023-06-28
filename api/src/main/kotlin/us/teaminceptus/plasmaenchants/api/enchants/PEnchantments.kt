@@ -212,6 +212,71 @@ enum class PEnchantments(
                 event.damage *= 1 + (level * 0.75)
         }),
 
+    POSEIDON(
+        TRIDENT, 5, Action(ATTACKING) { event, level ->
+            val p = event.damager as? Player ?: return@Action
+            if (p.location.block.type != Material.WATER) return@Action
+
+            event.damage *= 1 + (level * 0.15)
+        }),
+
+    RECOVERY(
+        MELEE_WEAPONS, 4, Action(ATTACKING) { event, level ->
+            val p = event.damager as? Player ?: return@Action
+            val target = event.entity as? Player ?: return@Action
+
+            if (target.health - event.finalDamage <= 0)
+                p.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION, 60 * level, level / 2, true))
+        }),
+
+    STEALTH(
+        AXES, 7, Action(ATTACKING) { event, level ->
+            val p = event.damager as? Player ?: return@Action
+            if (p.isSneaking)
+                event.damage *= 1 + (level * 0.1)
+        }, WITHERING),
+
+    BLEEDING(
+        MELEE_WEAPONS, 4, Action(ATTACKING) { event, level ->
+            val target = event.entity as? LivingEntity ?: return@Action
+
+            if (r.nextDouble() < (0.15 * level)) {
+                target.world.playSound(target.location, Sound.BLOCK_METAL_BREAK, 1F, 1F)
+
+                var i = 0
+                object : BukkitRunnable() {
+                    override fun run() {
+                        if (i >= 5 + (level * 2)) {
+                            cancel()
+                            return
+                        }
+
+                        target.damage(1.0, event.damager)
+                        i++
+                    }
+                }.runTaskTimer(PlasmaConfig.plugin, 20, 20)
+            }
+        }),
+
+    VANISH(
+        SWORDS, 3, Action(ATTACKING) { event, level ->
+            val p = event.damager as? Player ?: return@Action
+            val target = event.entity as? LivingEntity ?: return@Action
+            if (target.health - event.finalDamage < 0) return@Action
+
+            p.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, 60 * level, 1, true))
+            p.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 40 * level, level - 1, true))
+        }),
+
+    STREAK(
+        AXES, 2, Action(ATTACKING) { event, level ->
+            val p = event.damager as? Player ?: return@Action
+            val target = event.entity as? LivingEntity ?: return@Action
+            if (target.health - event.finalDamage < 0) return@Action
+
+            p.addPotionEffect(PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40 * level, level - 1, true))
+        }),
+
     // Attacking Enchantments - Collectors
 
     PLAYER_COLLECTOR(
@@ -414,6 +479,25 @@ enum class PEnchantments(
             event.damage = damage
         }),
 
+    REINFORCEMENT(
+        ARMOR, 4, Action(DEFENDING) { event, level ->
+            val entity = event.damager as? LivingEntity ?: return@Action
+
+            if (r.nextDouble() < 0.25) {
+                entity.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 20 * 3, level - 1, true))
+                entity.world.playSound(entity.location, Sound.ENCHANT_THORNS_HIT, 1F, 1F)
+            }
+        }),
+
+    TANK(
+        ARMOR, 3, Action(DEFENDING) { event, level ->
+            val entity = event.damager as? LivingEntity ?: return@Action
+            val item = entity.equipment?.itemInMainHand ?: return@Action
+
+            if (item.type.name.contains("AXE"))
+                event.damage *= 1.0 - (level * 0.03)
+        }),
+
     // Damage Enchantments
 
     LIGHTFOOT(
@@ -453,7 +537,7 @@ enum class PEnchantments(
                 if (it is LivingEntity)
                     it.damage(dmg, event.entity)
             }
-        }),
+        }, LIGHTFOOT),
 
     MOON_PROTECTION(
         ARMOR, 4, Action(DAMAGE) { event, level ->
@@ -494,6 +578,12 @@ enum class PEnchantments(
 
             if (level == 4) event.isCancelled = true
             else event.damage *= 1 - (level * 0.25)
+        }),
+
+    SNOW_WALKER(
+        BOOTS, 1, Action(DAMAGE) { event, _ ->
+            if (event.cause == DamageCause.HOT_FLOOR)
+                event.isCancelled = true
         }),
 
     // Mining Enchantments
@@ -594,6 +684,8 @@ enum class PEnchantments(
                         else
                             damageable.damage += 1
                         itemMeta = damageable as ItemMeta
+
+                        if (damageable.damage >= this.type.maxDurability) return@Action
                     }
 
                 it.breakNaturally(event.player.inventory.itemInMainHand)
@@ -602,6 +694,22 @@ enum class PEnchantments(
         }),
 
     // Passive Enchantments
+
+    BRISK(
+        MELEE_WEAPONS, 3, Action(PASSIVE) { event, level ->
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 3, level - 1, true))
+        }),
+
+    CLOVER(
+        HELMETS, 6, Action(PASSIVE) { event, level ->
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.LUCK, 3, level - 1, true))
+        }),
+
+    BUOYANT(
+        LEGGINGS, 2, Action(PASSIVE) { event, level ->
+            if (event.player.location.block.isLiquid)
+                event.player.velocity.add(Vector(0.0, 0.15 * level, 0.0))
+        }),
 
     JUMP(
         BOOTS, 5, Action(PASSIVE) { event, level ->
@@ -612,6 +720,27 @@ enum class PEnchantments(
         BOOTS, 2, Action(PASSIVE) { event, level ->
             event.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW_FALLING, 3, level - 1))
         }, JUMP),
+
+    HASTE(
+        TOOLS, 4, Action(PASSIVE) { event, level ->
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.FAST_DIGGING, 3, level - 1))
+        }),
+
+    HEALER(
+        HELMETS, 2, Action(PASSIVE) { event, level ->
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION, 3, level - 1))
+        }),
+
+    FLASHLIGHT(
+        HELMETS, 1, Action(PASSIVE) { event, _ ->
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.NIGHT_VISION, 3, 0))
+        }),
+
+    DENSITY(
+        CHESTPLATES, 2, Action(PASSIVE) { event, level ->
+            if (event.player.health < (event.player.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value?.div(2) ?: 10.0))
+                event.player.addPotionEffect(PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 3, level - 1))
+        }),
 
     // Ranged Enchantments
 
@@ -669,6 +798,44 @@ enum class PEnchantments(
             entity.velocity = vel
         }),
 
+    HOMING(
+        RANGED, 3, Action(SHOOT_BOW) { event, level ->
+            val proj = event.projectile as? Projectile ?: return@Action
+            val shooter = proj.shooter as? Player ?: return@Action
+            object : BukkitRunnable() {
+                override fun run() {
+                    if (proj.isOnGround || proj.isDead) {
+                        cancel()
+                        return
+                    }
+
+                    proj.getNearbyEntities(level * 5.0, level * 5.0, level * 5.0).forEach {
+                        val target = it as? LivingEntity ?: return@forEach
+                        if (target == shooter) return@forEach
+
+                        val dist = level * 2
+                        if (proj.location.distanceSquared(target.location) < dist * dist)
+                            proj.velocity = target.location.toVector().subtract(proj.location.toVector()).normalize().multiply(level)
+                    }
+                }
+            }.runTaskTimer(PlasmaConfig.plugin, 0, 1)
+        }),
+
+    // Misc Enchantments
+
+    GROWTH(
+        ALL, 2, Action(ATTACKING) { event, level ->
+            val p = event.damager as? Player ?: return@Action
+            val tool = p.inventory.itemInMainHand
+            val meta = tool.itemMeta ?: return@Action
+
+            if (meta !is Damageable) return@Action
+
+            if (r.nextDouble() < 0.2)
+                meta.damage += 1 + level
+
+            tool.itemMeta = meta
+        })
 
     ;
 
@@ -686,11 +853,6 @@ enum class PEnchantments(
         conflicts: PEnchantment
     ) : this(target, maxLevel, info, listOf(conflicts))
 
-    override val displayName
-        get() = this.name.split("_").joinToString(" ") {
-            it -> if (it.lowercase() == "of") it.lowercase() else it.lowercase().replaceFirstChar { it.uppercase() }
-        }
-
     override val type
         get() = info.type
 
@@ -700,12 +862,6 @@ enum class PEnchantments(
     override fun accept(e: Event, level: Int) = info.action(e, level)
 
     override fun getKey(): NamespacedKey = NamespacedKey(PlasmaConfig.plugin, name.lowercase())
-
-    override fun generateBook(level: Int): ItemStack = ItemStack(Material.ENCHANTED_BOOK).apply {
-            itemMeta = itemMeta!!.apply {
-                addEnchant(this@PEnchantments, level.coerceAtMost(if (PlasmaConfig.config.isIgnoreEnchantmentLevelRestriction) Integer.MAX_VALUE else maxLevel))
-            }
-        }
 
     private class Action<T : Event>(val type: PType<T>, action: (T, Int) -> Unit) {
         val action: (Event, Int) -> Unit
