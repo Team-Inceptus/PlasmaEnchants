@@ -140,7 +140,7 @@ var pathtoroot = "../../../../../";
 public enum <span class="typeNameLabel"><a href=PArtifacts.html>PArtifacts</a></span>
 extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>Enum</a>&lt;<a href=PArtifacts.html>PArtifacts</a>&gt; implements <a href=PArtifact.html>PArtifact</a>
                     </pre>
-                    <div class="block"><p>Represents a PlasmaEnchants Artifact.</p>&lt;p&gt;The difference between Artifacts and Enchantments is that Enchantments can be combined, whereas items can only have one artifact. Artifacts can be removed via a Gridstone just like a [PEnchantment].&lt;/p&gt;</div>
+                    <div class="block"><p>Represents a PlasmaEnchants Artifact. Artifacts available in later versions are not available here.</p>&lt;p&gt;The difference between Artifacts and Enchantments is that Enchantments can be combined, whereas items can only have one artifact. Artifacts can be removed via a Gridstone just like a [PEnchantment].&lt;/p&gt;</div>
                 </li>
             </ul>
         </div>
@@ -188,50 +188,26 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                         </tr>
                                         
                                         <tr class="altColor">
-                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#displayName>displayName</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr class="rowColor">
-                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#description>description</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr class="altColor">
                                             <td class="colFirst"><code>private final <a href=../PType.html>PType</a>&lt;out Event&gt;</code></td>
                                             <th class="colSecond" scope="row"><code><a href=PArtifacts.html#type>type</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr class="rowColor">
-                                            <td class="colFirst"><code>private final ShapedRecipe</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#recipe>recipe</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>private final ItemStack</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#item>item</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr class="rowColor">
-                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code></td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#priceMultiplier>priceMultiplier</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr class="altColor">
                                             <td class="colFirst"><code>private final <a href=../PTarget.html>PTarget</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=PArtifacts.html#target>target</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="rowColor">
+                                        <tr class="altColor">
                                             <td class="colFirst"><code>private final ItemStack</code></td>
                                             <th class="colSecond" scope="row"><code><a href=PArtifacts.html#ringItem>ringItem</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>private final Material</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#itemType>itemType</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
@@ -250,6 +226,30 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                         <tr class="altColor">
                                             <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=../enchants/PEnchantments.html#ordinal>ordinal</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#displayName>displayName</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>private final ShapedRecipe</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#recipe>recipe</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>private final ItemStack</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#item>item</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#priceMultiplier>priceMultiplier</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
@@ -344,79 +344,157 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                     
                                     <tr class="altColor">
                                         <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
-                                                href="TODO"><a href=PArtifacts.html#LAVA>LAVA</a></a></span></code></th>
+                                                href="TODO"><a href=PArtifacts.html#STEEL>STEEL</a></a></span></code></th>
                                         <td class="colLast"></td>
                                     </tr>
                                     
                                     <tr class="rowColor">
+                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
+                                                href="TODO"><a href=PArtifacts.html#SHULKER>SHULKER</a></a></span></code></th>
+                                        <td class="colLast"></td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
+                                                href="TODO"><a href=PArtifacts.html#END>END</a></a></span></code></th>
+                                        <td class="colLast"></td>
+                                    </tr>
+                                    
+                                    <tr class="rowColor">
+                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
+                                                href="TODO"><a href=PArtifacts.html#LAVA>LAVA</a></a></span></code></th>
+                                        <td class="colLast"></td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
                                         <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
                                                 href="TODO"><a href=PArtifacts.html#KELP>KELP</a></a></span></code></th>
                                         <td class="colLast"></td>
                                     </tr>
                                     
-                                    <tr class="altColor">
+                                    <tr class="rowColor">
                                         <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
                                                 href="TODO"><a href=PArtifacts.html#EXPERIENCE>EXPERIENCE</a></a></span></code></th>
                                         <td class="colLast"></td>
                                     </tr>
                                     
-                                    <tr class="rowColor">
+                                    <tr class="altColor">
                                         <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
                                                 href="TODO"><a href=PArtifacts.html#PHANTOM>PHANTOM</a></a></span></code></th>
                                         <td class="colLast"></td>
                                     </tr>
                                     
-                                    <tr class="altColor">
+                                    <tr class="rowColor">
                                         <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
                                                 href="TODO"><a href=PArtifacts.html#FEATHER>FEATHER</a></a></span></code></th>
                                         <td class="colLast"></td>
                                     </tr>
                                     
-                                    <tr class="rowColor">
+                                    <tr class="altColor">
                                         <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
                                                 href="TODO"><a href=PArtifacts.html#SEA>SEA</a></a></span></code></th>
                                         <td class="colLast"></td>
                                     </tr>
                                     
-                                    <tr class="altColor">
+                                    <tr class="rowColor">
                                         <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
                                                 href="TODO"><a href=PArtifacts.html#ANVIL>ANVIL</a></a></span></code></th>
                                         <td class="colLast"></td>
                                     </tr>
                                     
-                                    <tr class="rowColor">
+                                    <tr class="altColor">
                                         <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
                                                 href="TODO"><a href=PArtifacts.html#SQUID>SQUID</a></a></span></code></th>
                                         <td class="colLast"></td>
                                     </tr>
                                     
+                                    <tr class="rowColor">
+                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
+                                                href="TODO"><a href=PArtifacts.html#ZOMBIE>ZOMBIE</a></a></span></code></th>
+                                        <td class="colLast"></td>
+                                    </tr>
+                                    
                                     <tr class="altColor">
+                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
+                                                href="TODO"><a href=PArtifacts.html#BONE>BONE</a></a></span></code></th>
+                                        <td class="colLast"></td>
+                                    </tr>
+                                    
+                                    <tr class="rowColor">
+                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
+                                                href="TODO"><a href=PArtifacts.html#PRISMARINE>PRISMARINE</a></a></span></code></th>
+                                        <td class="colLast"></td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
+                                                href="TODO"><a href=PArtifacts.html#WART>WART</a></a></span></code></th>
+                                        <td class="colLast"></td>
+                                    </tr>
+                                    
+                                    <tr class="rowColor">
+                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
+                                                href="TODO"><a href=PArtifacts.html#POISON>POISON</a></a></span></code></th>
+                                        <td class="colLast"></td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
+                                                href="TODO"><a href=PArtifacts.html#DEATH>DEATH</a></a></span></code></th>
+                                        <td class="colLast"></td>
+                                    </tr>
+                                    
+                                    <tr class="rowColor">
                                         <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
                                                 href="TODO"><a href=PArtifacts.html#FLINT>FLINT</a></a></span></code></th>
                                         <td class="colLast"></td>
                                     </tr>
                                     
+                                    <tr class="altColor">
+                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
+                                                href="TODO"><a href=PArtifacts.html#FIREWORK>FIREWORK</a></a></span></code></th>
+                                        <td class="colLast"></td>
+                                    </tr>
+                                    
                                     <tr class="rowColor">
+                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
+                                                href="TODO"><a href=PArtifacts.html#BLAZE>BLAZE</a></a></span></code></th>
+                                        <td class="colLast"></td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
                                         <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
                                                 href="TODO"><a href=PArtifacts.html#IRON>IRON</a></a></span></code></th>
                                         <td class="colLast"></td>
                                     </tr>
                                     
-                                    <tr class="altColor">
+                                    <tr class="rowColor">
                                         <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
                                                 href="TODO"><a href=PArtifacts.html#GOLD>GOLD</a></a></span></code></th>
                                         <td class="colLast"></td>
                                     </tr>
                                     
-                                    <tr class="rowColor">
+                                    <tr class="altColor">
                                         <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
                                                 href="TODO"><a href=PArtifacts.html#DIAMOND>DIAMOND</a></a></span></code></th>
                                         <td class="colLast"></td>
                                     </tr>
                                     
-                                    <tr class="altColor">
+                                    <tr class="rowColor">
                                         <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
                                                 href="TODO"><a href=PArtifacts.html#APPLE>APPLE</a></a></span></code></th>
+                                        <td class="colLast"></td>
+                                    </tr>
+                                    
+                                    <tr class="altColor">
+                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
+                                                href="TODO"><a href=PArtifacts.html#TNT>TNT</a></a></span></code></th>
+                                        <td class="colLast"></td>
+                                    </tr>
+                                    
+                                    <tr class="rowColor">
+                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
+                                                href="TODO"><a href=PArtifacts.html#FARMING>FARMING</a></a></span></code></th>
                                         <td class="colLast"></td>
                                     </tr>
                                     
@@ -487,22 +565,6 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                         </tr>
                                         
                                         <tr id="i5" class="rowColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#getDisplayName()>getDisplayName</a>() </code>
-                                            </th>
-                                            <td class="colLast">Fetches the human-readable name of this artifact.</td>
-                                        </tr>
-                                        
-                                        <tr id="i6" class="altColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#getDescription()>getDescription</a>() </code>
-                                            </th>
-                                            <td class="colLast">Fetches the human-readable description of this artifact.</td>
-                                        </tr>
-                                        
-                                        <tr id="i7" class="rowColor">
                                             <td class="colFirst"><code><a href=../PType.html>PType</a>&lt;out Event&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=PArtifacts.html#getType()>getType</a>() </code>
@@ -510,31 +572,7 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                             <td class="colLast">Fetches the Type of this artifact.</td>
                                         </tr>
                                         
-                                        <tr id="i8" class="altColor">
-                                            <td class="colFirst"><code>ShapedRecipe</code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#getRecipe()>getRecipe</a>() </code>
-                                            </th>
-                                            <td class="colLast">Fetches a ShapedRecipe instance clone for this artifact.</td>
-                                        </tr>
-                                        
-                                        <tr id="i9" class="rowColor">
-                                            <td class="colFirst"><code>ItemStack</code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#getItem()>getItem</a>() </code>
-                                            </th>
-                                            <td class="colLast">Fetches the ItemStack representation of this artifact.</td>
-                                        </tr>
-                                        
-                                        <tr id="i10" class="altColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#getPriceMultiplier()>getPriceMultiplier</a>() </code>
-                                            </th>
-                                            <td class="colLast">Fetches the trading price multiplier for this artifact, determined by its rarity.</td>
-                                        </tr>
-                                        
-                                        <tr id="i11" class="rowColor">
+                                        <tr id="i6" class="altColor">
                                             <td class="colFirst"><code><a href=../PTarget.html>PTarget</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=PArtifacts.html#getTarget()>getTarget</a>() </code>
@@ -542,7 +580,7 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                             <td class="colLast">Fetches the Target Type of this artifact.</td>
                                         </tr>
                                         
-                                        <tr id="i12" class="altColor">
+                                        <tr id="i7" class="rowColor">
                                             <td class="colFirst"><code>ItemStack</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=PArtifacts.html#getRingItem()>getRingItem</a>() </code>
@@ -552,7 +590,15 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
 </td>
                                         </tr>
                                         
-                                        <tr id="i13" class="rowColor">
+                                        <tr id="i8" class="altColor">
+                                            <td class="colFirst"><code>Material</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PArtifacts.html#getItemType()>getItemType</a>() </code>
+                                            </th>
+                                            <td class="colLast">Fetches the Material type of this artifact.</td>
+                                        </tr>
+                                        
+                                        <tr id="i9" class="rowColor">
                                             <td class="colFirst"><code>ChatColor</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=PArtifacts.html#getColor()>getColor</a>() </code>
@@ -569,7 +615,7 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                             <!--   -->
                                         </a>
                                             <h3>Methods inherited from class&nbsp;us.teaminceptus.plasmaenchants.api.artifacts.PArtifact</h3>
-                                            <code>asString, isDisabled</code></li>
+                                            <code>asString, getDisplayName, getItem, getPriceMultiplier, getRecipe, isDisabled</code></li>
                                  
                                     <li class="blockList"><a id="methods.inherited.from.class.java.util.function.Consumer">
                                             <!--   -->
@@ -697,36 +743,6 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                     </li>
                                 </ul>
                                 
-                                <a id="getDisplayName()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getDisplayName</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=PArtifacts.html#getDisplayName()>getDisplayName</a>()</pre>
-                                        <div class="block"><p>Fetches the human-readable name of this artifact.</p></div>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="getDescription()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getDescription</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=PArtifacts.html#getDescription()>getDescription</a>()</pre>
-                                        <div class="block"><p>Fetches the human-readable description of this artifact.</p></div>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
                                 <a id="getType()">
                                     <!--   -->
                                 </a>
@@ -737,51 +753,6 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                         <h4>getType</h4>
                                         <pre class="methodSignature"> <a href=../PType.html>PType</a>&lt;out Event&gt; <a href=PArtifacts.html#getType()>getType</a>()</pre>
                                         <div class="block"><p>Fetches the Type of this artifact.</p></div>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="getRecipe()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getRecipe</h4>
-                                        <pre class="methodSignature"> ShapedRecipe <a href=PArtifacts.html#getRecipe()>getRecipe</a>()</pre>
-                                        <div class="block"><p>Fetches a ShapedRecipe instance clone for this artifact.</p></div>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="getItem()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getItem</h4>
-                                        <pre class="methodSignature"> ItemStack <a href=PArtifacts.html#getItem()>getItem</a>()</pre>
-                                        <div class="block"><p>Fetches the ItemStack representation of this artifact.</p></div>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="getPriceMultiplier()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getPriceMultiplier</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> <a href=PArtifacts.html#getPriceMultiplier()>getPriceMultiplier</a>()</pre>
-                                        <div class="block"><p>Fetches the trading price multiplier for this artifact, determined by its rarity.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -814,6 +785,21 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                         <div class="block">&lt;p&gt;Fetches the ring item used in the crafting of this Artifact.&lt;/p&gt;
 &lt;p&gt;When crafting an artifact, this item (and its count) will surround [PArtifact.RAW_ARTIFACT] to produce this artifact in item form.&lt;/p&gt;
 </div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getItemType()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getItemType</h4>
+                                        <pre class="methodSignature"> Material <a href=PArtifacts.html#getItemType()>getItemType</a>()</pre>
+                                        <div class="block"><p>Fetches the Material type of this artifact.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
