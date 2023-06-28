@@ -26,6 +26,13 @@ import java.io.IOException
 
 private const val BSTATS_ID = 18713
 private const val github = "Team-Inceptus/PlasmaEnchants"
+private val VERSIONS = listOf(
+    "1_15",
+    "1_16",
+    "1_17",
+    "1_19",
+    "1_20"
+)
 
 /**
  * Represents the main PlasmaEnchants Plugin
@@ -82,9 +89,38 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
 
     }
 
+    private fun registerVersionClasses() {
+        val current = Bukkit.getServer()::class.java.packageName.split(".")[3].substring(1)
+        val major = current.split("_")[0] + "_" + current.split("_")[1]
+
+        if (major == "1_14") return
+
+        for (version in VERSIONS) {
+            try {
+                Class.forName("us.teaminceptus.plasmaenchants.v$version.PEnchantments$version")
+                    .asSubclass(Enum::class.java)
+                    .enumConstants
+                    .forEach { if (it is PEnchantment) register(it) }
+            } catch (ignored: ClassNotFoundException) {}
+
+            try {
+                Class.forName("us.teaminceptus.plasmaenchants.v$version.PArtifacts$version")
+                    .asSubclass(Enum::class.java)
+                    .enumConstants
+                    .forEach { if (it is PArtifact) register(it) }
+            } catch (ignored: ClassNotFoundException) {}
+
+            if (major == version) break
+        }
+    }
+
     private fun loadClasses() {
         PEnchantments.values().forEach(::register)
         PArtifacts.values().forEach(::register)
+        registerVersionClasses()
+
+        logger.info("Loaded ${artifacts.size} Artifacts")
+        logger.info("Loaded ${enchantments.size} Enchantments")
 
         PlasmaEvents(this)
         SpawnEvents(this)

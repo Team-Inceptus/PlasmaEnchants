@@ -350,7 +350,7 @@ interface PlasmaConfig {
          * Fetches the global chance for an enchantment to spawn when an entity is killed.
          * @return Global Chance
          */
-        get() = "enchantments.spawn.drops.chance.global"[configuration, Double::class.java, 0.05]
+        get() = "enchantments.spawn.drops.chance.global"[configuration, Double::class.java, 0.007]
         /**
          * Sets the global chance for an enchantment to spawn when an entity is killed.
          * @param value Global Chance
@@ -604,7 +604,7 @@ interface PlasmaConfig {
          * Fetches the global chance for an enchantment to spawn when a block is mined.
          * @return Global Chance
          */
-        get() = "enchantments.spawn.mining.chance.global"[configuration, Double::class.java, 0.005]
+        get() = "enchantments.spawn.mining.chance.global"[configuration, Double::class.java, 0.0005]
         /**
          * Sets the global chance for an enchantment to spawn when a block is mined.
          * @param value Global Chance
@@ -958,7 +958,7 @@ interface PlasmaConfig {
          * Fetches the global chance for an artifact to spawn when an entity is killed.
          * @return Global Killing Drop Chance
          */
-        get() = "artifacts.spawn.killing.global-chance"[configuration, Double::class.java, 0.05]
+        get() = "artifacts.spawn.killing.global-chance"[configuration, Double::class.java, 0.005]
         /**
          * Sets the global chance for an artifact to spawn when an entity is killed.
          * @param value Global Killing Drop Chance
@@ -1058,7 +1058,7 @@ interface PlasmaConfig {
          * Fetches the global chance for an artifact to spawn when a block is mined.
          * @return Global Mining Drop Chance
          */
-        get() = "artifacts.spawn.mining.global-chance"[configuration, Double::class.java, 0.03]
+        get() = "artifacts.spawn.mining.global-chance"[configuration, Double::class.java, 0.0003]
         /**
          * Sets the global chance for an artifact to spawn when a block is mined.
          * @param value Global Mining Drop Chance
