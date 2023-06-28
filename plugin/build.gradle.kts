@@ -3,7 +3,23 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 val lampVersion = "3.1.5"
 
 dependencies {
+    compileOnly("org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT") {
+        version {
+            strictly("1.14.4-R0.1-SNAPSHOT")
+        }
+    }
+
     api(project(":plasmaenchants-api"))
+
+    listOf(
+        "1_15",
+        "1_16",
+        "1_17",
+        "1_19",
+        "1_20"
+    ).forEach {
+        api(project(":plasmaenchants-$it"))
+    }
 
     compileOnly("com.mojang:authlib:1.5.25")
 

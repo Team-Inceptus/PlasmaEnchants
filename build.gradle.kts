@@ -60,11 +60,6 @@ subprojects {
         project.ext["kotlin_version"] = kotlin!!.version
 
         compileOnly("org.jetbrains:annotations:24.0.1")
-        compileOnly("org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT") {
-            version {
-                strictly("1.14.4-R0.1-SNAPSHOT")
-            }
-        }
 
         testImplementation("org.mockito:mockito-core:5.4.0")
         testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
@@ -118,9 +113,9 @@ subprojects {
                 attributes["Implementation-Vendor"] = pAuthor
             }
 
-            relocate("revxrsal.commands", "us.teaminceptus.shaded.lamp")
-            relocate("org.bstats", "us.teaminceptus.shaded.bstats")
-            relocate("com.jeff_media.updatechecker", "us.teaminceptus.shaded.updatechecker")
+            relocate("revxrsal.commands", "us.teaminceptus.plasmaenchants.shaded.lamp")
+            relocate("org.bstats", "us.teaminceptus.plasmaenchants.shaded.bstats")
+            relocate("com.jeff_media.updatechecker", "us.teaminceptus.plasmaenchants.shaded.updatechecker")
 
             archiveFileName.set("${project.name}-${project.version}.jar")
             archiveClassifier.set("")

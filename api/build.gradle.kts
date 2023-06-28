@@ -7,6 +7,11 @@ apply(plugin = "maven-publish")
 
 dependencies {
     compileOnly("com.mojang:authlib:1.5.25")
+    compileOnly("org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT") {
+        version {
+            strictly("1.14.4-R0.1-SNAPSHOT")
+        }
+    }
 }
 
 description = "API for the Premium Plugin PlasmaEnchants"
