@@ -72,9 +72,14 @@ enum class PTarget {
     ),
 
     /**
-     * Represents all Melee Weapons (Swords and Axes)
+     * Represents a Tridents
      */
-    MELEE_WEAPONS(SWORDS, AXES),
+    TRIDENT(Material.TRIDENT),
+
+    /**
+     * Represents all Melee Weapons (Swords, Axes and Trident)
+     */
+    MELEE_WEAPONS(SWORDS, AXES, TRIDENT),
 
     /**
      * Represents all mining tools (Shovels, Pickaxes, Axes, and Hoes)
@@ -92,7 +97,7 @@ enum class PTarget {
     SHEARS(Material.SHEARS),
 
     /**
-     * Represents all Helmets
+     * Represents all Helmets (including [Material.TURTLE_HELMET])
      */
     HELMETS(
         Material.LEATHER_HELMET,
@@ -100,11 +105,12 @@ enum class PTarget {
         Material.IRON_HELMET,
         Material.GOLDEN_HELMET,
         Material.DIAMOND_HELMET,
+        Material.TURTLE_HELMET,
         Material.matchMaterial("NETHERITE_HELMET") ?: Material.AIR
     ),
 
     /**
-     * Represents all Chestplates
+     * Represents all Chestplates (not including [Material.ELYTRA])
      */
     CHESTPLATES(
         Material.LEATHER_CHESTPLATE,
@@ -140,9 +146,9 @@ enum class PTarget {
     ),
 
     /**
-     * Represents all Armor (Helmets, Chestplates, Leggings, and Boots)
+     * Represents all Armor (Helmets, Chestplates, Leggings, Boots, and Elytra)
      */
-    ARMOR(HELMETS, CHESTPLATES, LEGGINGS, BOOTS),
+    ARMOR(HELMETS, CHESTPLATES, LEGGINGS, BOOTS, Material.ELYTRA),
 
     /**
      * Represents a Bow
@@ -157,7 +163,7 @@ enum class PTarget {
     /**
      * Represents all Ranged Weapons (Bows and Crossbows)
      */
-    RANGED(BOW, CROSSBOW),
+    RANGED(BOW, CROSSBOW, TRIDENT),
 
     /**
      * Target that applies to all materials.
@@ -177,6 +183,18 @@ enum class PTarget {
     constructor(vararg targets: PTarget) {
         this.valid = targets.toList()
             .map { it.valid }
+            .flatten()
+            .filter { it != Material.AIR }
+            .toList()
+    }
+
+    constructor(vararg enums: Enum<*>) {
+        this.valid = enums.toList()
+            .filter { it is PTarget || it is Material }
+            .map {
+                if (it is PTarget) it.valid
+                else listOf(it as Material)
+            }
             .flatten()
             .filter { it != Material.AIR }
             .toList()
