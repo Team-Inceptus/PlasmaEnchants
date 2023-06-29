@@ -36,7 +36,7 @@ Coming Soon...
 [![GitHub branch checks state](https://github.com/Team-Inceptus/PlasmaEnchants/actions/workflows/build.yml/badge.svg)](https://github.com/Team-Inceptus/PlasmaEnchants/actions/)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Team-Inceptus/PlasmaEnchants?style=plastic)
 
-**JavaDocs:** [https://gamercoder215.github.io/plasmaenchants](https://gamercoder215.github.io/plasmaenchants)
+**JavaDocs:** [https://plasmaenchants.teaminceptus.us](https://plasmaenchants.teaminceptus.us)
 
 ### Installation
 
