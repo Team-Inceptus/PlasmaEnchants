@@ -36,6 +36,63 @@ Coming Soon...
 [![GitHub branch checks state](https://github.com/Team-Inceptus/PlasmaEnchants/actions/workflows/build.yml/badge.svg)](https://github.com/Team-Inceptus/PlasmaEnchants/actions/)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Team-Inceptus/PlasmaEnchants?style=plastic)
 
+**JavaDocs:** [https://gamercoder215.github.io/plasmaenchants](https://gamercoder215.github.io/plasmaenchants)
+
+### Installation
+
+<details>
+    <summary>Maven</summary>
+
+```xml
+<project>
+
+    <repositories>
+        <repository>
+            <id>codemc-releases</id>
+            <url>https://repo.codemc.io/repository/maven-releases/</url>
+        </repository>
+    </repositories>
+    
+    <dependencies>
+        <dependency>
+            <groupId>us.teaminceptus.plasmaenchants</groupId>
+            <artifactId>plasmaenchants-api</artifactId>
+            <version>[VERSION]</version>
+        </dependency>
+    </dependencies>
+    
+</project>
+```
+</details>
+
+<details>
+    <summary>Gradle (Groovy)</summary>
+
+```gradle
+repositories {
+    maven { url 'https://repo.codemc.io/repository/maven-releases/' }
+}
+
+dependencies {
+    implementation 'us.teaminceptus.plasmaenchants:plasmaenchants-api:[VERSION]'
+}
+```
+</details>
+
+<details>
+    <summary>Gradle (Kotlin DSL)</summary>
+
+```kotlin
+repositories {
+    maven(url = "https://repo.codemc.io/repository/maven-releases/")
+}
+
+dependencies {
+    implementation('us.teaminceptus.plasmaenchants:plasmaenchants-api:[VERSION]')
+}
+```
+</details>
+
 ---
 ## 📷 Screenshots
 
