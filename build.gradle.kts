@@ -56,7 +56,7 @@ subprojects {
     apply(plugin = "com.github.johnrengelman.shadow")
 
     dependencies {
-        val kotlin = compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.8.22")
+        val kotlin = compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
         project.ext["kotlin_version"] = kotlin!!.version
 
         compileOnly("org.jetbrains:annotations:24.0.1")
