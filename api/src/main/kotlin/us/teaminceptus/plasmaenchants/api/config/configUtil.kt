@@ -49,7 +49,7 @@ internal val CONFIG_MAP = ImmutableMap.builder<String, ConfigData>()
     .put("enchantments.spawn.drops.chance.global", isNumber, 0.007)
     .put("enchantments.spawn.drops.chance.looting-modifier", isNumber, 0.01)
     .put("enchantments.spawn.drops.chance.config", FileConfiguration::isList, listOf<Map<String, Any>>(),
-        { value -> value.all { map -> map.keyNotNull("bukkit") { enchant -> Enchantment.entries.map { it.key.key.lowercase() }.contains(enchant.toString().lowercase()) } &&
+        { value -> value.all { map -> map.keyNotNull("bukkit") { enchant -> Enchantment.values().map { it.key.key.lowercase() }.contains(enchant.toString().lowercase()) } &&
                 map.keyNotNull("plasma") { it.isEnchantment() } &&
                 map.keyNotNull("min-bukkit-level") { it.isChildLevel() } &&
                 map.keyNotNull("max-bukkit-level") { it.isChildLevel() } && map.keyNotNull("min-plasma-level") { it.isChildLevel() } &&
@@ -180,7 +180,7 @@ internal val CONFIG_MAP = ImmutableMap.builder<String, ConfigData>()
     .put("enchantments.trades.enchants.replace.only-enchantment-books", FileConfiguration::isBoolean, false)
     .put("enchantments.trades.enchants.replace.chance", isNumber, 0.25)
     .put("enchantments.trades.enchants.replace.config", FileConfiguration::isSet, listOf<Map<String, Any>>(),
-        { value -> value.all { map -> map.keyNotNull("bukkit") { enchant -> Enchantment.entries.map { it.key.key.lowercase() }.contains(enchant.toString().lowercase()) } &&
+        { value -> value.all { map -> map.keyNotNull("bukkit") { enchant -> Enchantment.values().map { it.key.key.lowercase() }.contains(enchant.toString().lowercase()) } &&
                 map.keyNotNull("plasma") { it.isEnchantment() } &&
                 map.keyNotNull("min-bukkit-level") { it.isChildLevel() } &&
                 map.keyNotNull("max-bukkit-level") { it.isChildLevel() } && map.keyNotNull("min-plasma-level") { it.isChildLevel() } &&
