@@ -268,7 +268,7 @@ enum class PArtifacts(
                 .apply {
                     if (this !is LivingEntity) return@Action
 
-                    addPotionEffect(PotionEffect(PotionEffectType.POISON, 3, 1, true))
+                    addPotionEffect(PotionEffect(PotionEffectType.WITHER, 3, 1, true))
                 }
         }, ItemStack(Material.WITHER_ROSE, 48), Material.WITHER_SKELETON_SKULL, ChatColor.LIGHT_PURPLE
     ),
@@ -292,7 +292,9 @@ enum class PArtifacts(
             if (event.action != LEFT_CLICK_AIR && event.action != LEFT_CLICK_BLOCK) return@Action
 
             val loc = event.player.eyeLocation
-            event.player.world.spawn(loc, SmallFireball::class.java)
+            event.player.world.spawn(loc, SmallFireball::class.java).apply {
+                shooter = event.player
+            }
         }, ItemStack(Material.BLAZE_ROD, 64), Material.BLAZE_POWDER, ChatColor.GOLD
     ),
 
