@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.util.Vector
 import us.teaminceptus.plasmaenchants.api.*
+import us.teaminceptus.plasmaenchants.api.PTarget.AXES
 import us.teaminceptus.plasmaenchants.api.PTarget.SWORDS
 import us.teaminceptus.plasmaenchants.api.PType.Companion.ATTACKING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.INTERACT
@@ -28,6 +29,13 @@ enum class PArtifacts1_20(
             val target = event.entity as? LivingEntity ?: return@Action
             target.velocity = target.velocity.add(event.damager.location.direction.multiply(1.5))
         }, ItemStack(Material.BAMBOO_BLOCK, 64), Material.BAMBOO
+    ),
+
+    BRICK(
+        AXES, Action(ATTACKING) { event ->
+            val target = event.entity as? LivingEntity ?: return@Action
+            target.velocity = target.velocity.add(Vector(0.0, -0.06, 0.0))
+        }, ItemStack(Material.BRICK, 64), Material.DECORATED_POT
     )
 
     ;
