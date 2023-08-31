@@ -115,8 +115,8 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
     }
 
     private fun loadClasses() {
-        PEnchantments.values().forEach(::register)
-        PArtifacts.values().forEach(::register)
+        PEnchantments.entries.forEach(::register)
+        PArtifacts.entries.forEach(::register)
         registerVersionClasses()
 
         logger.info("Loaded ${artifacts.size} Artifacts")

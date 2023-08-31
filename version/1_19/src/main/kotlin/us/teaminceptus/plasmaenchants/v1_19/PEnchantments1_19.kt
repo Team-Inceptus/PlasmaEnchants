@@ -37,30 +37,6 @@ enum class PEnchantments1_19(
                 target.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 30 * level, level - 1, true))
         }),
 
-    CHAINING(
-        RANGED, 3, Action(ATTACKING) { event, level ->
-            val proj = event.damager as? Projectile ?: return@Action
-            val target = event.entity as? LivingEntity ?: return@Action
-
-            if (target.health - event.finalDamage > 0) return@Action
-
-            if (r.nextDouble() < 0.4)
-                for (i in 0 until level) {
-                    val loc = target.eyeLocation
-                    loc.pitch = 0F
-                    loc.yaw = when (i) {
-                        1 -> loc.yaw + 45F
-                        2 -> loc.yaw - 45F
-                        else -> loc.yaw
-                    }
-
-                    val newProj = target.world.spawn(loc, proj.javaClass)
-                    newProj.velocity = proj.velocity.multiply(1.25).normalize()
-                    newProj.shooter = proj.shooter
-                    newProj.setBounce(proj.doesBounce())
-                }
-        }),
-
     ;
 
     constructor(
@@ -81,7 +57,7 @@ enum class PEnchantments1_19(
         get() = info.type
 
     override val conflicts
-        get() = PEnchantments.values().filter { conflictsP.test(it) }.toList()
+        get() = PEnchantments.entries.filter { conflictsP.test(it) }.toList()
 
     override fun accept(e: Event, level: Int) = info.action(e, level)
 

@@ -7,6 +7,7 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.*
 import org.bukkit.event.Event
 import org.bukkit.event.block.Action.*
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
@@ -94,7 +95,7 @@ enum class PArtifacts(
             val target = event.entity as? LivingEntity ?: return@Action
 
             target.world.strikeLightning(target.location)
-            target.damage(r.nextInt(-10, 10) + 15.0)
+            event.damage += r.nextInt(-10, 10) + 15.0
         }, ItemStack(Material.CREEPER_HEAD), Material.NETHER_STAR, ChatColor.LIGHT_PURPLE
     ),
 
@@ -107,8 +108,11 @@ enum class PArtifacts(
 
     SHULKER(
         SWORDS, Action(INTERACT) { event ->
-            val bullet = event.player.world.spawn(event.player.eyeLocation, ShulkerBullet::class.java)
-            bullet.target = event.player.getNearbyEntities(10.0, 10.0, 10.0).randomOrNull() as? LivingEntity
+            val bullet = event.player.world.spawn(event.player.eyeLocation, ShulkerBullet::class.java).apply {
+                shooter = event.player
+            }
+
+            bullet.target = event.player.getNearbyEntities(10.0, 10.0, 10.0).minByOrNull { it.location.distanceSquared(bullet.location) } as? LivingEntity
         }, ItemStack(Material.SHULKER_SHELL, 48), Material.SHULKER_SHELL, ChatColor.GOLD
     ),
 
@@ -163,8 +167,8 @@ enum class PArtifacts(
     ),
 
     SEA(
-        LEGGINGS, Action(DEFENDING) { event ->
-            if (event.cause == DamageCause.DROWNING || event.damager is Guardian || event.damager is Dolphin) event.isCancelled = true
+        LEGGINGS, Action(DAMAGE) { event ->
+            if (event.cause == DamageCause.DROWNING || (event is EntityDamageByEntityEvent && (event.damager is Guardian || event.damager is Dolphin))) event.isCancelled = true
         }, ItemStack(Material.HEART_OF_THE_SEA, 2), Material.HEART_OF_THE_SEA
     ),
 
@@ -264,7 +268,7 @@ enum class PArtifacts(
                 .apply {
                     if (this !is LivingEntity) return@Action
 
-                    addPotionEffect(PotionEffect(PotionEffectType.POISON, 3, 1, true))
+                    addPotionEffect(PotionEffect(PotionEffectType.WITHER, 3, 1, true))
                 }
         }, ItemStack(Material.WITHER_ROSE, 48), Material.WITHER_SKELETON_SKULL, ChatColor.LIGHT_PURPLE
     ),
@@ -288,7 +292,9 @@ enum class PArtifacts(
             if (event.action != LEFT_CLICK_AIR && event.action != LEFT_CLICK_BLOCK) return@Action
 
             val loc = event.player.eyeLocation
-            event.player.world.spawn(loc, SmallFireball::class.java)
+            event.player.world.spawn(loc, SmallFireball::class.java).apply {
+                shooter = event.player
+            }
         }, ItemStack(Material.BLAZE_ROD, 64), Material.BLAZE_POWDER, ChatColor.GOLD
     ),
 

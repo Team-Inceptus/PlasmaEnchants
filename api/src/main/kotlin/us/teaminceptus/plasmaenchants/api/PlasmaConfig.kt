@@ -284,7 +284,7 @@ interface PlasmaConfig {
          * Fetches a list of mobs that should not drop naturally occuring enchantments.
          * @return List of Mobs
          */
-        get() = "enchantments.spawn.drops.blacklisted-mobs"[configuration, List::class.java, listOf<String>()].mapNotNull { type -> EntityType.values().first { it.name == type.toString().uppercase() } }
+        get() = "enchantments.spawn.drops.blacklisted-mobs"[configuration, List::class.java, listOf<String>()].mapNotNull { type -> EntityType.entries.first { it.name == type.toString().uppercase() } }
         /**
          * Sets the list of mobs that should not drop naturally occuring enchantments.
          * @param value List of Mobs
@@ -296,7 +296,7 @@ interface PlasmaConfig {
          * Fetches a list of mobs that should only drop naturally occuring enchantments.
          * @return List of Mobs
          */
-        get() = "enchantments.spawn.drops.whitelisted-mobs"[configuration, List::class.java, listOf<String>()].mapNotNull { type -> EntityType.values().first { it.name == type.toString().uppercase() } }
+        get() = "enchantments.spawn.drops.whitelisted-mobs"[configuration, List::class.java, listOf<String>()].mapNotNull { type -> EntityType.entries.first { it.name == type.toString().uppercase() } }
         /**
          * Sets the list of mobs that should only drop naturally occuring enchantments.
          * @param value List of Mobs
@@ -372,7 +372,7 @@ interface PlasmaConfig {
          * Fetches an immutable copy of list of loot tables that should not include naturally spawned enchantments.
          * @return List of Blacklisted Loot Tables
          */
-        get() = "enchantments.spawn.loot.blacklisted-loottables"[configuration, List::class.java, listOf<String>()].mapNotNull { table -> LootTables.values().first { it.name == table.toString().uppercase() } }
+        get() = "enchantments.spawn.loot.blacklisted-loottables"[configuration, List::class.java, listOf<String>()].mapNotNull { table -> LootTables.entries.first { it.name == table.toString().uppercase() } }
         /**
          * Sets the list of loot tables that should not include naturally spawned enchantments.
          * @param value List of Blacklisted Loot Tables
@@ -384,7 +384,7 @@ interface PlasmaConfig {
          * Fetches an immutable copy of list of loot tables that should only include naturally spawned enchantments.
          * @return List of Whitelisted Loot Tables
          */
-        get() = "enchantments.spawn.loot.whitelisted-loottables"[configuration, List::class.java, listOf<String>()].mapNotNull { table -> LootTables.values().first { it.name == table.toString().uppercase() } }
+        get() = "enchantments.spawn.loot.whitelisted-loottables"[configuration, List::class.java, listOf<String>()].mapNotNull { table -> LootTables.entries.first { it.name == table.toString().uppercase() } }
         /**
          * Sets the list of loot tables that should only include naturally spawned enchantments.
          * @param value List of Whitelisted Loot Tables
@@ -1091,7 +1091,7 @@ interface PlasmaConfig {
          * Fetches the list of professions that can trade artifacts.
          * @return List of Villager Professions
          */
-        get() = "artifacts.trades.professions"[configuration, List::class.java, listOf<String>()].mapNotNull { profession -> Villager.Profession.values().firstOrNull { it.name.equals(profession.toString(), ignoreCase = true) } }
+        get() = "artifacts.trades.professions"[configuration, List::class.java, listOf<String>()].mapNotNull { profession -> Villager.Profession.entries.firstOrNull { it.name.equals(profession.toString(), ignoreCase = true) } }
         /**
          * Sets the list of professions that can trade artifacts.
          * @param value List of Villager Professions
@@ -1115,7 +1115,7 @@ interface PlasmaConfig {
          * Fetches the list of professions that can trade crafted artifacts.
          * @return List of Villager Professions
          */
-        get() = "artifacts.trades.craftable-artifacts.professions"[configuration, List::class.java, listOf<String>()].mapNotNull { profession -> Villager.Profession.values().firstOrNull { it.name.equals(profession.toString(), ignoreCase = true) } }.ifEmpty { artifactTradesProfessions }
+        get() = "artifacts.trades.craftable-artifacts.professions"[configuration, List::class.java, listOf<String>()].mapNotNull { profession -> Villager.Profession.entries.firstOrNull { it.name.equals(profession.toString(), ignoreCase = true) } }.ifEmpty { artifactTradesProfessions }
         /**
          * Sets the list of professions that can trade crafted artifacts.
          * @param value List of Villager Professions

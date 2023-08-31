@@ -31,12 +31,12 @@ internal val CONFIG_MAP = ImmutableMap.builder<String, ConfigData>()
 
     .putSection("enchantments.spawn.drops")
     .put("enchantments.spawn.drops.blacklisted-mobs", FileConfiguration::isList, listOf<String>(),
-        { value -> EntityType.values().map { it.name.lowercase() }.containsAll(value.map { it.lowercase() }) },
-        { old -> old.filter { type -> EntityType.values().map { it.name.lowercase() }.contains(type.lowercase()) } }
+        { value -> EntityType.entries.map { it.name.lowercase() }.containsAll(value.map { it.lowercase() }) },
+        { old -> old.filter { type -> EntityType.entries.map { it.name.lowercase() }.contains(type.lowercase()) } }
     )
     .put("enchantments.spawn.drops.whitelisted-mobs", FileConfiguration::isList, listOf<String>(),
-        { value -> EntityType.values().map { it.name.lowercase() }.containsAll(value.map { it.lowercase() }) },
-        { old -> old.filter { type -> EntityType.values().map { it.name.lowercase() }.contains(type.lowercase()) } }
+        { value -> EntityType.entries.map { it.name.lowercase() }.containsAll(value.map { it.lowercase() }) },
+        { old -> old.filter { type -> EntityType.entries.map { it.name.lowercase() }.contains(type.lowercase()) } }
     )
     .put("enchantments.spawn.drops.min-level", FileConfiguration::isSet, "default",
         { value -> value.isChildLevel() }
@@ -59,11 +59,11 @@ internal val CONFIG_MAP = ImmutableMap.builder<String, ConfigData>()
 
     .putSection("enchantments.spawn.loot")
     .put("enchantments.spawn.loot.blacklisted-loottables", FileConfiguration::isList, listOf<String>(),
-        { value -> LootTables.values().map { it.name.lowercase() }.containsAll(value.map { it.lowercase() }) })
-    { old -> old.filter { type -> LootTables.values().map { it.name.lowercase() }.contains(type.lowercase()) } }
+        { value -> LootTables.entries.map { it.name.lowercase() }.containsAll(value.map { it.lowercase() }) })
+    { old -> old.filter { type -> LootTables.entries.map { it.name.lowercase() }.contains(type.lowercase()) } }
     .put("enchantments.spawn.loot.whitelisted-loottables", FileConfiguration::isList, listOf<String>(),
-        { value -> EntityType.values().map { it.name.lowercase() }.containsAll(value.map { it.lowercase() }) },
-        { old -> old.filter { type -> EntityType.values().map { it.name.lowercase() }.contains(type.lowercase()) } }
+        { value -> EntityType.entries.map { it.name.lowercase() }.containsAll(value.map { it.lowercase() }) },
+        { old -> old.filter { type -> EntityType.entries.map { it.name.lowercase() }.contains(type.lowercase()) } }
     )
     .put("enchantments.spawn.loot.min-level", FileConfiguration::isSet, "default",
         { value -> value.isChildLevel() }
@@ -74,7 +74,7 @@ internal val CONFIG_MAP = ImmutableMap.builder<String, ConfigData>()
     .putSection("enchantments.spawn.loot.chance")
     .put("enchantments.spawn.loot.chance.global", isNumber, 0.3)
     .put("enchantments.spawn.loot.chance.config", FileConfiguration::isList, listOf<Map<String, Any>>(),
-        { value -> value.all { map -> map.keyNotNull("table") { table -> LootTables.values().map { it.name }.contains(table.toString().uppercase())}
+        { value -> value.all { map -> map.keyNotNull("table") { table -> LootTables.entries.map { it.name }.contains(table.toString().uppercase())}
             map.keyNotNull("chance") { it.isNumber() } &&
                     map.keyNotNull("min-level") { it.isChildLevel() } &&
                     map.keyNotNull("max-level") { it.isChildLevel() } &&
@@ -130,16 +130,16 @@ internal val CONFIG_MAP = ImmutableMap.builder<String, ConfigData>()
     .putSection("enchantments.trades")
     .put("enchantments.trades.include-wandering-traders", FileConfiguration::isBoolean, true)
     .put("enchantments.trades.professions", FileConfiguration::isList, listOf<String>(),
-        { value -> value.all { profession -> Villager.Profession.values().map { it.name.lowercase() }.contains(profession.lowercase()) } },
-        { old -> old.filter { profession -> Villager.Profession.values().map { it.name.lowercase() }.contains(profession.lowercase()) } }
+        { value -> value.all { profession -> Villager.Profession.entries.map { it.name.lowercase() }.contains(profession.lowercase()) } },
+        { old -> old.filter { profession -> Villager.Profession.entries.map { it.name.lowercase() }.contains(profession.lowercase()) } }
     )
     .put("enchantments.trades.blacklisted-types", FileConfiguration::isList, listOf<String>(),
-        { value -> value.all { type -> Villager.Type.values().map { it.name.lowercase() }.contains(type.lowercase()) } },
-        { old -> old.filter { type -> Villager.Type.values().map { it.name.lowercase() }.contains(type.lowercase()) } }
+        { value -> value.all { type -> Villager.Type.entries.map { it.name.lowercase() }.contains(type.lowercase()) } },
+        { old -> old.filter { type -> Villager.Type.entries.map { it.name.lowercase() }.contains(type.lowercase()) } }
     )
     .put("enchantments.trades.whitelisted-types", FileConfiguration::isList, listOf<String>(),
-        { value -> value.all { type -> Villager.Type.values().map { it.name.lowercase() }.contains(type.lowercase()) } },
-        { old -> old.filter { type -> Villager.Type.values().map { it.name.lowercase() }.contains(type.lowercase()) } }
+        { value -> value.all { type -> Villager.Type.entries.map { it.name.lowercase() }.contains(type.lowercase()) } },
+        { old -> old.filter { type -> Villager.Type.entries.map { it.name.lowercase() }.contains(type.lowercase()) } }
     )
     .put("enchantments.trades.min-villager-level", FileConfiguration::isInt, 1)
     .put("enchantments.trades.max-villager-level", FileConfiguration::isInt, 5)
@@ -216,8 +216,8 @@ internal val CONFIG_MAP = ImmutableMap.builder<String, ConfigData>()
     .putSection("artifacts.trades")
     .put("artifacts.trades.include-wandering-traders", FileConfiguration::isBoolean, true)
     .put("artifacts.trades.professions", FileConfiguration::isList, listOf<String>(),
-        { value -> value.all { profession -> Villager.Profession.values().map { it.name.lowercase() }.contains(profession.lowercase()) } },
-        { old -> old.filter { profession -> Villager.Profession.values().map { it.name.lowercase() }.contains(profession.lowercase()) } }
+        { value -> value.all { profession -> Villager.Profession.entries.map { it.name.lowercase() }.contains(profession.lowercase()) } },
+        { old -> old.filter { profession -> Villager.Profession.entries.map { it.name.lowercase() }.contains(profession.lowercase()) } }
     )
     .put("artifacts.trades.min-villager-level", FileConfiguration::isInt, 1)
     .put("artifacts.trades.max-villager-level", FileConfiguration::isInt, 5)
@@ -231,8 +231,8 @@ internal val CONFIG_MAP = ImmutableMap.builder<String, ConfigData>()
     .putSection("artifacts.trades.craftable-artifacts")
     .put("artifacts.trades.craftable-artifacts.enabled", FileConfiguration::isBoolean, true)
     .put("artifacts.trades.craftable-artifacts.professions", FileConfiguration::isList, listOf<String>(),
-        { value -> value.all { profession -> Villager.Profession.values().map { it.name.lowercase() }.contains(profession.lowercase()) } },
-        { old -> old.filter { profession -> Villager.Profession.values().map { it.name.lowercase() }.contains(profession.lowercase()) } }
+        { value -> value.all { profession -> Villager.Profession.entries.map { it.name.lowercase() }.contains(profession.lowercase()) } },
+        { old -> old.filter { profession -> Villager.Profession.entries.map { it.name.lowercase() }.contains(profession.lowercase()) } }
     )
     .put("artifacts.trades.craftable-artifacts.blacklisted-artifacts", FileConfiguration::isList, listOf<String>(),
         { value -> value.all { it.isArtifact() } },
