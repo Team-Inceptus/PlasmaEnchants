@@ -52,7 +52,7 @@ enum class PEnchantments1_15(
         get() = info.type
 
     override val conflicts
-        get() = PEnchantments.values().filter { conflictsP.test(it) }.toList()
+        get() = PEnchantments.entries.filter { conflictsP.test(it) }.toList()
 
     override fun accept(e: Event, level: Int) = info.action(e, level)
 

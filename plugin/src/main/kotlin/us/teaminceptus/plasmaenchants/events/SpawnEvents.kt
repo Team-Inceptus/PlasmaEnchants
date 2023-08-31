@@ -228,7 +228,7 @@ class SpawnEvents(private val plugin: PlasmaEnchants) : Listener {
 
         if (lootable.lootTable == null) return
         val tableI = lootable.lootTable!!
-        val table = LootTables.values().firstOrNull { it.key == tableI.key } ?: return
+        val table = LootTables.entries.firstOrNull { it.key == tableI.key } ?: return
 
         val artifactChance = plugin.artifactSpawnGlobalLootChance + (luckAmp * plugin.artifactSpawnLuckModifier)
         if (r.nextDouble() < artifactChance)
