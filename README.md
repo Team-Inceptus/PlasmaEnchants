@@ -26,6 +26,19 @@ Purchase and download the plugin on our Spigot Page, and drop it in to your Spig
 This plugin is built in Kotlin. While the plugin will automatically download the necessary libraries for the plugin to run, it is recommended that you install the [Kotlin Spigot Plugin](https://modrinth.com/plugin/kotlinmc/). **This is only required if you are running on a server version below 1.16.**
 
 ---
+## Changelog
+
+🐛 v1.0.1 - August 31, 2023
+- Fixed some Artifact & Enchantment Bugs
+- Internal Optimization
+- Update to Kotlin v1.9.x
+- Added the `BRICK` Artifact for 1.20+
+
+⚔️ v1.0.0 - June 28, 2023
+
+First Release of PlasmaEnchants
+
+---
 ## 🔮 Future Features
 
 Coming Soon...
