@@ -126,6 +126,14 @@ public enum <span class="typeNameLabel"><a href=PTarget.html>PTarget</a></span>
 extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>Enum</a>&lt;<a href=PTarget.html>PTarget</a>&gt;
                     </pre>
                     <div class="block"><p><a href=enchants/PEnchantment.html>PEnchantment</a> and <a href=artifacts/PArtifact.html>PArtifact</a> Material Application Targets</p></div>
+
+                    <dl>
+
+                    
+
+                    
+
+                    </dl>
                 </li>
             </ul>
         </div>
@@ -181,6 +189,12 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                         <tr class="rowColor">
                                             <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=enchants/PEnchantments.html#ordinal>ordinal</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>private final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.enums/-enum-entries/index.html>EnumEntries</a>&lt;<a href=PTarget.html>PTarget</a>&gt;</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=PTarget.html#entries>entries</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
@@ -403,6 +417,14 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                             <td class="colLast">Returns an array containing the constants of this enum type, in the order they're declared.</td>
                                         </tr>
                                         
+                                        <tr id="i4" class="altColor">
+                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.enums/-enum-entries/index.html>EnumEntries</a>&lt;<a href=PTarget.html>PTarget</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PTarget.html#getEntries()>getEntries</a>() </code>
+                                            </th>
+                                            <td class="colLast"><a href=enchants/PEnchantment.html>PEnchantment</a> and <a href=artifacts/PArtifact.html>PArtifact</a> Material Application Targets</td>
+                                        </tr>
+                                        
                                         </tbody>
                                     </table>
                                 </div>
@@ -463,8 +485,19 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                         <h4>getValidMaterials</h4>
                                         <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;Material&gt; <a href=PTarget.html#getValidMaterials()>getValidMaterials</a>()</pre>
                                         <div class="block"><p>Fetches all of the valid materiasl this Target supports.</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>Immutable Set of Valid Materials</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -478,17 +511,26 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                         <h4>isValid</h4>
                                         <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> <a href=PTarget.html#isValid(org.bukkit.Material)>isValid</a>(Material material)</pre>
                                         <div class="block"><p>Checks if the given Material is valid for this Target.</p></div>
-                                        
+
                                         <dl>
+
+                                        
                                             <dt><span class="paramLabel">Parameters:</span></dt>
                                             
                                             
                                             <dd><code>material</code> - Material to check</dd>
                                             
                                             
-                                        </dl>
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>True if the Material is valid, false otherwise</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -502,8 +544,16 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                         <h4>valueOf</h4>
                                         <pre class="methodSignature"> final <a href=PTarget.html>PTarget</a> <a href=PTarget.html#valueOf(java.lang.String)>valueOf</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> value)</pre>
                                         <div class="block"><p>Returns the enum constant of this type with the specified name. The string must match exactly an identifier used to declare an enum constant in this type. (Extraneous whitespace characters are not permitted.)</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -511,14 +561,45 @@ extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>En
                                     <!--   -->
                                 </a>
                                 <ul class=
-                                              "blockListLast"
+                                              "blockList"
                                           >
                                     <li class="blockList">
                                         <h4>values</h4>
                                         <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=PTarget.html>PTarget</a>&gt; <a href=PTarget.html#values()>values</a>()</pre>
                                         <div class="block"><p>Returns an array containing the constants of this enum type, in the order they're declared.</p><p>This method may be used to iterate over the constants.</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="getEntries()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getEntries</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.enums/-enum-entries/index.html>EnumEntries</a>&lt;<a href=PTarget.html>PTarget</a>&gt; <a href=PTarget.html#getEntries()>getEntries</a>()</pre>
+                                        <div class="block"><p><a href=enchants/PEnchantment.html>PEnchantment</a> and <a href=artifacts/PArtifact.html>PArtifact</a> Material Application Targets</p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 

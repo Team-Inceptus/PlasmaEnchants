@@ -126,6 +126,14 @@ public interface <span class="typeNameLabel"><a href=PEnchantment.html>PEnchantm
  implements <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiConsumer.html>BiConsumer</a>&lt;Event, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html>Int</a>&gt;, Keyed
                     </pre>
                     <div class="block"><p>Represents a PlasmaEnchants Enchantment.</p></div>
+
+                    <dl>
+
+                    
+
+                    
+
+                    </dl>
                 </li>
             </ul>
         </div>
@@ -383,17 +391,26 @@ public interface <span class="typeNameLabel"><a href=PEnchantment.html>PEnchantm
                                         <h4>conflictsWith</h4>
                                         <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> <a href=PEnchantment.html#conflictsWith(us.teaminceptus.plasmaenchants.api.enchants.PEnchantment)>conflictsWith</a>(<a href=PEnchantment.html>PEnchantment</a> enchantment)</pre>
                                         <div class="block"><p>Whether or not this PEnchantment conflicts with another PEnchantment. This will return false if <a href=../PlasmaConfig.html#isIgnoreEnchantmentConflictRestriction()>PlasmaConfig.isIgnoreEnchantmentConflictRestriction</a> is true.</p></div>
-                                        
+
                                         <dl>
+
+                                        
                                             <dt><span class="paramLabel">Parameters:</span></dt>
                                             
                                             
                                             <dd><code>enchantment</code> - PEnchantment to check for conflicts with.</dd>
                                             
                                             
-                                        </dl>
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>true if conflicts with enchantment, false otherwise</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -407,17 +424,26 @@ public interface <span class="typeNameLabel"><a href=PEnchantment.html>PEnchantm
                                         <h4>toString</h4>
                                         <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=PEnchantment.html#toString(java.lang.Integer)>toString</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> level)</pre>
                                         <div class="block"><p>Converts this PEnchantment to a string as shown in the lore.</p></div>
-                                        
+
                                         <dl>
+
+                                        
                                             <dt><span class="paramLabel">Parameters:</span></dt>
                                             
                                             
                                             <dd><code>level</code> - Level of Enchantment</dd>
                                             
                                             
-                                        </dl>
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>String Representation of Enchantment</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -431,17 +457,26 @@ public interface <span class="typeNameLabel"><a href=PEnchantment.html>PEnchantm
                                         <h4>generateBook</h4>
                                         <pre class="methodSignature"> ItemStack <a href=PEnchantment.html#generateBook(java.lang.Integer)>generateBook</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> level)</pre>
                                         <div class="block"><p>Generates an Material.ENCHANTED_BOOK book for this PEnchantment.</p></div>
-                                        
+
                                         <dl>
+
+                                        
                                             <dt><span class="paramLabel">Parameters:</span></dt>
                                             
                                             
                                             <dd><code>level</code> - Level of Enchantment</dd>
                                             
                                             
-                                        </dl>
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>Enchanted Book</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -455,8 +490,16 @@ public interface <span class="typeNameLabel"><a href=PEnchantment.html>PEnchantm
                                         <h4>getDisplayName</h4>
                                         <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=PEnchantment.html#getDisplayName()>getDisplayName</a>()</pre>
                                         <div class="block"></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -470,8 +513,16 @@ public interface <span class="typeNameLabel"><a href=PEnchantment.html>PEnchantm
                                         <h4>getMaxLevel</h4>
                                         <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> <a href=PEnchantment.html#getMaxLevel()>getMaxLevel</a>()</pre>
                                         <div class="block"></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -485,8 +536,19 @@ public interface <span class="typeNameLabel"><a href=PEnchantment.html>PEnchantm
                                         <h4>getTarget</h4>
                                         <pre class="methodSignature"> abstract <a href=../PTarget.html>PTarget</a> <a href=PEnchantment.html#getTarget()>getTarget</a>()</pre>
                                         <div class="block"><p>Fetches the Target Type of this PEnchantment.</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>Target Type</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -500,8 +562,19 @@ public interface <span class="typeNameLabel"><a href=PEnchantment.html>PEnchantm
                                         <h4>getType</h4>
                                         <pre class="methodSignature"> abstract <a href=../PType.html>PType</a>&lt;?&gt; <a href=PEnchantment.html#getType()>getType</a>()</pre>
                                         <div class="block"><p>Fetches the Type of this PEnchantment.</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>Type</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -515,8 +588,19 @@ public interface <span class="typeNameLabel"><a href=PEnchantment.html>PEnchantm
                                         <h4>getConflicts</h4>
                                         <pre class="methodSignature"> abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=PEnchantment.html>PEnchantment</a>&gt; <a href=PEnchantment.html#getConflicts()>getConflicts</a>()</pre>
                                         <div class="block"><p>Fetches the list of conflicts for this PEnchantment.</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>List of Conflicts</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -530,8 +614,19 @@ public interface <span class="typeNameLabel"><a href=PEnchantment.html>PEnchantm
                                         <h4>isDisabled</h4>
                                         <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> <a href=PEnchantments.html#isDisabled>isDisabled</a>()</pre>
                                         <div class="block"><p>Whether or not this PEnchantment is disabled.</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>true if disabled, false otherwise</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
