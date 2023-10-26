@@ -12,7 +12,7 @@ plugins {
 }
 
 val pGroup = "us.teaminceptus.plasmaenchants"
-val pVersion = "1.0.1"
+val pVersion = "1.1.0"
 val pAuthor = "Team-Inceptus"
 
 val jvmVersion: JavaVersion = JavaVersion.VERSION_11
