@@ -28,6 +28,14 @@ This plugin is built in Kotlin. While the plugin will automatically download the
 ---
 ## Changelog
 
+**🪓 v1.1.0 - October 26, 2023**
+
+- Added Various Wood Artifacts (Oak, Birch, Spruce, etc.)
+- Added Friendship Enchantment
+- Dependency Updates
+    - Update Command Handler & CI Internals
+- Fix issues on 1.20.2
+
 🐛 v1.0.1 - August 31, 2023
 - Fixed some Artifact & Enchantment Bugs
 - Internal Optimization
