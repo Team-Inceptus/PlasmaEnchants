@@ -349,6 +349,54 @@ enum class PArtifacts(
         }, ItemStack(Material.HAY_BLOCK, 64), Material.HAY_BLOCK, ChatColor.AQUA
     ),
 
+    OAK(
+        AXES, Action(MINING) { event ->
+            val m = event.block.type
+            if (m.name.contains("OAK") && !m.name.contains("DARK_OAK"))
+                event.instaBreak = true
+        }, ItemStack(Material.OAK_LOG, 32), Material.OAK_SAPLING
+    ),
+
+    BIRCH(
+        AXES, Action(MINING) { event ->
+            val m = event.block.type
+            if (m.name.contains("BIRCH"))
+                event.instaBreak = true
+        }, ItemStack(Material.BIRCH_LOG, 32), Material.BIRCH_SAPLING
+    ),
+
+    SPRUCE(
+        AXES, Action(MINING) { event ->
+            val m = event.block.type
+            if (m.name.contains("SPRUCE"))
+                event.instaBreak = true
+        }, ItemStack(Material.SPRUCE_LOG, 32), Material.SPRUCE_SAPLING
+    ),
+
+    JUNGLE(
+        AXES, Action(MINING) { event ->
+            val m = event.block.type
+            if (m.name.contains("JUNGLE"))
+                event.instaBreak = true
+        }, ItemStack(Material.JUNGLE_LOG, 32), Material.JUNGLE_SAPLING
+    ),
+
+    ACACIA(
+        AXES, Action(MINING) { event ->
+            val m = event.block.type
+            if (m.name.contains("ACACIA"))
+                event.instaBreak = true
+        }, ItemStack(Material.ACACIA_LOG, 32), Material.ACACIA_SAPLING
+    ),
+
+    DARK_OAK(
+        AXES, Action(MINING) { event ->
+            val m = event.block.type
+            if (m.name.contains("DARK_OAK"))
+                event.instaBreak = true
+        }, ItemStack(Material.DARK_OAK_LOG, 32), Material.DARK_OAK_SAPLING
+    ),
+
     ;
 
     override val type
