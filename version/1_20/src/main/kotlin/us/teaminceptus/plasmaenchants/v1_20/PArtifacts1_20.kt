@@ -9,10 +9,10 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.util.Vector
 import us.teaminceptus.plasmaenchants.api.*
-import us.teaminceptus.plasmaenchants.api.PTarget.AXES
-import us.teaminceptus.plasmaenchants.api.PTarget.SWORDS
+import us.teaminceptus.plasmaenchants.api.PTarget.*
 import us.teaminceptus.plasmaenchants.api.PType.Companion.ATTACKING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.INTERACT
+import us.teaminceptus.plasmaenchants.api.PType.Companion.MINING
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
 
 @Suppress("unchecked_cast")
@@ -36,7 +36,15 @@ enum class PArtifacts1_20(
             val target = event.entity as? LivingEntity ?: return@Action
             target.velocity = target.velocity.add(Vector(0.0, -0.06, 0.0))
         }, ItemStack(Material.BRICK, 64), Material.DECORATED_POT
-    )
+    ),
+
+    CHERRY(
+        AXES, Action(MINING) { event ->
+            val m = event.block.type
+            if (m.name.contains("CHERRY"))
+                event.instaBreak = true
+        }, ItemStack(Material.CHERRY_LOG, 32), Material.CHERRY_SAPLING
+    ),
 
     ;
 
