@@ -9,11 +9,12 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import us.teaminceptus.plasmaenchants.api.*
-import us.teaminceptus.plasmaenchants.api.PTarget.HELMETS
-import us.teaminceptus.plasmaenchants.api.PTarget.MELEE_WEAPONS
+import us.teaminceptus.plasmaenchants.api.PTarget.*
 import us.teaminceptus.plasmaenchants.api.PType.Companion.ATTACKING
+import us.teaminceptus.plasmaenchants.api.PType.Companion.MINING
 import us.teaminceptus.plasmaenchants.api.PType.Companion.PASSIVE
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
+import us.teaminceptus.plasmaenchants.api.artifacts.PArtifacts
 
 @Suppress("unchecked_cast")
 enum class PArtifacts1_19(
@@ -40,6 +41,16 @@ enum class PArtifacts1_19(
             event.player.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 3, 0, true))
             event.player.addPotionEffect(PotionEffect(PotionEffectType.INCREASE_DAMAGE, 3, 5, true))
         }, ItemStack(Material.SCULK_CATALYST, 16), Material.SCULK_CATALYST, ChatColor.LIGHT_PURPLE
+    ),
+
+    // Tool Artifacts
+
+    MANGROVE(
+        AXES, Action(MINING) { event ->
+            val m = event.block.type
+            if (m.name.contains("MANGROVE") && !m.name.contains("MANGROVE_ROOTS"))
+                event.instaBreak = true
+        }, ItemStack(Material.MANGROVE_LOG, 32), Material.MANGROVE_PROPAGULE
     ),
 
     ;

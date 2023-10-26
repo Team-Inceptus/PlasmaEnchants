@@ -67,7 +67,7 @@ internal class PlasmaCommands(private val plugin: PlasmaEnchants) {
             val p = Properties()
             p.load(PlasmaConfig.plugin.javaClass.getResourceAsStream("/util/heads.properties"))
 
-            val profile = GameProfile(UUID.randomUUID(), null)
+            val profile = GameProfile(UUID.randomUUID(), head)
             profile.properties.put("textures", Property("textures", p.getProperty(head)))
 
             val setP = meta.javaClass.getDeclaredMethod("setProfile", GameProfile::class.java)

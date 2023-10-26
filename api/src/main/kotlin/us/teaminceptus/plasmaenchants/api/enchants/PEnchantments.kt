@@ -766,6 +766,15 @@ enum class PEnchantments(
                 event.player.addPotionEffect(PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 3, level - 1))
         }),
 
+    FRIENDSHIP(
+        HELMETS, 3, Action(PASSIVE) { event, level ->
+            val amplifier = event.player.world.getNearbyEntities(event.player.location, level * 5.0, level * 5.0, level * 5.0)
+                    .filterIsInstance<Tameable>()
+                    .count { it.owner?.uniqueId == event.player.uniqueId }.coerceAtMost(6)
+
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 3, amplifier, true))
+        }),
+
     // Ranged Enchantments
 
     SNIPING(
