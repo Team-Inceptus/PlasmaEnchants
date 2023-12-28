@@ -2,7 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.9.21"
+    kotlin("jvm") version "1.9.22"
     id("org.sonarqube") version "4.0.0.2929"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 
@@ -56,7 +56,7 @@ subprojects {
     apply(plugin = "com.github.johnrengelman.shadow")
 
     dependencies {
-        val kotlin = compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.9.21")
+        val kotlin = compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
         project.ext["kotlin_version"] = kotlin!!.version
 
         compileOnly("org.jetbrains:annotations:24.1.0")
