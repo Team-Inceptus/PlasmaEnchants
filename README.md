@@ -28,6 +28,11 @@ This plugin is built in Kotlin. While the plugin will automatically download the
 ---
 ## Changelog
 
+🤝 v1.1.1 - December 27, 2023
+
+- Added Piglin Bartering Configuration for Enchantments
+- Minor Bug Fixes
+
 **🪓 v1.1.0 - October 26, 2023**
 
 - Added Various Wood Artifacts (Oak, Birch, Spruce, etc.)
