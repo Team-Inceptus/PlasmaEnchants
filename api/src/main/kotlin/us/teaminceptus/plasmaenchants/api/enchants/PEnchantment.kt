@@ -89,4 +89,16 @@ interface PEnchantment : BiConsumer<Event, Int>, Keyed {
          */
         get() = PlasmaConfig.config.disabledEnchantments.contains(this)
 
+    val isSpawnBlacklisted: Boolean
+        /**
+         * Whether or not this PEnchantment is blacklisted from spawning.
+         * @return true if blacklisted, false otherwise
+         */
+        get() {
+            if (PlasmaConfig.config.whitelistedSpawnEnchantments.isNotEmpty())
+                return !PlasmaConfig.config.whitelistedSpawnEnchantments.contains(this)
+
+            return PlasmaConfig.config.blacklistedSpawnEnchantments.contains(this)
+        }
+
 }
