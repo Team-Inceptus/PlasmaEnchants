@@ -1273,4 +1273,76 @@ interface PlasmaConfig {
          * @param value Maximum Anvil Cost
          */
         set(value) { "max-anvil-cost"[configuration, configFile] = value }
+
+    var isEnchantmentBarteringEnabled: Boolean
+        /**
+         * Fetches whether or not bartering with piglins can yield enchanted books.
+         * @return true if enabled, false otherwise
+         */
+        get() = "enchantments.bartering.enabled"[configuration, Boolean::class.java, true]
+        /**
+         * Sets whether or not bartering with piglins can yield enchanted books.
+         * @param value true if enabled, false otherwise
+         */
+        set(value) { "enchantments.bartering.enabled"[configuration, configFile] = value }
+
+    var enchantmentBarteringChance: Double
+        /**
+         * Fetches the chance for a bartering trade to yield an enchanted book.
+         * @return Chance
+         */
+        get() = "enchantments.bartering.chance"[configuration, Double::class.java, 0.05]
+        /**
+         * Sets the chance for a bartering trade to yield an enchanted book.
+         * @param value Chance
+         */
+        set(value) { "enchantments.bartering.chance"[configuration, configFile] = value }
+
+    var blacklistedBarteringEnchantments: List<PEnchantment>
+        /**
+         * Fetches the list of enchantments that cannot be received through bartering.
+         * @return List of Enchantments
+         */
+        get() = "enchantments.bartering.blacklisted-enchants"[configuration, List::class.java, listOf<String>()].mapNotNull { registry.getEnchantment(it.toString()) }
+        /**
+         * Sets the list of enchantments that cannot be received through bartering.
+         * @param value List of Enchantments
+         */
+        set(value) { "enchantments.bartering.blacklisted-enchants"[configuration, configFile] = value.map { it.key.key } }
+
+    var whitelistedBarteringEnchantments: List<PEnchantment>
+        /**
+         * Fetches the list of enchantments that can only be received through bartering.
+         * @return List of Enchantments
+         */
+        get() = "enchantments.bartering.whitelisted-enchants"[configuration, List::class.java, listOf<String>()].mapNotNull { registry.getEnchantment(it.toString()) }
+        /**
+         * Sets the list of enchantments that can only be received through bartering.
+         * @param value List of Enchantments
+         */
+        set(value) { "enchantments.bartering.whitelisted-enchants"[configuration, configFile] = value.map { it.key.key } }
+
+    var enchantmentBarteringMinEnchantLevel: Int
+        /**
+         * Fetches the minimum enchantment level for enchanted books received through bartering.
+         * @return Minimum Level
+         */
+        get() = "enchantments.bartering.min-level"[configuration, Int::class.java, 1]
+        /**
+         * Sets the minimum enchantment level for enchanted books received through bartering.
+         * @param value Minimum Level
+         */
+        set(value) { "enchantments.bartering.min-level"[configuration, configFile] = value }
+
+    var enchantmentBarteringMaxEnchantLevel: Int
+        /**
+         * Fetches the maximum enchantment level for enchanted books received through bartering.
+         * @return Maximum Level
+         */
+        get() = "enchantments.bartering.max-level"[configuration, Int::class.java] ?: Int.MAX_VALUE
+        /**
+         * Sets the maximum enchantment level for enchanted books received through bartering.
+         * @param value Maximum Level
+         */
+        set(value) { "enchantments.bartering.max-level"[configuration, configFile] = value }
 }

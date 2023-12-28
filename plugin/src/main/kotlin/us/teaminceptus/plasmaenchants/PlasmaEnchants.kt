@@ -12,6 +12,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.event.player.PlayerEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 import us.teaminceptus.plasmaenchants.api.*
 import us.teaminceptus.plasmaenchants.api.artifacts.PArtifact
@@ -108,6 +109,11 @@ class PlasmaEnchants : JavaPlugin(), PlasmaConfig, PlasmaRegistry {
                     .asSubclass(Enum::class.java)
                     .enumConstants
                     .forEach { if (it is PArtifact) register(it) }
+            } catch (ignored: ClassNotFoundException) {}
+
+            try {
+                val clazz = Class.forName("us.teaminceptus.plasmaenchants.events.Events$version")
+                clazz.getConstructor(Plugin::class.java).newInstance(this)
             } catch (ignored: ClassNotFoundException) {}
 
             if (major == version) break
