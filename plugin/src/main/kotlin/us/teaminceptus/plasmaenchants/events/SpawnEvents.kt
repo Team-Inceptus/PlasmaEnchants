@@ -12,7 +12,6 @@ import org.bukkit.event.player.PlayerFishEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.BlockInventoryHolder
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.MerchantInventory
 import org.bukkit.inventory.MerchantRecipe
 import org.bukkit.loot.LootTables
 import org.bukkit.loot.Lootable
@@ -40,17 +39,9 @@ class SpawnEvents(private val plugin: PlasmaEnchants) : Listener {
 
     // Extension Util
 
-    private inline val PEnchantment.isBlacklisted: Boolean
-        get() {
-            if (plugin.whitelistedSpawnEnchantments.isNotEmpty())
-                return !plugin.whitelistedSpawnEnchantments.contains(this)
-
-            return plugin.blacklistedSpawnEnchantments.contains(this)
-        }
-
     private inline val PEnchantment.isFishingBlacklisted: Boolean
         get() {
-            if (isBlacklisted) return true
+            if (isSpawnBlacklisted) return true
 
             if (plugin.enchantmentSpawnFishingWhitelistedEnchants.isNotEmpty())
                 return !plugin.enchantmentSpawnFishingWhitelistedEnchants.contains(this)
@@ -90,7 +81,7 @@ class SpawnEvents(private val plugin: PlasmaEnchants) : Listener {
 
     fun <T : Enum<T>> getRandomEnchantment(fishing: Boolean = false, configuration: EnchantmentChanceConfiguration<T>? = null): PEnchantment? =
         plugin.enchantments.filter {
-            !it.isDisabled && !it.isBlacklisted && (configuration?.isAllowed(it) ?: true) && !(fishing && it.isFishingBlacklisted)
+            !it.isDisabled && !it.isSpawnBlacklisted && (configuration?.isAllowed(it) ?: true) && !(fishing && it.isFishingBlacklisted)
         }.randomOrNull()
 
     fun <T: Enum<T>> generateEnchantmentBook(min: Int = plugin.enchantmentSpawnMiningMaxLevel, max: Int = plugin.enchantmentSpawnMaxLevel, fishing: Boolean = false, configuration: EnchantmentChanceConfiguration<T>? = null): ItemStack? {
@@ -106,7 +97,7 @@ class SpawnEvents(private val plugin: PlasmaEnchants) : Listener {
         return enchant?.generateBook(r.nextInt(min0, max0 + 1))
     }
 
-    fun isAllowed(type: Any, blacklist: List<Any>, whitelist: List<Any>): Boolean {
+    fun <T> isAllowed(type: T, blacklist: List<T>, whitelist: List<T>): Boolean {
         if (whitelist.isNotEmpty())
             return whitelist.contains(type)
 

@@ -2,7 +2,6 @@ package us.teaminceptus.plasmaenchants.api.config
 
 import com.google.common.collect.ImmutableMap
 import org.bukkit.Material
-import org.bukkit.configuration.MemorySection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.EntityType
@@ -188,6 +187,20 @@ internal val CONFIG_MAP = ImmutableMap.builder<String, ConfigData>()
         }}
     )
 
+    .putSection("enchantments.bartering")
+    .put("enchantments.bartering.enabled", FileConfiguration::isBoolean, true)
+    .put("enchantments.bartering.chance", isNumber, 0.05)
+    .put("enchantments.bartering.blacklisted-enchants", FileConfiguration::isList, listOf<String>(),
+        { value -> value.all { it.isEnchantment() } },
+        { old -> old.filter { it.isEnchantment() } }
+    )
+    .put("enchantments.bartering.whitelisted-enchants", FileConfiguration::isList, listOf<String>(),
+        { value -> value.all { it.isEnchantment() } },
+        { old -> old.filter { it.isEnchantment() } }
+    )
+    .put("enchantments.bartering.min-level", FileConfiguration::isInt, "default")
+    .put("enchantments.bartering.max-level", FileConfiguration::isInt, "default")
+
     // Artifact Configuration
     .putSection("artifacts")
     .put("artifacts.disabled-artifacts", FileConfiguration::isList, listOf<String>(),
@@ -273,7 +286,7 @@ private fun Any?.isArtifact(): Boolean {
 }
 
 private inline fun <K, reified CV> ImmutableMap.Builder<K, ConfigData>.put(
-    key: K,
+    key: K & Any,
     noinline checker: (FileConfiguration, String) -> Boolean,
     default: CV? = null,
     crossinline validator: (CV) -> Boolean = { true },
@@ -285,7 +298,7 @@ private inline fun <K, reified CV> ImmutableMap.Builder<K, ConfigData>.put(
     false)
 )
 
-private fun <T> ImmutableMap.Builder<T, ConfigData>.putSection(key: T) =
+private fun <T> ImmutableMap.Builder<T, ConfigData>.putSection(key: T & Any) =
     put(key, ConfigData(FileConfiguration::isConfigurationSection, null, { true }, { it }, true))
 
 private fun <K, V> Map<K, V>.key(key: K, predicate: (V?) -> Boolean): Boolean = predicate(get(key))

@@ -194,6 +194,30 @@ enchantments:
         #     - boss_collector
         config: []
 
+    # Enchanted Books received through Piglin Bartering
+    bartering:
+      # Whether you can receive enchantment books from bartering with piglins
+      enabled: true
+
+      # The chance of receiving an enchanted book from bartering with piglins
+      chance: 0.05
+
+      # A List of Enchantments that shouldn't be received through barterin
+      # If not empty, this overrides the global blacklisted enchantments
+      blacklisted-enchants: []
+
+      # A List of Enchantments that can only be received through bartering
+      # If this isn't empty, only these enchantments can be received by bartering and this overrides the global whitelisted enchantments
+      whitelisted-enchants: []
+
+      # The Minimum Enchantment Level for a fished enchanted book
+      # Set to 'default' to use the global default
+      min-level: default
+
+      # The Maximum Enchantment Level for a fished enchanted book
+      # Set to 'default' to use the global default
+      max-level: default
+
   # Villager Trading for Enchantments Configuration
   trades:
     # Whether Wandering Traders can trade for artifacts
